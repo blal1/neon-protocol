@@ -1,0 +1,85 @@
+[gd_scene load_steps=2 format=3 uid="uid://debug_console_001"]
+
+[ext_resource type="Script" path="res://tests/debug/DebugConsole.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_console"]
+bg_color = Color(0.02, 0.02, 0.04, 0.95)
+border_color = Color(0, 0.8, 0.8, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_input"]
+bg_color = Color(0.05, 0.05, 0.08, 1)
+border_color = Color(0, 0.6, 0.6, 0.8)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+content_margin_left = 8.0
+content_margin_right = 8.0
+
+[node name="DebugConsole" type="CanvasLayer"]
+layer = 99
+process_mode = 3
+script = ExtResource("1_script")
+
+[node name="ConsolePanel" type="PanelContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = -50.0
+theme_override_styles/panel = SubResource("StyleBox_console")
+
+[node name="VBox" type="VBoxContainer" parent="ConsolePanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="ConsolePanel/VBox"]
+layout_mode = 2
+text = "🖥️ DEBUG CONSOLE (F12 to toggle, ESC to close)"
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+
+[node name="Output" type="RichTextLabel" parent="ConsolePanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = ""
+scroll_following = true
+
+[node name="InputBar" type="HBoxContainer" parent="ConsolePanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Prompt" type="Label" parent="ConsolePanel/VBox/InputBar"]
+layout_mode = 2
+text = ">"
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+
+[node name="Input" type="LineEdit" parent="ConsolePanel/VBox/InputBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBox_input")
+placeholder_text = "Entrez une commande..."
+caret_blink = true
+
+[connection signal="text_submitted" from="ConsolePanel/VBox/InputBar/Input" to="." method="_on_input_text_submitted"]
+[connection signal="gui_input" from="ConsolePanel/VBox/InputBar/Input" to="." method="_on_input_gui_input"]

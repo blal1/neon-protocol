@@ -1,0 +1,103 @@
+ERROR: Error opening file 'res://assets/splash.png'.
+   at: load_image (core/io/image_loader.cpp:89)
+ERROR: Non-existing or invalid boot splash at 'res://assets/splash.png'.  Loading default splash.
+   at: setup_boot_logo (main/main.cpp:3796)
+WARNING: TTSManager: TTS non disponible sur cette plateforme
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _check_tts_availability (res://scripts/audio/TTSManager.gd:239)
+       [1] _ready (res://scripts/audio/TTSManager.gd:78)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:86)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:96)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:106)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:117)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:128)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:141)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:151)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:161)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:172)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:185)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:195)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:205)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:217)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:227)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+SCRIPT ERROR: Invalid assignment of property or key 'cost_per_level' with value of type 'Array' on a base object of type 'RefCounted (Skill)'.
+   at: _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+   GDScript backtrace (most recent call first):
+       [0] _add_skill (res://scripts/systems/SkillTreeManager.gd:259)
+       [1] _create_skill_tree (res://scripts/systems/SkillTreeManager.gd:237)
+       [2] _ready (res://scripts/systems/SkillTreeManager.gd:74)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2514)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:795)

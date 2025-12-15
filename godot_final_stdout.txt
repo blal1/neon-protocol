@@ -1,0 +1,4 @@
+Godot Engine v4.5.1.stable.official.f62fdbde1 - https://godotengine.org
+
+MissionManager: 10 missions chargées
+MusicManager: Lecture de 'Dark 80's Synth'

@@ -1,0 +1,101 @@
+[gd_scene load_steps=6 format=3 uid="uid://enemy_robot_001"]
+
+[ext_resource type="Script" path="res://scripts/enemies/SecurityRobot.gd" id="1_robot"]
+[ext_resource type="Script" path="res://scripts/components/HealthComponent.gd" id="2_health"]
+[ext_resource type="Script" path="res://scripts/audio/EnemyAudioFeedback.gd" id="3_audio"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_robot"]
+radius = 0.5
+height = 2.0
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_robot"]
+radius = 0.5
+height = 2.0
+
+[sub_resource type="StandardMaterial3D" id="Material_robot"]
+albedo_color = Color(0.3, 0.1, 0.1, 1)
+metallic = 0.8
+roughness = 0.3
+emission_enabled = true
+emission = Color(0.8, 0.1, 0.1, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_eye"]
+size = Vector3(0.4, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Material_eye"]
+albedo_color = Color(1, 0, 0, 1)
+emission_enabled = true
+emission = Color(1, 0, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_detection"]
+radius = 10.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_attack"]
+radius = 2.0
+
+[node name="SecurityRobot" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_robot")
+patrol_speed = 2.0
+chase_speed = 4.0
+attack_damage = 15.0
+attack_cooldown = 1.5
+detection_range = 10.0
+attack_range = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_robot")
+
+[node name="MeshPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Body" type="MeshInstance3D" parent="MeshPivot"]
+mesh = SubResource("CapsuleMesh_robot")
+surface_material_override/0 = SubResource("Material_robot")
+
+[node name="Eye" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.45)
+mesh = SubResource("BoxMesh_eye")
+surface_material_override/0 = SubResource("Material_eye")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("2_health")
+max_health = 50.0
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.5
+target_desired_distance = 1.0
+
+[node name="DetectionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="DetectionShape" type="CollisionShape3D" parent="DetectionArea"]
+shape = SubResource("SphereShape3D_detection")
+
+[node name="AttackArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="AttackShape" type="CollisionShape3D" parent="AttackArea"]
+shape = SubResource("SphereShape3D_attack")
+
+[node name="PatrolPoints" type="Node3D" parent="."]
+
+[node name="Point1" type="Marker3D" parent="PatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
+
+[node name="Point2" type="Marker3D" parent="PatrolPoints"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+
+[node name="EnemyAudioFeedback" type="Node" parent="."]
+script = ExtResource("3_audio")
+
+[connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_body_exited"]

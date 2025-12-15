@@ -1,0 +1,239 @@
+[gd_scene load_steps=3 format=3 uid="uid://hacking_minigame_001"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/HackingMinigame.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.05, 0.08, 0.12, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.8, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_normal"]
+bg_color = Color(0.1, 0.15, 0.2, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.6, 0.6, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0, 0.3, 0.3, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_bg"]
+bg_color = Color(0.1, 0.1, 0.15, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.3, 0.3, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_progress_fill"]
+bg_color = Color(0, 0.8, 0.8, 1)
+
+[node name="HackingMinigame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="DimOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MainPanel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(500, 400)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MainPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="HeaderHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "⚡ PIRATAGE EN COURS"
+horizontal_alignment = 1
+
+[node name="CloseButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/HeaderHBox"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "✕"
+
+[node name="Separator1" type="HSeparator" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/color = Color(0, 0.5, 0.5, 0.5)
+
+[node name="InfoPanel" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="TimeContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TimeLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel/TimeContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "TEMPS RESTANT"
+horizontal_alignment = 1
+
+[node name="TimeValue" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel/TimeContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 32
+text = "30s"
+horizontal_alignment = 1
+
+[node name="AttemptsContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttemptsLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel/AttemptsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "ESSAIS"
+horizontal_alignment = 1
+
+[node name="AttemptsValue" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/InfoPanel/AttemptsContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 32
+text = "3/3"
+horizontal_alignment = 1
+
+[node name="Separator2" type="HSeparator" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/color = Color(0, 0.5, 0.5, 0.5)
+
+[node name="InstructionLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Reproduisez la séquence avec les boutons ci-dessous"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="SequenceDisplay" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Seq1" type="Panel" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/SequenceDisplay"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Seq2" type="Panel" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/SequenceDisplay"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Seq3" type="Panel" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/SequenceDisplay"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Seq4" type="Panel" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/SequenceDisplay"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Seq5" type="Panel" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/SequenceDisplay"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="TimingBar" type="ProgressBar" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_progress_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_progress_fill")
+value = 50.0
+show_percentage = false
+
+[node name="TargetZone" type="ColorRect" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/TimingBar"]
+layout_mode = 0
+offset_left = 150.0
+offset_top = 2.0
+offset_right = 230.0
+offset_bottom = 28.0
+color = Color(0.2, 0.8, 0.4, 0.5)
+
+[node name="ButtonsContainer" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="AttackButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "⚔️ ATTAQUE
+[A]"
+
+[node name="DashButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "💨 DASH
+[D]"
+
+[node name="InteractButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonsContainer"]
+custom_minimum_size = Vector2(120, 60)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "🔧 INTERACT
+[I]"
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 1)
+text = "En attente de la séquence..."
+horizontal_alignment = 1
+
+[node name="AudioPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Interface"

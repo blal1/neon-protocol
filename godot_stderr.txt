@@ -1,0 +1,4 @@
+ERROR: Error opening file 'res://assets/splash.png'.
+   at: load_image (core/io/image_loader.cpp:89)
+ERROR: Non-existing or invalid boot splash at 'res://assets/splash.png'.  Loading default splash.
+   at: setup_boot_logo (main/main.cpp:3796)

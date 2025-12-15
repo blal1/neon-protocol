@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cd5afponbosnc"
+path="res://.godot/imported/Is Anyone There_.mp3-d37f7b44c2f83ea3cce90a89a2d905e5.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Is Anyone There_.mp3"
+dest_files=["res://.godot/imported/Is Anyone There_.mp3-d37f7b44c2f83ea3cce90a89a2d905e5.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

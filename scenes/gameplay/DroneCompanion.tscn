@@ -1,0 +1,89 @@
+[gd_scene load_steps=2 format=3 uid="uid://drone_companion_001"]
+
+[ext_resource type="Script" path="res://scripts/gameplay/DroneCompanion.gd" id="1_script"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_drone_body"]
+size = Vector3(0.6, 0.3, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_drone"]
+albedo_color = Color(0.1, 0.15, 0.2, 1)
+metallic = 0.9
+roughness = 0.2
+emission_enabled = true
+emission = Color(0, 0.8, 0.8, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rotor"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 0.05
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rotor"]
+albedo_color = Color(0.3, 0.3, 0.35, 1)
+metallic = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_eye"]
+radius = 0.08
+height = 0.16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eye"]
+albedo_color = Color(0, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 1, 1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_scan"]
+radius = 15.0
+
+[node name="DroneCompanion" type="Node3D"]
+script = ExtResource("1_script")
+drone_type = 0
+drone_name = "ARIA-7"
+
+[node name="MeshPivot" type="Node3D" parent="."]
+
+[node name="Mesh" type="MeshInstance3D" parent="MeshPivot"]
+mesh = SubResource("BoxMesh_drone_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_drone")
+
+[node name="RotorFL" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.2, -0.3)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="RotorFR" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.2, -0.3)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="RotorBL" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0.2, 0.3)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="RotorBR" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.2, 0.3)
+mesh = SubResource("CylinderMesh_rotor")
+surface_material_override/0 = SubResource("StandardMaterial3D_rotor")
+
+[node name="Eye" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, -0.35)
+mesh = SubResource("SphereMesh_eye")
+surface_material_override/0 = SubResource("StandardMaterial3D_eye")
+
+[node name="ScanArea" type="Area3D" parent="."]
+collision_layer = 4
+collision_mask = 6
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ScanArea"]
+shape = SubResource("SphereShape3D_scan")
+
+[node name="AudioPlayer" type="AudioStreamPlayer3D" parent="."]
+max_db = -10.0
+max_distance = 20.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+light_color = Color(0, 0.8, 0.8, 1)
+light_energy = 0.5
+omni_range = 3.0

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dwmwxtkxexgf"
+path="res://.godot/imported/Time to Leave.mp3-d60882ebbb01879194eef9405446522b.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Time to Leave.mp3"
+dest_files=["res://.godot/imported/Time to Leave.mp3-d60882ebbb01879194eef9405446522b.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

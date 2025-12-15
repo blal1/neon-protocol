@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bjels83ip2l7w"
+path="res://.godot/imported/Horror Piano.mp3-e52bf66d9edafe44caa4d2de42437223.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Horror Piano.mp3"
+dest_files=["res://.godot/imported/Horror Piano.mp3-e52bf66d9edafe44caa4d2de42437223.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

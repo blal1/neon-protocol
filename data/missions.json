@@ -1,0 +1,165 @@
+{
+  "campaign": {
+    "name": "Eclipse Protocol",
+    "corporation": "NovaTech Industries",
+    "tagline": "La vérité est enfouie sous des couches de néon."
+  },
+  "missions": [
+    {
+      "id": 1,
+      "title": "Premier Contact",
+      "description": "Infiltre le terminal de données abandonné dans le Secteur 7. NovaTech cache quelque chose.",
+      "objective_type": "GoTo",
+      "target_coordinates": {
+        "x": 150.0,
+        "y": 0.0,
+        "z": 85.0
+      },
+      "reward_credits": 500,
+      "story_context": "Un informateur anonyme t'a contacté. NovaTech efface des preuves.",
+      "layer": "DEAD_GROUND",
+      "layer_name": "Sol Mort"
+    },
+    {
+      "id": 2,
+      "title": "Données Compromises",
+      "description": "Récupère les trois puces mémoire avant que les drones de nettoyage ne les détruisent.",
+      "objective_type": "Collect",
+      "target_coordinates": {
+        "x": 180.0,
+        "y": 50.0,
+        "z": 120.0
+      },
+      "target_count": 3,
+      "reward_credits": 750,
+      "story_context": "Les puces contiennent des logs de communication cryptés.",
+      "layer": "LIVING_CITY",
+      "layer_name": "Ville Vivante"
+    },
+    {
+      "id": 3,
+      "title": "Témoin Gênant",
+      "description": "Élimine les robots de sécurité qui patrouillent le périmètre de l'entrepôt secret.",
+      "objective_type": "Kill",
+      "target_coordinates": {
+        "x": 220.0,
+        "y": 0.0,
+        "z": 95.0
+      },
+      "target_count": 5,
+      "reward_credits": 1000,
+      "story_context": "Ces robots ont été modifiés pour tirer à vue. Pas de témoins.",
+      "layer": "DEAD_GROUND",
+      "layer_name": "Sol Mort"
+    },
+    {
+      "id": 4,
+      "title": "Le Laboratoire Oublié",
+      "description": "Trouve le laboratoire souterrain où NovaTech menait des expériences sur des civils.",
+      "objective_type": "GoTo",
+      "target_coordinates": {
+        "x": 95.0,
+        "y": -80.0,
+        "z": 200.0
+      },
+      "reward_credits": 1200,
+      "story_context": "Les expériences ont cessé il y a 5 ans. Officiellement.",
+      "layer": "SUBNETWORK",
+      "layer_name": "Sous-Réseau"
+    },
+    {
+      "id": 5,
+      "title": "Preuves Biologiques",
+      "description": "Collecte des échantillons ADN dans les capsules de stase abandonnées.",
+      "objective_type": "Collect",
+      "target_coordinates": {
+        "x": 100.0,
+        "y": -75.0,
+        "z": 210.0
+      },
+      "target_count": 4,
+      "reward_credits": 1500,
+      "story_context": "Ces échantillons prouvent que NovaTech a utilisé des cobayes humains.",
+      "layer": "SUBNETWORK",
+      "layer_name": "Sous-Réseau"
+    },
+    {
+      "id": 6,
+      "title": "Nettoyage Corporatif",
+      "description": "Neutralise l'équipe de nettoyage envoyée pour effacer le laboratoire et toi avec.",
+      "objective_type": "Kill",
+      "target_coordinates": {
+        "x": 110.0,
+        "y": -60.0,
+        "z": 195.0
+      },
+      "target_count": 8,
+      "reward_credits": 2000,
+      "story_context": "NovaTech sait que tu en sais trop. Ils ont envoyé leurs meilleurs.",
+      "layer": "SUBNETWORK",
+      "layer_name": "Sous-Réseau"
+    },
+    {
+      "id": 7,
+      "title": "L'Informateur",
+      "description": "Rencontre ton contact au bar Néon Dreams dans le quartier bas.",
+      "objective_type": "GoTo",
+      "target_coordinates": {
+        "x": 50.0,
+        "y": 25.0,
+        "z": 300.0
+      },
+      "reward_credits": 800,
+      "story_context": "Ton informateur a des informations sur le PDG de NovaTech.",
+      "layer": "LIVING_CITY",
+      "layer_name": "Ville Vivante"
+    },
+    {
+      "id": 8,
+      "title": "Boîte Noire",
+      "description": "Récupère les enregistreurs de vol du drone cargo crashé. NovaTech transportait du matériel illégal.",
+      "objective_type": "Collect",
+      "target_coordinates": {
+        "x": 280.0,
+        "y": 0.0,
+        "z": 150.0
+      },
+      "target_count": 2,
+      "reward_credits": 1800,
+      "story_context": "Le drone a été abattu par NovaTech eux-mêmes. Pourquoi?",
+      "layer": "DEAD_GROUND",
+      "layer_name": "Sol Mort"
+    },
+    {
+      "id": 9,
+      "title": "Coup de Grâce",
+      "description": "Élimine le chef de sécurité de NovaTech avant qu'il ne quitte la ville.",
+      "objective_type": "Kill",
+      "target_coordinates": {
+        "x": 320.0,
+        "y": 250.0,
+        "z": 280.0
+      },
+      "target_count": 1,
+      "reward_credits": 3000,
+      "story_context": "Il connaît tous les secrets. S'il s'échappe, tout est perdu.",
+      "layer": "CORPORATE_TOWERS",
+      "layer_name": "Tours Corporatistes"
+    },
+    {
+      "id": 10,
+      "title": "Protocole Eclipse",
+      "description": "Atteins le serveur central de NovaTech et diffuse les preuves au monde entier.",
+      "objective_type": "GoTo",
+      "target_coordinates": {
+        "x": 400.0,
+        "y": 350.0,
+        "z": 400.0
+      },
+      "reward_credits": 5000,
+      "story_context": "C'est la mission finale. NovaTech tombera, ou tu tomberas avec.",
+      "layer": "CORPORATE_TOWERS",
+      "layer_name": "Tours Corporatistes"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+[gd_scene load_steps=4 format=3 uid="uid://options_menu_001"]
+
+[ext_resource type="Script" path="res://scripts/ui/OptionsMenu.gd" id="1_options"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.03, 0.03, 0.08, 0.98)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_tab"]
+bg_color = Color(0.1, 0.1, 0.15, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.8, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_slider"]
+bg_color = Color(0.2, 0.2, 0.25, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_slider_fill"]
+bg_color = Color(0, 0.8, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="OptionsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_options")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.02, 0.05, 0.95)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+text = "⚙ OPTIONS"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+
+[node name="Tabs" type="TabContainer" parent="Panel/VBox"]
+custom_minimum_size = Vector2(580, 400)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBox_tab")
+
+[node name="Accessibility" type="ScrollContainer" parent="Panel/VBox/Tabs"]
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/VBox/Tabs/Accessibility"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="TextSizeLabel" type="Label" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+text = "Taille du texte"
+
+[node name="TextSizeOption" type="OptionButton" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+
+[node name="ColorblindLabel" type="Label" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+text = "Mode daltonien"
+
+[node name="ColorblindOption" type="OptionButton" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+
+[node name="DyslexiaToggle" type="CheckButton" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+text = "Police dyslexie (OpenDyslexic)"
+
+[node name="BlindModeToggle" type="CheckButton" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+text = "Mode accessibilité aveugle"
+
+[node name="GameSpeedLabel" type="Label" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+text = "Vitesse du jeu"
+
+[node name="GameSpeedSlider" type="HSlider" parent="Panel/VBox/Tabs/Accessibility/VBox"]
+layout_mode = 2
+min_value = 0.5
+max_value = 1.0
+step = 0.1
+value = 1.0
+
+[node name="Audio" type="ScrollContainer" parent="Panel/VBox/Tabs"]
+visible = false
+layout_mode = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel/VBox/Tabs/Audio"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 15
+
+[node name="MasterLabel" type="Label" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+text = "Volume principal"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="MusicLabel" type="Label" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+text = "Musique"
+
+[node name="MusicVolumeSlider" type="HSlider" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.7
+
+[node name="SFXLabel" type="Label" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+text = "Effets sonores"
+
+[node name="SFXVolumeSlider" type="HSlider" parent="Panel/VBox/Tabs/Audio/VBox"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 0.8
+
+[node name="BackButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+text = "← RETOUR"
+
+[connection signal="item_selected" from="Panel/VBox/Tabs/Accessibility/VBox/TextSizeOption" to="." method="_on_text_size_selected"]
+[connection signal="item_selected" from="Panel/VBox/Tabs/Accessibility/VBox/ColorblindOption" to="." method="_on_colorblind_selected"]
+[connection signal="toggled" from="Panel/VBox/Tabs/Accessibility/VBox/DyslexiaToggle" to="." method="_on_dyslexia_toggled"]
+[connection signal="toggled" from="Panel/VBox/Tabs/Accessibility/VBox/BlindModeToggle" to="." method="_on_blind_mode_toggled"]
+[connection signal="value_changed" from="Panel/VBox/Tabs/Accessibility/VBox/GameSpeedSlider" to="." method="_on_game_speed_changed"]
+[connection signal="value_changed" from="Panel/VBox/Tabs/Audio/VBox/MasterVolumeSlider" to="." method="_on_master_volume_changed"]
+[connection signal="value_changed" from="Panel/VBox/Tabs/Audio/VBox/MusicVolumeSlider" to="." method="_on_music_volume_changed"]
+[connection signal="value_changed" from="Panel/VBox/Tabs/Audio/VBox/SFXVolumeSlider" to="." method="_on_sfx_volume_changed"]
+[connection signal="pressed" from="Panel/VBox/BackButton" to="." method="_on_back_pressed"]

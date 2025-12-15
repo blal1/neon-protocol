@@ -1,0 +1,234 @@
+[gd_scene load_steps=5 format=3 uid="uid://multiplayer_lobby_001"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.03, 0.05, 0.08, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.7, 0.7, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.05, 0.08, 0.12, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.5, 0.5, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0, 0.35, 0.35, 0.9)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.8, 0.8, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0, 0.5, 0.5, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_player_item"]
+bg_color = Color(0.05, 0.1, 0.15, 0.8)
+border_width_left = 1
+border_width_bottom = 1
+border_color = Color(0, 0.4, 0.4, 0.5)
+
+[node name="MultiplayerLobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.03, 0.05, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="MainPanel" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(600, 500)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/MainPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "⚡ MULTIJOUEUR"
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/color = Color(0, 0.5, 0.5, 0.5)
+
+[node name="ConfigSection" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NameHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection"]
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/NameHBox"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Pseudo :"
+
+[node name="NameInput" type="LineEdit" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/NameHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+placeholder_text = "Runner_42"
+max_length = 20
+
+[node name="IPHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection"]
+layout_mode = 2
+
+[node name="IPLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/IPHBox"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Adresse IP :"
+
+[node name="IPInput" type="LineEdit" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/IPHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+text = "127.0.0.1"
+placeholder_text = "127.0.0.1"
+
+[node name="PortHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection"]
+layout_mode = 2
+
+[node name="PortLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/PortHBox"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+text = "Port :"
+
+[node name="PortInput" type="SpinBox" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ConfigSection/PortHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1024.0
+max_value = 65535.0
+value = 7777.0
+
+[node name="ButtonsHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="HostButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonsHBox"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "🖥️ HÉBERGER"
+
+[node name="JoinButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/ButtonsHBox"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "🌐 REJOINDRE"
+
+[node name="Separator2" type="HSeparator" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/color = Color(0, 0.5, 0.5, 0.5)
+
+[node name="PlayersLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "JOUEURS CONNECTÉS"
+horizontal_alignment = 1
+
+[node name="PlayersList" type="VBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="NoPlayersLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/PlayersList"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+text = "Aucun joueur connecté"
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.8, 0.6, 1)
+text = "En attente..."
+horizontal_alignment = 1
+
+[node name="BottomHBox" type="HBoxContainer" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ReadyButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/BottomHBox"]
+visible = false
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "✓ PRÊT"
+toggle_mode = true
+
+[node name="StartButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/BottomHBox"]
+visible = false
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+text = "🚀 LANCER LA PARTIE"
+
+[node name="DisconnectButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer/BottomHBox"]
+visible = false
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.6, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "✕ QUITTER"
+
+[node name="BackButton" type="Button" parent="CenterContainer/MainPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+text = "← RETOUR"

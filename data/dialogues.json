@@ -1,0 +1,202 @@
+{
+    "dialogues": {
+        "npc_vendor_01": {
+            "id": "npc_vendor_01",
+            "name": "Viktor - Arms Dealer",
+            "portrait": "res://assets/portraits/viktor.png",
+            "nodes": {
+                "start": {
+                    "text": "Bienvenue dans mon établissement, runner. Tu cherches du chrome de qualité ?",
+                    "choices": [
+                        {
+                            "text": "Montre-moi ta marchandise",
+                            "next": "show_shop"
+                        },
+                        {
+                            "text": "J'ai des questions",
+                            "next": "questions"
+                        },
+                        {
+                            "text": "Je vais réfléchir",
+                            "next": "exit"
+                        }
+                    ]
+                },
+                "show_shop": {
+                    "text": "J'ai les meilleures armes de ce côté du district. Modifiées à la main.",
+                    "action": "open_shop",
+                    "next": "after_shop"
+                },
+                "questions": {
+                    "text": "Pose tes questions, mais vite. Le temps c'est des crédits.",
+                    "choices": [
+                        {
+                            "text": "Où trouver du travail ?",
+                            "next": "work_info"
+                        },
+                        {
+                            "text": "Que sais-tu sur NovaTech ?",
+                            "next": "novatech_info"
+                        },
+                        {
+                            "text": "Rien, merci",
+                            "next": "exit"
+                        }
+                    ]
+                },
+                "work_info": {
+                    "text": "Tu veux du boulot ? Va voir Mama Chen au district sud. Elle a toujours besoin de runners discrets.",
+                    "reputation_change": {
+                        "faction": "street",
+                        "amount": 5
+                    },
+                    "next": "questions"
+                },
+                "novatech_info": {
+                    "text": "NovaTech ? *baisse la voix* Fais attention avec eux. Leurs robots de sécurité sont programmés pour tuer.",
+                    "unlock": "novatech_lore_01",
+                    "next": "questions"
+                },
+                "after_shop": {
+                    "text": "Reviens quand tu veux. Et reste discret là dehors.",
+                    "choices": [
+                        {
+                            "text": "À bientôt",
+                            "next": "exit"
+                        }
+                    ]
+                },
+                "exit": {
+                    "text": "",
+                    "end": true
+                }
+            }
+        },
+        "npc_informer_01": {
+            "id": "npc_informer_01",
+            "name": "Ghost - Hacker",
+            "portrait": "res://assets/portraits/ghost.png",
+            "nodes": {
+                "start": {
+                    "text": "*regarde nerveusement autour* T'es le runner dont on m'a parlé ?",
+                    "choices": [
+                        {
+                            "text": "Ça dépend qui demande",
+                            "next": "cautious"
+                        },
+                        {
+                            "text": "Ouais, c'est moi",
+                            "next": "direct"
+                        },
+                        {
+                            "text": "Je me suis trompé d'endroit",
+                            "next": "exit"
+                        }
+                    ]
+                },
+                "cautious": {
+                    "text": "Malin. J'aime ça. *tend une carte mémoire* Prends ça. Y'a les coordonnées d'un data vault NovaTech. Ça t'intéresse ?",
+                    "reputation_change": {
+                        "faction": "hackers",
+                        "amount": 10
+                    },
+                    "next": "mission_offer"
+                },
+                "direct": {
+                    "text": "*soupire* Discrétion zéro. Mais bon... J'ai un job pour toi. Un data vault à infiltrer.",
+                    "next": "mission_offer"
+                },
+                "mission_offer": {
+                    "text": "Le vault contient des données sur le projet Chimera. NovaTech cache quelque chose de gros. Tu acceptes ?",
+                    "choices": [
+                        {
+                            "text": "J'accepte le job",
+                            "next": "accept_mission",
+                            "consequence": "Vous avez accepté la mission d'infiltration."
+                        },
+                        {
+                            "text": "Combien tu paies ?",
+                            "next": "payment"
+                        },
+                        {
+                            "text": "Trop risqué pour moi",
+                            "next": "refuse"
+                        }
+                    ]
+                },
+                "payment": {
+                    "text": "5000 crédits plus ce que tu pourras récupérer dans le vault. Et l'accès à notre réseau d'infos. Ça vaut le coup.",
+                    "next": "final_choice"
+                },
+                "final_choice": {
+                    "text": "Alors ?",
+                    "choices": [
+                        {
+                            "text": "J'accepte",
+                            "next": "accept_mission"
+                        },
+                        {
+                            "text": "Je refuse",
+                            "next": "refuse"
+                        }
+                    ]
+                },
+                "accept_mission": {
+                    "text": "Bien. Je t'envoie les détails sur ton interface. Et... fais gaffe aux Enforcers là-bas.",
+                    "start_mission": "mission_data_vault",
+                    "reputation_change": {
+                        "faction": "hackers",
+                        "amount": 15
+                    },
+                    "end": true
+                },
+                "refuse": {
+                    "text": "*hausse les épaules* Ton choix. Mais cette opportunité passera pas deux fois.",
+                    "reputation_change": {
+                        "faction": "hackers",
+                        "amount": -5
+                    },
+                    "end": true
+                },
+                "exit": {
+                    "text": "*te fixe avec suspicion*",
+                    "end": true
+                }
+            }
+        },
+        "tutorial_npc": {
+            "id": "tutorial_npc",
+            "name": "Système IA",
+            "portrait": null,
+            "nodes": {
+                "start": {
+                    "text": "Bienvenue, runner. Je suis ARIA, ton interface neurale. Je vais te guider.",
+                    "auto_advance": true,
+                    "next": "movement"
+                },
+                "movement": {
+                    "text": "Utilise le joystick gauche pour te déplacer. Essaie maintenant.",
+                    "wait_for": "player_moved",
+                    "next": "combat"
+                },
+                "combat": {
+                    "text": "Parfait. Maintenant, appuie sur le bouton d'attaque pour éliminer les menaces.",
+                    "wait_for": "player_attacked",
+                    "next": "complete"
+                },
+                "complete": {
+                    "text": "Excellent. Tu es prêt pour les rues de Neo-Kyoto. Bonne chance, runner.",
+                    "end": true
+                }
+            }
+        }
+    },
+    "metadata": {
+        "version": "1.0",
+        "default_language": "fr",
+        "supported_languages": [
+            "fr",
+            "en"
+        ]
+    }
+}

@@ -1,0 +1,9 @@
+WARNING: TTSManager: TTS non disponible sur cette plateforme
+   at: push_warning (core/variant/variant_utility.cpp:1034)
+   GDScript backtrace (most recent call first):
+       [0] _check_tts_availability (res://scripts/audio/TTSManager.gd:239)
+       [1] _ready (res://scripts/audio/TTSManager.gd:78)
+WARNING: ObjectDB instances leaked at exit (run with --verbose for details).
+   at: cleanup (core/object/object.cpp:2514)
+ERROR: 1 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:795)

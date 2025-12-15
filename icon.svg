@@ -1,0 +1,42 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="neonGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff0055;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00ffff;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="128" height="128" fill="#0a0a14"/>
+  
+  <!-- Helmet shape -->
+  <ellipse cx="64" cy="68" rx="45" ry="50" fill="#1a1a2e" stroke="url(#neonGlow)" stroke-width="3" filter="url(#glow)"/>
+  
+  <!-- Visor -->
+  <rect x="25" y="55" width="78" height="20" rx="10" fill="#00ffff" opacity="0.9" filter="url(#glow)"/>
+  
+  <!-- Visor reflection -->
+  <rect x="30" y="58" width="68" height="6" rx="3" fill="#ffffff" opacity="0.3"/>
+  
+  <!-- Circuit lines - left -->
+  <line x1="20" y1="40" x2="35" y2="50" stroke="#00ffff" stroke-width="2" opacity="0.7"/>
+  <line x1="35" y1="50" x2="25" y2="85" stroke="#00ffff" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Circuit lines - right -->
+  <line x1="108" y1="40" x2="93" y2="50" stroke="#ff0055" stroke-width="2" opacity="0.7"/>
+  <line x1="93" y1="50" x2="103" y2="85" stroke="#ff0055" stroke-width="2" opacity="0.7"/>
+  
+  <!-- Top accent -->
+  <path d="M 50 25 Q 64 15 78 25" stroke="url(#neonGlow)" stroke-width="3" fill="none" filter="url(#glow)"/>
+  
+  <!-- N letter hint -->
+  <text x="58" y="105" font-family="Arial Black" font-size="20" fill="url(#neonGlow)" filter="url(#glow)">N</text>
+</svg>

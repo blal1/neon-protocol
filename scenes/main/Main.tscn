@@ -1,0 +1,175 @@
+[gd_scene load_steps=16 format=3 uid="uid://main_scene_001"]
+
+[ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/audio/AmbientAudioManager.gd" id="4_ambient"]
+
+[sub_resource type="Environment" id="Environment_cyberpunk"]
+background_mode = 1
+background_color = Color(0.05, 0.05, 0.1, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.15, 0.15, 0.25, 1)
+ambient_light_energy = 0.3
+fog_enabled = true
+fog_light_color = Color(0.1, 0.1, 0.15, 1)
+fog_density = 0.01
+glow_enabled = true
+glow_intensity = 1.0
+glow_strength = 0.8
+glow_bloom = 0.2
+glow_blend_mode = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+size = Vector2(50, 50)
+subdivide_width = 4
+subdivide_depth = 4
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(50, 0.1, 50)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(50, 4, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall"]
+size = Vector3(50, 4, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pillar"]
+size = Vector3(1, 3, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_marker"]
+top_radius = 0.5
+bottom_radius = 0.5
+height = 0.1
+
+[sub_resource type="StandardMaterial3D" id="NeonMaterial_cyan"]
+albedo_color = Color(0, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 1, 1, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="NeonMaterial_magenta"]
+albedo_color = Color(1, 0, 0.5, 1)
+emission_enabled = true
+emission = Color(1, 0, 0.5, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="NeonMaterial_green"]
+albedo_color = Color(0, 1, 0.4, 1)
+emission_enabled = true
+emission = Color(0, 1, 0.4, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="NeonMaterial_yellow"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="StandardMaterial3D" id="Material_floor"]
+albedo_color = Color(0.1, 0.1, 0.12, 1)
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cyberpunk")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.433, 0.25, 0, 0.5, 0.866, -0.5, -0.75, 0.433, 10, 20, 10)
+light_color = Color(0.6, 0.65, 0.8, 1)
+light_energy = 0.5
+shadow_enabled = true
+
+[node name="TestLevel" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="TestLevel"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="FloorMesh" type="MeshInstance3D" parent="TestLevel/Floor"]
+mesh = SubResource("PlaneMesh_floor")
+surface_material_override/0 = SubResource("Material_floor")
+
+[node name="FloorCollision" type="CollisionShape3D" parent="TestLevel/Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="Walls" type="Node3D" parent="TestLevel"]
+
+[node name="Wall1" type="StaticBody3D" parent="TestLevel/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -25)
+collision_layer = 1
+
+[node name="WallMesh" type="MeshInstance3D" parent="TestLevel/Walls/Wall1"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallCollision" type="CollisionShape3D" parent="TestLevel/Walls/Wall1"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall2" type="StaticBody3D" parent="TestLevel/Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 25)
+collision_layer = 1
+
+[node name="WallMesh" type="MeshInstance3D" parent="TestLevel/Walls/Wall2"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallCollision" type="CollisionShape3D" parent="TestLevel/Walls/Wall2"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall3" type="StaticBody3D" parent="TestLevel/Walls"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -25, 2, 0)
+collision_layer = 1
+
+[node name="WallMesh" type="MeshInstance3D" parent="TestLevel/Walls/Wall3"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallCollision" type="CollisionShape3D" parent="TestLevel/Walls/Wall3"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="Wall4" type="StaticBody3D" parent="TestLevel/Walls"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 2, 0)
+collision_layer = 1
+
+[node name="WallMesh" type="MeshInstance3D" parent="TestLevel/Walls/Wall4"]
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallCollision" type="CollisionShape3D" parent="TestLevel/Walls/Wall4"]
+shape = SubResource("BoxShape3D_wall")
+
+[node name="NeonPillar1" type="MeshInstance3D" parent="TestLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.5, -10)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("NeonMaterial_cyan")
+
+[node name="NeonPillar2" type="MeshInstance3D" parent="TestLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, -10)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("NeonMaterial_magenta")
+
+[node name="NeonPillar3" type="MeshInstance3D" parent="TestLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.5, 10)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("NeonMaterial_green")
+
+[node name="NeonPillar4" type="MeshInstance3D" parent="TestLevel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, 10)
+mesh = SubResource("BoxMesh_pillar")
+surface_material_override/0 = SubResource("NeonMaterial_yellow")
+
+[node name="ObjectiveMarker" type="Node3D" parent="TestLevel" groups=["objective"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 15)
+
+[node name="MarkerMesh" type="MeshInstance3D" parent="TestLevel/ObjectiveMarker"]
+mesh = SubResource("CylinderMesh_marker")
+surface_material_override/0 = SubResource("NeonMaterial_cyan")
+
+[node name="PlayerSpawn" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Enemies" type="Node3D" parent="."]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="AmbientAudio" type="Node" parent="."]
+script = ExtResource("4_ambient")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

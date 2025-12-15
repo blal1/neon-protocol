@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://d2b5yxleh0cge"
+path="res://.godot/imported/Death Do Us Part.mp3-3897ef02eb908505d672864cf1221ed2.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Death Do Us Part.mp3"
+dest_files=["res://.godot/imported/Death Do Us Part.mp3-3897ef02eb908505d672864cf1221ed2.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

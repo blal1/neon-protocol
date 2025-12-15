@@ -1,0 +1,145 @@
+[gd_scene load_steps=11 format=3 uid="uid://hud_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/ui/GameHUD.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.05, 0.05, 0.1, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.8, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_healthbar_bg"]
+bg_color = Color(0.2, 0.1, 0.1, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_healthbar_fill"]
+bg_color = Color(0, 0.8, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="LabelSettings" id="LabelSettings_header"]
+font_size = 14
+font_color = Color(0.6, 0.6, 0.7, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_value"]
+font_size = 16
+font_color = Color(1, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_credits_icon"]
+font_size = 28
+font_color = Color(1, 0.8, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_credits"]
+font_size = 24
+font_color = Color(1, 0.9, 0.3, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mission_title"]
+font_size = 18
+font_color = Color(0, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mission_desc"]
+font_size = 16
+font_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mission_progress"]
+font_size = 14
+font_color = Color(0.7, 0.7, 0.7, 1)
+
+[node name="GameHUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hud")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="HealthContainer" type="VBoxContainer" parent="MarginContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="HealthLabel" type="Label" parent="MarginContainer/TopBar/HealthContainer"]
+layout_mode = 2
+text = "SANTÉ"
+label_settings = SubResource("LabelSettings_header")
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/TopBar/HealthContainer"]
+custom_minimum_size = Vector2(200, 25)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBox_healthbar_bg")
+theme_override_styles/fill = SubResource("StyleBox_healthbar_fill")
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="MarginContainer/TopBar/HealthContainer"]
+layout_mode = 2
+text = "100 / 100"
+label_settings = SubResource("LabelSettings_value")
+
+[node name="Spacer" type="Control" parent="MarginContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CreditsContainer" type="HBoxContainer" parent="MarginContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="CreditsIcon" type="Label" parent="MarginContainer/TopBar/CreditsContainer"]
+layout_mode = 2
+text = "₿"
+label_settings = SubResource("LabelSettings_credits_icon")
+
+[node name="CreditsLabel" type="Label" parent="MarginContainer/TopBar/CreditsContainer"]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_credits")
+
+[node name="MissionPanel" type="PanelContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+anchors_preset = 1
+anchor_left = 0.0
+anchor_top = 0.15
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/MissionPanel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MissionTitle" type="Label" parent="MarginContainer/MissionPanel/VBoxContainer"]
+layout_mode = 2
+text = "[MISSION]"
+label_settings = SubResource("LabelSettings_mission_title")
+
+[node name="MissionDescription" type="Label" parent="MarginContainer/MissionPanel/VBoxContainer"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+text = "En attente de mission..."
+autowrap_mode = 2
+label_settings = SubResource("LabelSettings_mission_desc")
+
+[node name="MissionProgress" type="Label" parent="MarginContainer/MissionPanel/VBoxContainer"]
+layout_mode = 2
+text = ""
+label_settings = SubResource("LabelSettings_mission_progress")

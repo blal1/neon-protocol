@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://crafting_ui"]
+
+[ext_resource type="Script" path="res://scripts/ui/CraftingUI.gd" id="1"]
+
+[node name="CraftingUI" type="CanvasLayer"]
+layer = 100
+process_mode = 3
+script = ExtResource("1")

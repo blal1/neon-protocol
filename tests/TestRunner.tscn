@@ -1,0 +1,137 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_runner_001"]
+
+[ext_resource type="Script" path="res://tests/TestRunner.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.08, 0.08, 0.12, 1)
+border_color = Color(0, 0.8, 0.8, 0.5)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button"]
+bg_color = Color(0.1, 0.2, 0.25, 1)
+border_color = Color(0, 0.8, 0.8, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button_hover"]
+bg_color = Color(0, 0.3, 0.35, 1)
+border_color = Color(0, 1, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="TestRunner" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.03, 0.03, 0.06, 1)
+
+[node name="VBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="VBox"]
+layout_mode = 2
+text = "🧪 NEON PROTOCOL - TEST SUITE"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+
+[node name="ButtonBar" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="RunAllButton" type="Button" parent="VBox/ButtonBar"]
+custom_minimum_size = Vector2(180, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+text = "▶ Tous les tests"
+
+[node name="RunUnitButton" type="Button" parent="VBox/ButtonBar"]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+text = "📦 Unit Tests"
+
+[node name="RunIntegrationButton" type="Button" parent="VBox/ButtonBar"]
+custom_minimum_size = Vector2(150, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+text = "🔗 Integration"
+
+[node name="QuitButton" type="Button" parent="VBox/ButtonBar"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+text = "✕ Quitter"
+
+[node name="ResultsPanel" type="PanelContainer" parent="VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="Results" type="RichTextLabel" parent="VBox/ResultsPanel"]
+layout_mode = 2
+bbcode_enabled = true
+text = ""
+scroll_following = true
+
+[node name="StatusBar" type="HBoxContainer" parent="VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Status" type="Label" parent="VBox/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "En attente..."
+theme_override_colors/font_color = Color(0.7, 0.7, 0.8, 1)
+
+[node name="Progress" type="ProgressBar" parent="VBox/StatusBar"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+max_value = 10.0
+show_percentage = false
+
+[connection signal="pressed" from="VBox/ButtonBar/RunAllButton" to="." method="_on_run_all_pressed"]
+[connection signal="pressed" from="VBox/ButtonBar/RunUnitButton" to="." method="_on_run_unit_pressed"]
+[connection signal="pressed" from="VBox/ButtonBar/RunIntegrationButton" to="." method="_on_run_integration_pressed"]
+[connection signal="pressed" from="VBox/ButtonBar/QuitButton" to="." method="_on_quit_pressed"]

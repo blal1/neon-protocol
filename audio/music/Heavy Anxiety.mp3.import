@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c2nyu3pc7f07e"
+path="res://.godot/imported/Heavy Anxiety.mp3-0d64201af38725761f93a91828bf72ce.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Heavy Anxiety.mp3"
+dest_files=["res://.godot/imported/Heavy Anxiety.mp3-0d64201af38725761f93a91828bf72ce.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

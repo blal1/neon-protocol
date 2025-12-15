@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dddok3tuklvrl"
+path="res://.godot/imported/Return to the Nightmare.mp3-ae84469d1db97ad1f4e36e6404416bcb.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Return to the Nightmare.mp3"
+dest_files=["res://.godot/imported/Return to the Nightmare.mp3-ae84469d1db97ad1f4e36e6404416bcb.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

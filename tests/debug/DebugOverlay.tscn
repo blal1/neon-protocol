@@ -1,0 +1,42 @@
+[gd_scene load_steps=2 format=3 uid="uid://debug_overlay_001"]
+
+[ext_resource type="Script" path="res://tests/debug/DebugOverlay.gd" id="1_script"]
+
+[node name="DebugOverlay" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_script")
+
+[node name="Overlay" type="PanelContainer" parent="."]
+offset_right = 320.0
+offset_bottom = 250.0
+theme_override_styles/panel = SubResource("StyleBox_debug")
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_debug"]
+bg_color = Color(0, 0, 0, 0.75)
+border_color = Color(0, 0.8, 0.8, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+
+[node name="VBox" type="VBoxContainer" parent="Overlay"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Overlay/VBox"]
+layout_mode = 2
+text = "🔧 DEBUG OVERLAY (F3)"
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+
+[node name="Info" type="RichTextLabel" parent="Overlay/VBox"]
+custom_minimum_size = Vector2(300, 180)
+layout_mode = 2
+bbcode_enabled = true
+text = "Chargement..."

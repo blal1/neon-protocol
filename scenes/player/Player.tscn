@@ -1,0 +1,115 @@
+[gd_scene load_steps=8 format=3 uid="uid://player_scene_001"]
+
+[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_player"]
+[ext_resource type="Script" path="res://scripts/player/CombatManager.gd" id="2_combat"]
+[ext_resource type="Script" path="res://scripts/components/HealthComponent.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/camera/FollowCamera.gd" id="4_camera"]
+[ext_resource type="Script" path="res://scripts/camera/CameraController.gd" id="5_camera_ctrl"]
+[ext_resource type="Script" path="res://scripts/audio/FootstepSystem.gd" id="6_footsteps"]
+[ext_resource type="Script" path="res://scripts/audio/AudioCompass.gd" id="7_compass"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_player"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_player"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material_player"]
+albedo_color = Color(0.2, 0.6, 0.8, 1)
+emission_enabled = true
+emission = Color(0, 0.5, 0.7, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_visor"]
+size = Vector3(0.3, 0.1, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="Material_visor"]
+albedo_color = Color(0, 1, 1, 1)
+emission_enabled = true
+emission = Color(0, 1, 1, 1)
+emission_energy_multiplier = 2.0
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_player")
+
+[node name="MeshPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="Body" type="MeshInstance3D" parent="MeshPivot"]
+mesh = SubResource("CapsuleMesh_player")
+surface_material_override/0 = SubResource("Material_player")
+
+[node name="Visor" type="MeshInstance3D" parent="MeshPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.35)
+mesh = SubResource("BoxMesh_visor")
+surface_material_override/0 = SubResource("Material_visor")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 100.0
+
+[node name="CombatManager" type="Node" parent="."]
+script = ExtResource("2_combat")
+attack_range = 5.0
+attack_damage = 25.0
+attack_cooldown = 0.8
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+script = ExtResource("4_camera")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.906, 0.423, 0, -0.423, 0.906, 0, 0, 0)
+collision_mask = 1
+spring_length = 5.0
+margin = 0.5
+script = ExtResource("5_camera_ctrl")
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+current = true
+fov = 60.0
+
+[node name="FloorDetector" type="RayCast3D" parent="."]
+target_position = Vector3(0, -1.5, 0)
+collision_mask = 1
+
+[node name="FootstepSystem" type="Node" parent="."]
+script = ExtResource("6_footsteps")
+
+[node name="AudioCompass" type="Node3D" parent="."]
+script = ExtResource("7_compass")
+
+[node name="RayFront" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+target_position = Vector3(0, 0, -1.5)
+collision_mask = 1
+enabled = true
+
+[node name="RayLeft" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+target_position = Vector3(-1.0, 0, 0)
+collision_mask = 1
+enabled = true
+
+[node name="RayRight" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 0)
+target_position = Vector3(1.0, 0, 0)
+collision_mask = 1
+enabled = true
+
+[node name="InteractionArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="InteractionShape" type="CollisionShape3D" parent="InteractionArea"]
+
+[connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b2o7kdaakw27g"
+path="res://.godot/imported/Arrival to Carcosa.mp3-de0da0be59675224eda10ba7c903dcb1.mp3str"
+
+[deps]
+
+source_file="res://audio/music/Arrival to Carcosa.mp3"
+dest_files=["res://.godot/imported/Arrival to Carcosa.mp3-de0da0be59675224eda10ba7c903dcb1.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
