@@ -1,0 +1,81 @@
+[gd_scene load_steps=2 format=3 uid="uid://c68tmshsu2ux"]
+
+[ext_resource type="Script" uid="uid://b0ptd6kt5q5tr" path="res://addons/gmap_hotkeys/search/gmap_node_searching.gd" id="1_j6k5q"]
+
+[node name="GmapNodeSearching" type="Window"]
+title = "GMAP Node searching"
+position = Vector2i(0, 36)
+size = Vector2i(800, 400)
+script = ExtResource("1_j6k5q")
+
+[node name="GMAPLineEdit" type="LineEdit" parent="."]
+offset_right = 417.0
+offset_bottom = 31.0
+focus_neighbor_right = NodePath("../GMAPToolTipsToggle")
+focus_neighbor_bottom = NodePath("../GMAPSearch")
+focus_next = NodePath("../GMAPToolTipsToggle")
+keep_editing_on_text_submit = true
+emoji_menu_enabled = false
+
+[node name="GMAPSearch" type="Button" parent="."]
+offset_top = 50.0
+offset_right = 150.0
+offset_bottom = 81.0
+focus_neighbor_top = NodePath("../GMAPLineEdit")
+focus_neighbor_right = NodePath("../GMAPNext")
+focus_neighbor_bottom = NodePath("../GMAPLabel")
+focus_next = NodePath("../GMAPNext")
+focus_previous = NodePath("../GMAPOpenScreenOnly")
+text = "Search"
+
+[node name="GMAPNext" type="Button" parent="."]
+offset_left = 155.0
+offset_top = 50.0
+offset_right = 305.0
+offset_bottom = 81.0
+focus_neighbor_left = NodePath("../GMAPSearch")
+focus_neighbor_top = NodePath("../GMAPSearch")
+focus_neighbor_bottom = NodePath("../GMAPLabel")
+focus_next = NodePath("../GMAPLabel")
+focus_previous = NodePath("../GMAPSearch")
+text = "Next"
+
+[node name="GMAPLabel" type="Label" parent="."]
+accessibility_live = 2
+offset_left = 30.0
+offset_top = 108.0
+offset_right = 772.0
+offset_bottom = 351.0
+focus_neighbor_left = NodePath("../GMAPNext")
+focus_previous = NodePath("../GMAPNext")
+
+[node name="GMAPToolTipsToggle" type="CheckBox" parent="."]
+accessibility_name = "Tool Tip Toggle"
+accessibility_description = "If checked, checks the tool tips which are often much longer. So will get more results, but can search for things with no name."
+offset_left = 431.0
+offset_top = 6.0
+offset_right = 455.0
+offset_bottom = 30.0
+focus_neighbor_left = NodePath("../GMAPLineEdit")
+focus_neighbor_right = NodePath("../GMAPOpenScreenOnly")
+focus_neighbor_bottom = NodePath("../GMAPNext")
+focus_next = NodePath("../GMAPOpenScreenOnly")
+focus_previous = NodePath("../GMAPLineEdit")
+
+[node name="GMAPOpenScreenOnly" type="CheckBox" parent="."]
+accessibility_name = "Open screen only toggle"
+offset_left = 462.0
+offset_top = 6.0
+offset_right = 486.0
+offset_bottom = 30.0
+focus_neighbor_left = NodePath("../GMAPToolTipsToggle")
+focus_neighbor_bottom = NodePath("../GMAPNext")
+focus_next = NodePath("../GMAPSearch")
+focus_previous = NodePath("../GMAPToolTipsToggle")
+button_pressed = true
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="window_input" from="." to="." method="_on_window_input"]
+[connection signal="text_submitted" from="GMAPLineEdit" to="." method="_on_enter"]
+[connection signal="pressed" from="GMAPSearch" to="." method="_search_pressed"]
+[connection signal="pressed" from="GMAPNext" to="." method="_next_pressed"]

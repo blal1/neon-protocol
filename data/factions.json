@@ -1,0 +1,357 @@
+{
+    "factions": {
+        "novatech": {
+            "id": "novatech",
+            "name": "NovaTech Corporation",
+            "name_fr": "NovaTech Corporation",
+            "description": "Mégacorporation dominante de la ville",
+            "ideology": "corporate_control",
+            "color": "#00a8ff",
+            "territory": [
+                "corporate_tower",
+                "neon_mile"
+            ],
+            "leader": "Director Chen Wei",
+            "reputation_thresholds": {
+                "hostile": -50,
+                "unfriendly": -20,
+                "neutral": 0,
+                "friendly": 30,
+                "allied": 60
+            },
+            "relations": {
+                "anarkingdom": -80,
+                "ban_captchas": -60,
+                "cryptopirates": -40,
+                "police": 50,
+                "citizens": -20,
+                "nomads": -10
+            },
+            "perks": {
+                "friendly": [
+                    "corpo_discounts",
+                    "safe_zones"
+                ],
+                "allied": [
+                    "corpo_missions",
+                    "advanced_cyberware"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "corpo_bounty",
+                    "no_medical_access"
+                ]
+            }
+        },
+        "anarkingdom": {
+            "id": "anarkingdom",
+            "name": "Anarkingdom",
+            "name_fr": "Anarkingdom",
+            "description": "Anarchistes avec un roi ironique élu",
+            "ideology": "anarchist_democracy",
+            "color": "#ff3366",
+            "territory": [
+                "dead_end",
+                "the_sprawl"
+            ],
+            "leader": "Queen Pixel (élue démocratiquement)",
+            "reputation_thresholds": {
+                "hostile": -50,
+                "unfriendly": -20,
+                "neutral": 0,
+                "friendly": 30,
+                "allied": 60
+            },
+            "relations": {
+                "novatech": -80,
+                "ban_captchas": 40,
+                "cryptopirates": 30,
+                "police": -70,
+                "citizens": 20,
+                "nomads": 30
+            },
+            "perks": {
+                "friendly": [
+                    "safe_houses",
+                    "street_intel"
+                ],
+                "allied": [
+                    "rebel_missions",
+                    "black_market"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "street_ambush",
+                    "no_shelter"
+                ]
+            }
+        },
+        "ban_captchas": {
+            "id": "ban_captchas",
+            "name": "Ban-Captchas Collective",
+            "name_fr": "Collectif Ban-Captchas",
+            "description": "Coalition IA et humains pour droits numériques",
+            "ideology": "digital_rights",
+            "color": "#00ff88",
+            "territory": [
+                "sub_network",
+                "the_depths"
+            ],
+            "leader": "Conseil partagé IA/Humains",
+            "reputation_thresholds": {
+                "hostile": -50,
+                "unfriendly": -20,
+                "neutral": 0,
+                "friendly": 30,
+                "allied": 60
+            },
+            "relations": {
+                "novatech": -60,
+                "anarkingdom": 40,
+                "cryptopirates": 20,
+                "police": -50,
+                "citizens": 10,
+                "nomads": 0
+            },
+            "perks": {
+                "friendly": [
+                    "hacking_tools",
+                    "ai_contacts"
+                ],
+                "allied": [
+                    "digital_missions",
+                    "neural_upgrades"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "tracked_online",
+                    "hacking_attacks"
+                ]
+            }
+        },
+        "cryptopirates": {
+            "id": "cryptopirates",
+            "name": "Cryptopirates",
+            "name_fr": "Cryptopirates",
+            "description": "Pirates de l'information et contrebandiers de données",
+            "ideology": "information_freedom",
+            "color": "#ffcc00",
+            "territory": [
+                "neon_mile",
+                "the_wastes"
+            ],
+            "leader": "Captain Null",
+            "reputation_thresholds": {
+                "hostile": -50,
+                "unfriendly": -20,
+                "neutral": 0,
+                "friendly": 30,
+                "allied": 60
+            },
+            "relations": {
+                "novatech": -40,
+                "anarkingdom": 30,
+                "ban_captchas": 20,
+                "police": -60,
+                "citizens": 0,
+                "nomads": 40
+            },
+            "perks": {
+                "friendly": [
+                    "data_trades",
+                    "smuggler_routes"
+                ],
+                "allied": [
+                    "pirate_missions",
+                    "rare_intel"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "data_stolen",
+                    "bounty_posted"
+                ]
+            }
+        },
+        "police": {
+            "id": "police",
+            "name": "Metro Police Department",
+            "name_fr": "Département de Police Métropolitain",
+            "description": "Force de l'ordre corrompue par NovaTech",
+            "ideology": "corporate_law",
+            "color": "#4488ff",
+            "territory": [
+                "living_city",
+                "neon_mile"
+            ],
+            "leader": "Chief Director Morrison",
+            "reputation_thresholds": {
+                "hostile": -40,
+                "unfriendly": -15,
+                "neutral": 0,
+                "friendly": 25,
+                "allied": 50
+            },
+            "relations": {
+                "novatech": 50,
+                "anarkingdom": -70,
+                "ban_captchas": -50,
+                "cryptopirates": -60,
+                "citizens": 10,
+                "nomads": -20
+            },
+            "perks": {
+                "friendly": [
+                    "legal_immunity",
+                    "police_intel"
+                ],
+                "allied": [
+                    "bounty_access",
+                    "restricted_areas"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "wanted_status",
+                    "increased_patrols"
+                ]
+            }
+        },
+        "citizens": {
+            "id": "citizens",
+            "name": "Citizens Coalition",
+            "name_fr": "Coalition Citoyenne",
+            "description": "Habitants ordinaires essayant de survivre",
+            "ideology": "survival",
+            "color": "#aaaaaa",
+            "territory": [
+                "living_city",
+                "rust_belt"
+            ],
+            "leader": "Conseil de quartier",
+            "reputation_thresholds": {
+                "hostile": -30,
+                "unfriendly": -10,
+                "neutral": 0,
+                "friendly": 20,
+                "allied": 45
+            },
+            "relations": {
+                "novatech": -20,
+                "anarkingdom": 20,
+                "ban_captchas": 10,
+                "cryptopirates": 0,
+                "police": 10,
+                "nomads": 20
+            },
+            "perks": {
+                "friendly": [
+                    "local_tips",
+                    "safe_trading"
+                ],
+                "allied": [
+                    "community_quests",
+                    "housing_access"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "no_service",
+                    "social_pariah"
+                ]
+            }
+        },
+        "nomads": {
+            "id": "nomads",
+            "name": "Wasteland Nomads",
+            "name_fr": "Nomades des Terres Désolées",
+            "description": "Clans vivant hors de la ville",
+            "ideology": "freedom",
+            "color": "#cc8844",
+            "territory": [
+                "the_wastes",
+                "rust_belt"
+            ],
+            "leader": "Chef de clan rotatif",
+            "reputation_thresholds": {
+                "hostile": -50,
+                "unfriendly": -20,
+                "neutral": 0,
+                "friendly": 30,
+                "allied": 60
+            },
+            "relations": {
+                "novatech": -10,
+                "anarkingdom": 30,
+                "ban_captchas": 0,
+                "cryptopirates": 40,
+                "police": -20,
+                "citizens": 20
+            },
+            "perks": {
+                "friendly": [
+                    "wasteland_guides",
+                    "vehicle_repairs"
+                ],
+                "allied": [
+                    "nomad_missions",
+                    "exclusive_routes"
+                ]
+            },
+            "penalties": {
+                "hostile": [
+                    "wasteland_ambush",
+                    "resource_denial"
+                ]
+            }
+        }
+    },
+    "reputation_actions": {
+        "kill_corpo_guard": {
+            "novatech": -5,
+            "police": -3,
+            "anarkingdom": 2,
+            "citizens": -1
+        },
+        "help_citizen": {
+            "citizens": 5,
+            "anarkingdom": 2,
+            "police": 1
+        },
+        "hack_corpo_server": {
+            "novatech": -10,
+            "ban_captchas": 5,
+            "cryptopirates": 3
+        },
+        "complete_corpo_mission": {
+            "novatech": 10,
+            "police": 3,
+            "anarkingdom": -5,
+            "citizens": -2
+        },
+        "free_ai": {
+            "ban_captchas": 15,
+            "novatech": -8,
+            "anarkingdom": 5
+        },
+        "turn_in_criminal": {
+            "police": 8,
+            "novatech": 3,
+            "anarkingdom": -10,
+            "cryptopirates": -5
+        },
+        "steal_data": {
+            "cryptopirates": 5,
+            "novatech": -5,
+            "police": -3
+        },
+        "help_nomads": {
+            "nomads": 8,
+            "anarkingdom": 2,
+            "citizens": 1
+        }
+    }
+}

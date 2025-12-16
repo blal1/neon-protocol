@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3 uid="uid://rhj581vcetde"]
+
+[ext_resource type="Script" uid="uid://bdayfdlw2s6jq" path="res://addons/gmap_viewer/map_line.gd" id="1_f24ek"]
+[ext_resource type="AudioStream" uid="uid://h2rv5o1c15mu" path="res://addons/gmap_viewer/mapline_alert.wav" id="2_2fedv"]
+
+[node name="MapLine" type="LineEdit"]
+offset_right = 68.5625
+offset_bottom = 31.0
+script = ExtResource("1_f24ek")
+
+[node name="AutoComplete" type="ItemList" parent="."]
+visible = false
+z_index = 1
+layout_mode = 0
+offset_right = 285.0
+offset_bottom = 471.0
+focus_neighbor_left = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+focus_neighbor_top = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+focus_neighbor_right = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+focus_neighbor_bottom = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+focus_next = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+focus_previous = NodePath("/root/@EditorNode@21228/@Panel@14/@VBoxContainer@15/DockHSplitLeftL/DockHSplitLeftR/DockHSplitMain/@VBoxContainer@26/DockVSplitCenter/@VSplitContainer@54/@VBoxContainer@55/@EditorMainScreen@102/MainScreen/@CanvasItemEditor@11457/@VSplitContainer@11109/@HSplitContainer@11111/@HSplitContainer@11113/@Control@11114/@SubViewportContainer@11115/@SubViewport@11116/MapLine")
+
+[node name="NoObj" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_2fedv")
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="focus_exited" from="AutoComplete" to="." method="_on_auto_complete_focus_exited"]
+[connection signal="item_activated" from="AutoComplete" to="." method="_on_auto_complete_item_activated"]

@@ -1,0 +1,246 @@
+# ==============================================================================
+# GitHub Actions - Build Mobile & Desktop pour Neon Protocol
+# ==============================================================================
+# Builds automatisés pour Android (APK/AAB), iOS, Windows et Linux
+# Déclenché sur push vers main ou tags de release
+# ==============================================================================
+
+name: Build Neon Protocol
+
+on:
+  push:
+    branches: [main, develop]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Platforms to build (comma separated: android,ios,windows,linux)'
+        required: false
+        default: 'android,windows'
+
+env:
+  GODOT_VERSION: "4.3"
+  PROJECT_PATH: "."
+  EXPORT_NAME: "NeonProtocol"
+
+jobs:
+  # ===========================================================================
+  # VALIDATION
+  # ===========================================================================
+  validate:
+    name: Validate Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+      
+      - name: Import Project
+        run: |
+          godot --headless --import
+          echo "Project imported successfully"
+      
+      - name: Validate Scripts
+        run: |
+          godot --headless --check-only --script res://scripts/player/Player.gd
+          echo "Scripts validated"
+
+  # ===========================================================================
+  # BUILD ANDROID
+  # ===========================================================================
+  build-android:
+    name: Build Android
+    runs-on: ubuntu-latest
+    needs: validate
+    if: contains(github.event.inputs.platforms || 'android', 'android') || github.event_name == 'push'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          export-templates: true
+      
+      - name: Setup Android Export
+        run: |
+          mkdir -p ~/.config/godot/
+          echo '[gd_resource type="EditorSettings" format=3]' > ~/.config/godot/editor_settings-4.tres
+          echo '[resource]' >> ~/.config/godot/editor_settings-4.tres
+          echo 'export/android/android_sdk_path = "/usr/local/lib/android/sdk"' >> ~/.config/godot/editor_settings-4.tres
+      
+      - name: Create Export Directory
+        run: mkdir -p build/android
+      
+      - name: Build Debug APK
+        run: |
+          godot --headless --export-debug "Android" build/android/${{ env.EXPORT_NAME }}-debug.apk
+      
+      - name: Build Release APK
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          godot --headless --export-release "Android" build/android/${{ env.EXPORT_NAME }}-release.apk
+      
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: build/android/*.apk
+          retention-days: 7
+
+  # ===========================================================================
+  # BUILD WINDOWS
+  # ===========================================================================
+  build-windows:
+    name: Build Windows
+    runs-on: ubuntu-latest
+    needs: validate
+    if: contains(github.event.inputs.platforms || 'windows', 'windows') || github.event_name == 'push'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          export-templates: true
+      
+      - name: Create Export Directory
+        run: mkdir -p build/windows
+      
+      - name: Build Windows Release
+        run: |
+          godot --headless --export-release "Windows Desktop" build/windows/${{ env.EXPORT_NAME }}.exe
+      
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: build/windows/
+          retention-days: 7
+
+  # ===========================================================================
+  # BUILD LINUX
+  # ===========================================================================
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    needs: validate
+    if: contains(github.event.inputs.platforms || 'linux', 'linux')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+      
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v1
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          export-templates: true
+      
+      - name: Create Export Directory
+        run: mkdir -p build/linux
+      
+      - name: Build Linux Release
+        run: |
+          godot --headless --export-release "Linux" build/linux/${{ env.EXPORT_NAME }}.x86_64
+      
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: build/linux/
+          retention-days: 7
+
+  # ===========================================================================
+  # RELEASE
+  # ===========================================================================
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [build-android, build-windows]
+    if: startsWith(github.ref, 'refs/tags/')
+    
+    steps:
+      - name: Download Android APK
+        uses: actions/download-artifact@v4
+        with:
+          name: android-apk
+          path: artifacts/android
+      
+      - name: Download Windows Build
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build
+          path: artifacts/windows
+      
+      - name: Create ZIP archives
+        run: |
+          cd artifacts/windows && zip -r ../../NeonProtocol-Windows-${{ github.ref_name }}.zip . && cd ../..
+          cd artifacts/android && mv *.apk ../../ && cd ../..
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            NeonProtocol-Windows-${{ github.ref_name }}.zip
+            *.apk
+          draft: false
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ===========================================================================
+  # NOTIFY
+  # ===========================================================================
+  notify:
+    name: Build Notification
+    runs-on: ubuntu-latest
+    needs: [build-android, build-windows]
+    if: always()
+    
+    steps:
+      - name: Build Status Summary
+        run: |
+          echo "## Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Platform | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Android | ${{ needs.build-android.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Windows | ${{ needs.build-windows.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Triggered by: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY

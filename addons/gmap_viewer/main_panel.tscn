@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8623u0gk1acu"]
+
+[ext_resource type="Script" uid="uid://b6sprm0h04lnk" path="res://addons/gmap_viewer/main_panel.gd" id="1_fahxc"]
+
+[node name="MainPanel" type="GridContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+focus_mode = 2
+columns = 5
+script = ExtResource("1_fahxc")

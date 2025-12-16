@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4gibd5cc4wgr"]
+
+[ext_resource type="AudioStream" uid="uid://xj1o2ruq50sf" path="res://addons/gmap_hotkeys/gmap_alert.wav" id="1_8bdyh"]
+
+[node name="GmapAlert" type="AudioStreamPlayer"]
+stream = ExtResource("1_8bdyh")

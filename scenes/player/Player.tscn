@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://player_scene_001"]
+[gd_scene load_steps=9 format=3 uid="uid://player_scene_001"]
 
 [ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_player"]
 [ext_resource type="Script" path="res://scripts/player/CombatManager.gd" id="2_combat"]
@@ -30,6 +30,9 @@ albedo_color = Color(0, 1, 1, 1)
 emission_enabled = true
 emission = Color(0, 1, 1, 1)
 emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_interaction"]
+radius = 2.0
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -111,5 +114,6 @@ collision_layer = 0
 collision_mask = 4
 
 [node name="InteractionShape" type="CollisionShape3D" parent="InteractionArea"]
+shape = SubResource("SphereShape3D_interaction")
 
 [connection signal="body_entered" from="InteractionArea" to="." method="_on_interaction_area_body_entered"]

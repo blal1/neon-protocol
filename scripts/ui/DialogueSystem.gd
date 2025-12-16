@@ -604,12 +604,23 @@ func _load_dialogues_database() -> void:
 		return
 	
 	var json := JSON.new()
-	if json.parse(file.get_as_text()) == OK:
-		var data: Dictionary = json.data
-		_dialogues_database = data.get("dialogues", {})
-		print("DialogueSystem: %d dialogues chargés" % _dialogues_database.size())
-	
+	var parse_result := json.parse(file.get_as_text())
 	file.close()
+	
+	if parse_result != OK:
+		push_error("DialogueSystem: Erreur de parsing JSON: %s (ligne %d)" % [
+			json.get_error_message(), 
+			json.get_error_line()
+		])
+		return
+	
+	if json.data == null or not json.data is Dictionary:
+		push_error("DialogueSystem: Format JSON invalide - dictionnaire attendu")
+		return
+	
+	var data: Dictionary = json.data
+	_dialogues_database = data.get("dialogues", {})
+	print("DialogueSystem: %d dialogues chargés" % _dialogues_database.size())
 
 
 func start_npc_dialogue(dialogue_id: String) -> void:

@@ -514,3 +514,66 @@ func get_system_summary() -> Dictionary:
 		"pool_sizes": pool_sizes,
 		"total_spawned": _spawn_counts.values().reduce(func(a, b): return a + b, 0)
 	}
+
+
+# ==============================================================================
+# COMPATIBILITÉ IMPACTEFFECTS (Rétrocompatibilité)
+# ==============================================================================
+# Ces méthodes permettent une migration progressive depuis ImpactEffects.gd
+
+## Singleton access pour compatibilité avec l'ancien code
+static var _instance: VFXPoolManager = null
+
+static func get_instance() -> VFXPoolManager:
+	"""Retourne l'instance singleton (pour compatibilité avec ImpactEffects)."""
+	if not _instance:
+		_instance = Engine.get_singleton("VFXPoolManager") as VFXPoolManager
+		if not _instance:
+			push_warning("VFXPoolManager: Utilisez l'Autoload, pas get_instance()")
+	return _instance
+
+
+func spawn_hit_effect(position: Vector3, normal: Vector3 = Vector3.UP, effect_type: String = "spark") -> void:
+	"""
+	Compatibilité ImpactEffects : spawn un effet d'impact.
+	@deprecated: Utilisez spawn(VFXType.SPARK, position) directement.
+	"""
+	var vfx_type: VFXType
+	match effect_type:
+		"spark": vfx_type = VFXType.SPARK
+		"blood": vfx_type = VFXType.BLOOD_SPRAY
+		"cyber": vfx_type = VFXType.CYBER_GLITCH
+		"electric": vfx_type = VFXType.ELECTRIC_ARC
+		"metal": vfx_type = VFXType.BULLET_IMPACT_METAL
+		"flesh": vfx_type = VFXType.BULLET_IMPACT_FLESH
+		"concrete": vfx_type = VFXType.BULLET_IMPACT_CONCRETE
+		_: vfx_type = VFXType.SPARK
+	
+	var rotation := Vector3.ZERO
+	if normal != Vector3.UP:
+		rotation.x = asin(normal.y)
+		rotation.y = atan2(normal.x, normal.z)
+	
+	spawn(vfx_type, position, rotation)
+
+
+func spawn_slash_effect(position: Vector3, direction: Vector3) -> void:
+	"""Compatibilité ImpactEffects : effet de slash."""
+	spawn(VFXType.CYBER_GLITCH, position, Vector3(0, atan2(direction.x, direction.z), 0))
+
+
+func spawn_explosion_effect(position: Vector3, radius: float = 2.0) -> void:
+	"""Compatibilité ImpactEffects : effet d'explosion."""
+	var vfx_type := VFXType.EXPLOSION_SMALL
+	if radius >= 4.0:
+		vfx_type = VFXType.EXPLOSION_LARGE
+	elif radius >= 2.0:
+		vfx_type = VFXType.EXPLOSION_MEDIUM
+	
+	spawn(vfx_type, position, Vector3.ZERO, {"scale": radius / 2.0})
+
+
+func spawn_heal_effect(position: Vector3) -> void:
+	"""Compatibilité ImpactEffects : effet de soin."""
+	spawn(VFXType.HEAL_EFFECT, position)
+

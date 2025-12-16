@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbqixqnlsn2io"]
+
+[ext_resource type="Script" uid="uid://djdyxtkompkh4" path="res://addons/gmap_viewer/game scripts/gmap_in_game_label.gd" id="1_jglgm"]
+
+[node name="GmapInGameLabel" type="Label"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 2
+script = ExtResource("1_jglgm")

@@ -410,6 +410,28 @@ func _perform_interact() -> void:
 			tts.speak("Rien à proximité")
 
 
+func _on_interaction_area_body_entered(body: Node3D) -> void:
+	"""
+	Appelé quand un corps entre dans la zone d'interaction.
+	Connecté depuis Player.tscn via signal InteractionArea.body_entered.
+	"""
+	if not body or body == self:
+		return
+	
+	# Vérifier si c'est un objet interactible
+	if body.is_in_group("interactable"):
+		# Feedback visuel/audio qu'un objet est accessible
+		var tts = get_node_or_null("/root/TTSManager")
+		if tts and tts.has_method("speak_hint"):
+			var obj_name := _get_interactable_name(body)
+			tts.speak_hint("Objet accessible: " + obj_name)
+
+
+func _on_interaction_area_body_exited(body: Node3D) -> void:
+	"""Appelé quand un corps quitte la zone d'interaction."""
+	pass  # Placeholder pour futur feedback
+
+
 # ==============================================================================
 # ACCESSIBILITÉ - Méthodes utilitaires
 # ==============================================================================
@@ -508,11 +530,11 @@ func _on_attack_hit(target: Node3D, damage: float) -> void:
 	"""Appelée quand une attaque touche une cible."""
 	attack_hit.emit(target)
 	
-	# Impact particles
-	var impact_effects = ImpactEffects.get_instance()
-	if impact_effects:
+	# Impact particles (via VFXPoolManager)
+	var vfx_pool = get_node_or_null("/root/VFXPoolManager")
+	if vfx_pool:
 		var hit_pos := target.global_position + Vector3(0, 1, 0)
-		impact_effects.spawn_hit_effect(hit_pos, Vector3.UP, "cyber")
+		vfx_pool.spawn_hit_effect(hit_pos, Vector3.UP, "cyber")
 	
 	# Haptic combo feedback
 	var haptic = get_node_or_null("/root/HapticFeedback")
@@ -624,10 +646,10 @@ func _trigger_damage_camera_shake() -> void:
 
 func _spawn_attack_effect() -> void:
 	"""Génère l'effet visuel d'attaque (slash)."""
-	var impact_effects = ImpactEffects.get_instance()
-	if impact_effects:
+	var vfx_pool = get_node_or_null("/root/VFXPoolManager")
+	if vfx_pool:
 		var attack_pos := global_position + get_facing_direction() * 1.0 + Vector3(0, 1, 0)
-		impact_effects.spawn_slash_effect(attack_pos, get_facing_direction())
+		vfx_pool.spawn_slash_effect(attack_pos, get_facing_direction())
 
 
 func _trigger_hit_camera_shake() -> void:

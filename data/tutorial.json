@@ -1,0 +1,253 @@
+{
+    "version": 1,
+    "tutorials": [
+        {
+            "id": "movement",
+            "name": "Déplacement",
+            "description": "Apprenez à vous déplacer dans Night City",
+            "category": "gameplay",
+            "required": true,
+            "steps": [
+                {
+                    "id": "move_intro",
+                    "text": "Bienvenue, Runner. Utilisez le joystick virtuel à gauche pour vous déplacer.",
+                    "audio_cue": "tutorial_move",
+                    "highlight": "VirtualJoystick",
+                    "wait_for": "movement_detected",
+                    "timeout": 30
+                },
+                {
+                    "id": "move_around",
+                    "text": "Parfait ! Continuez à explorer la zone.",
+                    "audio_cue": "tutorial_success",
+                    "wait_for": "distance_5m",
+                    "timeout": 60
+                }
+            ]
+        },
+        {
+            "id": "dash",
+            "name": "Dash",
+            "description": "Maîtrisez l'esquive rapide",
+            "category": "gameplay",
+            "required": true,
+            "prerequisite": "movement",
+            "steps": [
+                {
+                    "id": "dash_intro",
+                    "text": "Appuyez sur le bouton Dash pour effectuer une esquive rapide.",
+                    "audio_cue": "tutorial_dash",
+                    "highlight": "DashButton",
+                    "wait_for": "dash_performed",
+                    "timeout": 30
+                },
+                {
+                    "id": "dash_direction",
+                    "text": "Le dash suit la direction du joystick. Essayez de dasher vers différentes directions.",
+                    "wait_for": "dash_count_3",
+                    "timeout": 60
+                }
+            ]
+        },
+        {
+            "id": "combat",
+            "name": "Combat",
+            "description": "Apprenez les bases du combat",
+            "category": "gameplay",
+            "required": true,
+            "prerequisite": "dash",
+            "steps": [
+                {
+                    "id": "attack_intro",
+                    "text": "Appuyez sur le bouton Attaque pour frapper. Le système cible automatiquement l'ennemi le plus proche.",
+                    "audio_cue": "tutorial_attack",
+                    "highlight": "AttackButton",
+                    "wait_for": "attack_performed",
+                    "timeout": 30
+                },
+                {
+                    "id": "combo_intro",
+                    "text": "Enchaînez les attaques rapidement pour créer un combo !",
+                    "wait_for": "combo_count_3",
+                    "timeout": 45
+                },
+                {
+                    "id": "kill_enemy",
+                    "text": "Éliminez l'ennemi d'entrainement pour continuer.",
+                    "wait_for": "enemy_killed",
+                    "timeout": 120
+                }
+            ]
+        },
+        {
+            "id": "interaction",
+            "name": "Interaction",
+            "description": "Interagissez avec le monde",
+            "category": "gameplay",
+            "required": true,
+            "prerequisite": "combat",
+            "steps": [
+                {
+                    "id": "interact_intro",
+                    "text": "Approchez-vous d'un objet interactif. Le bouton Interact apparaîtra.",
+                    "audio_cue": "tutorial_interact",
+                    "highlight": "InteractButton",
+                    "wait_for": "near_interactable",
+                    "timeout": 60
+                },
+                {
+                    "id": "interact_perform",
+                    "text": "Appuyez sur Interact pour ramasser l'objet ou parler au PNJ.",
+                    "wait_for": "interaction_performed",
+                    "timeout": 30
+                }
+            ]
+        },
+        {
+            "id": "hacking",
+            "name": "Hacking",
+            "description": "Infiltrez les systèmes informatiques",
+            "category": "advanced",
+            "required": false,
+            "prerequisite": "interaction",
+            "steps": [
+                {
+                    "id": "hack_intro",
+                    "text": "Approchez d'un terminal hackable et interagissez avec lui.",
+                    "audio_cue": "tutorial_hack",
+                    "wait_for": "terminal_activated",
+                    "timeout": 120
+                },
+                {
+                    "id": "hack_puzzle",
+                    "text": "Résolvez le puzzle pour pirater le système. Les ICE (protections) s'adapteront à votre niveau.",
+                    "wait_for": "hack_complete",
+                    "timeout": 180
+                }
+            ]
+        },
+        {
+            "id": "stealth",
+            "name": "Furtivité",
+            "description": "Passez inaperçu",
+            "category": "advanced",
+            "required": false,
+            "prerequisite": "interaction",
+            "steps": [
+                {
+                    "id": "stealth_intro",
+                    "text": "Maintenez le bouton Crouch pour vous accroupir et réduire votre visibilité.",
+                    "audio_cue": "tutorial_stealth",
+                    "highlight": "CrouchButton",
+                    "wait_for": "crouch_performed",
+                    "timeout": 30
+                },
+                {
+                    "id": "stealth_cover",
+                    "text": "Restez près des murs et des obstacles pour vous mettre à couvert.",
+                    "wait_for": "in_cover",
+                    "timeout": 45
+                },
+                {
+                    "id": "stealth_takedown",
+                    "text": "Approchez discrètement d'un ennemi par derrière pour effectuer une élimination silencieuse.",
+                    "wait_for": "takedown_performed",
+                    "timeout": 120
+                }
+            ]
+        },
+        {
+            "id": "navigation_audio",
+            "name": "Navigation Audio",
+            "description": "Utilisez le sonar pour naviguer",
+            "category": "accessibility",
+            "required": false,
+            "steps": [
+                {
+                    "id": "sonar_intro",
+                    "text": "Le système Sonar émet des pings audio vers votre objectif. Plus le son est aigu, plus vous êtes proche.",
+                    "audio_cue": "tutorial_sonar",
+                    "wait_for": "sonar_ping_heard",
+                    "timeout": 30
+                },
+                {
+                    "id": "sonar_manual",
+                    "text": "Appuyez sur le bouton Ping (ou Tab) pour déclencher manuellement un ping de navigation.",
+                    "highlight": "PingButton",
+                    "wait_for": "manual_ping",
+                    "timeout": 30
+                }
+            ]
+        },
+        {
+            "id": "inventory",
+            "name": "Inventaire",
+            "description": "Gérez vos objets",
+            "category": "systems",
+            "required": false,
+            "steps": [
+                {
+                    "id": "inventory_open",
+                    "text": "Ouvrez le menu Pause et sélectionnez Inventaire pour voir vos objets.",
+                    "wait_for": "inventory_opened",
+                    "timeout": 60
+                },
+                {
+                    "id": "inventory_use",
+                    "text": "Sélectionnez un objet consommable et appuyez sur Utiliser pour l'appliquer.",
+                    "wait_for": "item_used",
+                    "timeout": 60
+                }
+            ]
+        },
+        {
+            "id": "skills",
+            "name": "Compétences",
+            "description": "Améliorez votre personnage",
+            "category": "systems",
+            "required": false,
+            "steps": [
+                {
+                    "id": "skills_open",
+                    "text": "L'arbre de compétences vous permet de débloquer de nouvelles capacités. Accédez-y depuis le menu Pause.",
+                    "wait_for": "skills_opened",
+                    "timeout": 60
+                },
+                {
+                    "id": "skills_unlock",
+                    "text": "Chaque point de compétence peut être investi dans une des 4 branches: Combat, Hacking, Furtivité ou Survie.",
+                    "wait_for": "skill_unlocked",
+                    "timeout": 120
+                }
+            ]
+        }
+    ],
+    "categories": {
+        "gameplay": {
+            "name": "Gameplay de Base",
+            "priority": 1,
+            "color": "#00FFFF"
+        },
+        "advanced": {
+            "name": "Mécaniques Avancées",
+            "priority": 2,
+            "color": "#FF00FF"
+        },
+        "accessibility": {
+            "name": "Accessibilité",
+            "priority": 0,
+            "color": "#00FF00"
+        },
+        "systems": {
+            "name": "Systèmes du Jeu",
+            "priority": 3,
+            "color": "#FFFF00"
+        }
+    },
+    "settings": {
+        "show_tutorials_on_first_play": true,
+        "allow_skip": true,
+        "replay_from_menu": true,
+        "tts_enabled": true
+    }
+}

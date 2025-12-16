@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dg104fkldj6tm"]
+
+[ext_resource type="Script" uid="uid://7anuu351wq58" path="res://addons/gmap_viewer/game scripts/gmap.gd" id="1_nmcxx"]
+
+[node name="GMAP" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_nmcxx")
+rows = 12
+columns = 12

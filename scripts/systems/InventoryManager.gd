@@ -103,11 +103,25 @@ func _load_item_database() -> void:
 		return
 	
 	var json := JSON.new()
-	if json.parse(file.get_as_text()) == OK:
-		for item_data in json.data:
-			_item_database[item_data["id"]] = item_data
-	
+	var parse_result := json.parse(file.get_as_text())
 	file.close()
+	
+	if parse_result != OK:
+		push_error("InventoryManager: Erreur de parsing JSON: %s (ligne %d)" % [
+			json.get_error_message(),
+			json.get_error_line()
+		])
+		_create_default_database()
+		return
+	
+	if json.data == null or not json.data is Array:
+		push_error("InventoryManager: Format JSON invalide - array attendu")
+		_create_default_database()
+		return
+	
+	for item_data in json.data:
+		if item_data is Dictionary and item_data.has("id"):
+			_item_database[item_data["id"]] = item_data
 
 
 func _create_default_database() -> void:

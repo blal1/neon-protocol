@@ -1,0 +1,259 @@
+{
+    "corporate_tower": {
+        "layer_id": "corporate_tower",
+        "name": "Corporate Tower",
+        "name_fr": "Tour Corporative",
+        "altitude_range": [
+            80,
+            200
+        ],
+        "biome": "pristine",
+        "atmosphere": {
+            "fog_density": 0.001,
+            "fog_color": "#1a1a2e",
+            "ambient_color": "#2a2a4e",
+            "ambient_energy": 0.4,
+            "sky_tint": "#0a0a20"
+        },
+        "lighting": {
+            "primary_color": "#ffffff",
+            "accent_colors": [
+                "#00a8ff",
+                "#00ffff"
+            ],
+            "intensity": 1.2,
+            "shadow_enabled": true
+        },
+        "architecture": {
+            "style": "sleek_modern",
+            "materials": [
+                "glass",
+                "chrome",
+                "white_concrete"
+            ],
+            "window_density": 0.9,
+            "decoration_level": "minimal"
+        },
+        "population": {
+            "density": "low",
+            "types": [
+                "corpo_worker",
+                "security_guard",
+                "executive"
+            ],
+            "hostility_base": 0.2
+        },
+        "props": {
+            "common": [
+                "holographic_ad",
+                "security_camera",
+                "drone_patrol"
+            ],
+            "rare": [
+                "executive_vehicle",
+                "private_garden"
+            ]
+        },
+        "sounds": {
+            "ambient": "res://audio/ambient/corpo_hum.ogg",
+            "music_mood": "tense_corporate"
+        }
+    },
+    "living_city": {
+        "layer_id": "living_city",
+        "name": "Living City",
+        "name_fr": "Ville Vivante",
+        "altitude_range": [
+            20,
+            80
+        ],
+        "biome": "urban_dense",
+        "atmosphere": {
+            "fog_density": 0.02,
+            "fog_color": "#1a1a2e",
+            "ambient_color": "#332244",
+            "ambient_energy": 0.3,
+            "sky_tint": "#ff00ff"
+        },
+        "lighting": {
+            "primary_color": "#ff6600",
+            "accent_colors": [
+                "#ff00ff",
+                "#00ffff",
+                "#ffff00"
+            ],
+            "neon_density": 0.8,
+            "intensity": 0.8,
+            "shadow_enabled": true
+        },
+        "architecture": {
+            "style": "mixed_commercial",
+            "materials": [
+                "concrete",
+                "metal",
+                "neon_signs"
+            ],
+            "window_density": 0.7,
+            "decoration_level": "high"
+        },
+        "population": {
+            "density": "high",
+            "types": [
+                "citizen",
+                "vendor",
+                "street_performer",
+                "beggar",
+                "police"
+            ],
+            "hostility_base": 0.1
+        },
+        "props": {
+            "common": [
+                "neon_sign",
+                "food_stall",
+                "trash_pile",
+                "advertisement"
+            ],
+            "rare": [
+                "street_musician",
+                "illegal_vendor",
+                "info_broker"
+            ]
+        },
+        "sounds": {
+            "ambient": "res://audio/ambient/city_crowd.ogg",
+            "music_mood": "urban_pulse"
+        }
+    },
+    "dead_ground": {
+        "layer_id": "dead_ground",
+        "name": "Dead Ground",
+        "name_fr": "Terre Morte",
+        "altitude_range": [
+            0,
+            20
+        ],
+        "biome": "slum",
+        "atmosphere": {
+            "fog_density": 0.04,
+            "fog_color": "#1a1511",
+            "ambient_color": "#221a11",
+            "ambient_energy": 0.2,
+            "sky_tint": "#331100"
+        },
+        "lighting": {
+            "primary_color": "#ff4400",
+            "accent_colors": [
+                "#ff6600",
+                "#884400"
+            ],
+            "neon_density": 0.2,
+            "intensity": 0.4,
+            "shadow_enabled": false
+        },
+        "architecture": {
+            "style": "shanty_improvised",
+            "materials": [
+                "rusted_metal",
+                "scrap",
+                "tarp",
+                "broken_concrete"
+            ],
+            "window_density": 0.3,
+            "decoration_level": "minimal"
+        },
+        "population": {
+            "density": "medium",
+            "types": [
+                "homeless",
+                "scavenger",
+                "gang_member",
+                "outcast"
+            ],
+            "hostility_base": 0.4
+        },
+        "props": {
+            "common": [
+                "barrel_fire",
+                "junk_pile",
+                "makeshift_shelter",
+                "graffiti"
+            ],
+            "rare": [
+                "hidden_cache",
+                "rebel_hideout",
+                "chop_shop"
+            ]
+        },
+        "sounds": {
+            "ambient": "res://audio/ambient/slum_wind.ogg",
+            "music_mood": "desolate"
+        }
+    },
+    "sub_network": {
+        "layer_id": "sub_network",
+        "name": "Sub-Network",
+        "name_fr": "Sous-Réseau",
+        "altitude_range": [
+            -50,
+            0
+        ],
+        "biome": "underground",
+        "atmosphere": {
+            "fog_density": 0.05,
+            "fog_color": "#0a0a15",
+            "ambient_color": "#111122",
+            "ambient_energy": 0.15,
+            "sky_tint": "#000011"
+        },
+        "lighting": {
+            "primary_color": "#00ff88",
+            "accent_colors": [
+                "#00ffff",
+                "#00ff00",
+                "#0088ff"
+            ],
+            "neon_density": 0.5,
+            "intensity": 0.5,
+            "shadow_enabled": true
+        },
+        "architecture": {
+            "style": "industrial_tunnels",
+            "materials": [
+                "wet_concrete",
+                "pipes",
+                "cables",
+                "server_racks"
+            ],
+            "window_density": 0.0,
+            "decoration_level": "medium"
+        },
+        "population": {
+            "density": "low",
+            "types": [
+                "hacker",
+                "smuggler",
+                "ai_entity",
+                "mutant"
+            ],
+            "hostility_base": 0.3
+        },
+        "props": {
+            "common": [
+                "data_terminal",
+                "cable_bundle",
+                "water_drip",
+                "server_rack"
+            ],
+            "rare": [
+                "ai_core",
+                "hidden_lab",
+                "data_vault"
+            ]
+        },
+        "sounds": {
+            "ambient": "res://audio/ambient/underground_drip.ogg",
+            "music_mood": "digital_mystery"
+        }
+    }
+}

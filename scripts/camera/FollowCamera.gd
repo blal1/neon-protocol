@@ -56,6 +56,15 @@ var _current_distance: float
 var _target_position: Vector3
 var _velocity: Vector3 = Vector3.ZERO  # Pour smooth damp manuel
 var _pitch: float = -25.0  # Angle vertical initial
+var _yaw: float = 0.0  # Angle horizontal
+
+# Desktop camera control
+var _mouse_captured: bool = false
+@export_group("Desktop Controls")
+@export var mouse_sensitivity: float = 0.003  ## Sensibilité souris
+@export var gamepad_sensitivity: float = 2.0  ## Sensibilité stick droit
+@export var invert_y: bool = false  ## Inverser l'axe Y
+@export var enable_mouse_look: bool = true  ## Activer la rotation souris
 
 # ==============================================================================
 # FONCTIONS GODOT
@@ -102,6 +111,74 @@ func _physics_process(delta: float) -> void:
 	
 	# 4. Faire regarder la caméra vers le joueur
 	_update_camera_look()
+	
+	# 5. Gérer la rotation gamepad (stick droit)
+	_handle_gamepad_look(delta)
+
+
+func _input(event: InputEvent) -> void:
+	"""Gestion des inputs pour la rotation caméra."""
+	if not enable_mouse_look:
+		return
+	
+	# Mouse look (desktop)
+	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var motion := event as InputEventMouseMotion
+		_apply_camera_rotation(motion.relative * mouse_sensitivity)
+	
+	# Capture/release mouse with Escape
+	if event.is_action_pressed("pause"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+			_mouse_captured = false
+	
+	# Click to capture mouse
+	if event is InputEventMouseButton and event.pressed:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.button_index == MOUSE_BUTTON_LEFT:
+			if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+				# Check if we're not clicking UI
+				var viewport := get_viewport()
+				if viewport:
+					var gui_path := viewport.gui_get_focus_owner()
+					if gui_path == null:
+						Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+						_mouse_captured = true
+
+
+func _handle_gamepad_look(delta: float) -> void:
+	"""Gère la rotation via stick droit de manette."""
+	var look_input := Vector2.ZERO
+	
+	# Check gamepad right stick
+	look_input.x = Input.get_joy_axis(0, JOY_AXIS_RIGHT_X)
+	look_input.y = Input.get_joy_axis(0, JOY_AXIS_RIGHT_Y)
+	
+	# Apply deadzone
+	if look_input.length() < 0.2:
+		return
+	
+	_apply_camera_rotation(look_input * gamepad_sensitivity * delta * 60.0)
+
+
+func _apply_camera_rotation(delta_look: Vector2) -> void:
+	"""Applique la rotation de la caméra."""
+	# Yaw (rotation horizontale)
+	_yaw -= delta_look.x
+	
+	# Pitch (rotation verticale)
+	var pitch_delta := delta_look.y
+	if invert_y:
+		pitch_delta *= -1
+	_pitch -= pitch_delta
+	_pitch = clamp(_pitch, MIN_PITCH, MAX_PITCH)
+	
+	# Appliquer au pivot (ce node)
+	rotation_degrees.y = _yaw
+	
+	# Appliquer au spring arm
+	if spring_arm:
+		spring_arm.rotation_degrees.x = _pitch
 
 
 # ==============================================================================

@@ -1,0 +1,317 @@
+{
+    "districts": {
+        "neon_mile": {
+            "id": "neon_mile",
+            "name": "Neon Mile",
+            "name_fr": "Mile Néon",
+            "description": "Le cœur commercial de la ville, brillant de mille néons",
+            "layer": "living_city",
+            "size": [
+                500,
+                500
+            ],
+            "economy": {
+                "wealth_level": 0.7,
+                "commerce_density": 0.9,
+                "black_market": 0.3,
+                "job_types": [
+                    "vendor",
+                    "entertainer",
+                    "security"
+                ]
+            },
+            "control": {
+                "primary_faction": "novatech",
+                "contested_by": [
+                    "cryptopirates"
+                ],
+                "police_presence": 0.7,
+                "gang_presence": 0.2
+            },
+            "atmosphere": {
+                "crowd_density": 0.8,
+                "noise_level": 0.9,
+                "pollution": 0.4,
+                "neon_intensity": 1.0
+            },
+            "landmarks": [
+                "mega_mall",
+                "holo_theater",
+                "food_court"
+            ],
+            "events": [
+                "street_performance",
+                "police_raid",
+                "product_launch"
+            ]
+        },
+        "rust_belt": {
+            "id": "rust_belt",
+            "name": "Rust Belt",
+            "name_fr": "Ceinture de Rouille",
+            "description": "Zone industrielle abandonnée, repaire de gangs",
+            "layer": "dead_ground",
+            "size": [
+                600,
+                400
+            ],
+            "economy": {
+                "wealth_level": 0.2,
+                "commerce_density": 0.1,
+                "black_market": 0.8,
+                "job_types": [
+                    "scavenger",
+                    "mechanic",
+                    "smuggler"
+                ]
+            },
+            "control": {
+                "primary_faction": "anarkingdom",
+                "contested_by": [
+                    "cryptopirates",
+                    "nomads"
+                ],
+                "police_presence": 0.1,
+                "gang_presence": 0.7
+            },
+            "atmosphere": {
+                "crowd_density": 0.2,
+                "noise_level": 0.4,
+                "pollution": 0.8,
+                "neon_intensity": 0.2
+            },
+            "landmarks": [
+                "abandoned_factory",
+                "scrap_yard",
+                "rebel_base"
+            ],
+            "events": [
+                "gang_war",
+                "scavenger_hunt",
+                "toxic_leak"
+            ]
+        },
+        "corpo_plaza": {
+            "id": "corpo_plaza",
+            "name": "Corporate Plaza",
+            "name_fr": "Place Corporative",
+            "description": "Quartier des affaires avec tours étincelantes",
+            "layer": "corporate_tower",
+            "size": [
+                400,
+                400
+            ],
+            "economy": {
+                "wealth_level": 0.95,
+                "commerce_density": 0.6,
+                "black_market": 0.05,
+                "job_types": [
+                    "executive",
+                    "lawyer",
+                    "security_elite"
+                ]
+            },
+            "control": {
+                "primary_faction": "novatech",
+                "contested_by": [],
+                "police_presence": 0.9,
+                "gang_presence": 0.0
+            },
+            "atmosphere": {
+                "crowd_density": 0.4,
+                "noise_level": 0.3,
+                "pollution": 0.1,
+                "neon_intensity": 0.5
+            },
+            "landmarks": [
+                "novatech_tower",
+                "sky_garden",
+                "executive_club"
+            ],
+            "events": [
+                "corporate_gala",
+                "security_lockdown",
+                "protest"
+            ]
+        },
+        "the_depths": {
+            "id": "the_depths",
+            "name": "The Depths",
+            "name_fr": "Les Profondeurs",
+            "description": "Tunnels souterrains contrôlés par les hackers",
+            "layer": "sub_network",
+            "size": [
+                800,
+                300
+            ],
+            "economy": {
+                "wealth_level": 0.4,
+                "commerce_density": 0.3,
+                "black_market": 0.9,
+                "job_types": [
+                    "hacker",
+                    "data_runner",
+                    "tech_dealer"
+                ]
+            },
+            "control": {
+                "primary_faction": "ban_captchas",
+                "contested_by": [
+                    "cryptopirates"
+                ],
+                "police_presence": 0.05,
+                "gang_presence": 0.4
+            },
+            "atmosphere": {
+                "crowd_density": 0.15,
+                "noise_level": 0.2,
+                "pollution": 0.3,
+                "neon_intensity": 0.4
+            },
+            "landmarks": [
+                "data_haven",
+                "ai_sanctuary",
+                "underground_market"
+            ],
+            "events": [
+                "data_auction",
+                "ai_awakening",
+                "corpo_raid"
+            ]
+        },
+        "dead_end": {
+            "id": "dead_end",
+            "name": "Dead End",
+            "name_fr": "Impasse",
+            "description": "Quartier le plus pauvre, zone de non-droit",
+            "layer": "dead_ground",
+            "size": [
+                500,
+                500
+            ],
+            "economy": {
+                "wealth_level": 0.05,
+                "commerce_density": 0.05,
+                "black_market": 0.6,
+                "job_types": [
+                    "beggar",
+                    "organ_dealer",
+                    "fixer"
+                ]
+            },
+            "control": {
+                "primary_faction": "citizens",
+                "contested_by": [
+                    "anarkingdom"
+                ],
+                "police_presence": 0.0,
+                "gang_presence": 0.5
+            },
+            "atmosphere": {
+                "crowd_density": 0.3,
+                "noise_level": 0.3,
+                "pollution": 0.9,
+                "neon_intensity": 0.05
+            },
+            "landmarks": [
+                "chop_shop",
+                "refugee_camp",
+                "toxic_dump"
+            ],
+            "events": [
+                "raid",
+                "disease_outbreak",
+                "corpo_cleanup"
+            ]
+        },
+        "the_sprawl": {
+            "id": "the_sprawl",
+            "name": "The Sprawl",
+            "name_fr": "L'Étalement",
+            "description": "Zone résidentielle dense de la classe moyenne basse",
+            "layer": "living_city",
+            "size": [
+                700,
+                600
+            ],
+            "economy": {
+                "wealth_level": 0.35,
+                "commerce_density": 0.5,
+                "black_market": 0.4,
+                "job_types": [
+                    "worker",
+                    "small_vendor",
+                    "driver"
+                ]
+            },
+            "control": {
+                "primary_faction": "citizens",
+                "contested_by": [
+                    "anarkingdom",
+                    "police"
+                ],
+                "police_presence": 0.4,
+                "gang_presence": 0.4
+            },
+            "atmosphere": {
+                "crowd_density": 0.7,
+                "noise_level": 0.6,
+                "pollution": 0.5,
+                "neon_intensity": 0.6
+            },
+            "landmarks": [
+                "night_market",
+                "apartment_blocks",
+                "local_bar"
+            ],
+            "events": [
+                "street_fight",
+                "market_day",
+                "power_outage"
+            ]
+        },
+        "the_wastes": {
+            "id": "the_wastes",
+            "name": "The Wastes",
+            "name_fr": "Les Terres Désolées",
+            "description": "Désert aux portes de la ville, territoire nomade",
+            "layer": "dead_ground",
+            "size": [
+                1000,
+                800
+            ],
+            "economy": {
+                "wealth_level": 0.15,
+                "commerce_density": 0.05,
+                "black_market": 0.3,
+                "job_types": [
+                    "nomad",
+                    "scavenger",
+                    "trader"
+                ]
+            },
+            "control": {
+                "primary_faction": "nomads",
+                "contested_by": [],
+                "police_presence": 0.0,
+                "gang_presence": 0.2
+            },
+            "atmosphere": {
+                "crowd_density": 0.05,
+                "noise_level": 0.1,
+                "pollution": 0.6,
+                "neon_intensity": 0.0
+            },
+            "landmarks": [
+                "nomad_camp",
+                "crashed_vehicle",
+                "radio_tower"
+            ],
+            "events": [
+                "sandstorm",
+                "caravan_arrival",
+                "creature_attack"
+            ]
+        }
+    }
+}

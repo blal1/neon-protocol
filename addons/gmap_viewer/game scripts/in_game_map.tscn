@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dkcmvtra6bohq"]
+
+[ext_resource type="Script" uid="uid://oteexbte7es8" path="res://addons/gmap_viewer/game scripts/in_game_map.gd" id="1_vcre0"]
+
+[node name="InGameMap" type="GridContainer"]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_vcre0")
