@@ -1,0 +1,52 @@
+name: cloc report
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  cloc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install cloc
+        run: sudo apt-get update && sudo apt-get install -y cloc
+
+      - name: Run cloc (JSON + CSV)
+        run: |
+          cloc --by-file --json . > cloc.json || true
+          cloc --csv . > cloc.csv || true
+
+      - name: Upload cloc report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloc-report
+          path: |
+            cloc.json
+            cloc.csv
+
+      - name: Post cloc summary as PR comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const data = JSON.parse(fs.readFileSync('cloc.json','utf8'));
+            const sum = data.SUM || {};
+            const total = sum.code || 0;
+            const langs = Object.keys(data)
+              .filter(k => k !== 'SUM' && k !== 'header')
+              .map(k => ({lang: k, lines: data[k].code || 0}))
+              .sort((a,b) => b.lines - a.lines)
+              .slice(0,5);
+            let body = `## cloc report\n\nTotal lines of code: **${total}**\n\nTop languages:\n` +
+              langs.map(l => `- ${l.lang}: ${l.lines}`).join('\n');
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body
+            });
