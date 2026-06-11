@@ -150,7 +150,7 @@ func _state_targeting(delta: float) -> void:
 		turret_head.rotation.y = lerp_angle(current_angle, _target_angle, rotation_speed * delta)
 		
 		# Vérifier si on est aligné
-		var angle_diff := abs(angle_difference(current_angle, _target_angle))
+		var angle_diff: float = abs(angle_difference(current_angle, _target_angle))
 		if angle_diff < aim_tolerance and can_fire:
 			current_state = State.FIRING
 
@@ -321,7 +321,7 @@ func _process_hacked(delta: float) -> void:
 		turret_head.rotation.y = lerp_angle(turret_head.rotation.y, target, rotation_speed * delta)
 		
 		# Tirer
-		var angle_diff := abs(angle_difference(turret_head.rotation.y, target))
+		var angle_diff: float = abs(angle_difference(turret_head.rotation.y, target))
 		if angle_diff < aim_tolerance and can_fire:
 			_fire_single()
 			can_fire = false

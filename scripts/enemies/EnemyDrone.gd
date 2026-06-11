@@ -287,7 +287,7 @@ func _create_projectile() -> Node3D:
 	projectile.add_child(collision)
 	
 	# Script inline pour le mouvement
-	projectile.set_script(preload("res://scripts/gameplay/Projectile.gd") if ResourceLoader.exists("res://scripts/gameplay/Projectile.gd") else null)
+	projectile.set_script(load("res://scripts/gameplay/Projectile.gd") if ResourceLoader.exists("res://scripts/gameplay/Projectile.gd") else null)
 	
 	# Stocker les données
 	projectile.set_meta("direction", direction)
