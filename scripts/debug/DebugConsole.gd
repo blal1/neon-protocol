@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends CanvasLayer
-class_name DebugConsole
 
 # ==============================================================================
 # SIGNAUX
@@ -44,7 +43,7 @@ var _commands: Dictionary = {}  # command_name -> Callable
 ## UI Elements
 var _panel: Panel
 var _output: RichTextLabel
-var _input: LineEdit
+var _input_field: LineEdit
 var _scroll: ScrollContainer
 
 # ==============================================================================
@@ -102,20 +101,20 @@ func _create_ui() -> void:
 	_scroll.add_child(_output)
 	
 	# Input
-	_input = LineEdit.new()
-	_input.name = "Input"
-	_input.placeholder_text = "Entrez une commande (help pour la liste)"
-	_input.add_theme_color_override("font_color", text_color)
-	_input.add_theme_color_override("caret_color", text_color)
-	
+	_input_field = LineEdit.new()
+	_input_field.name = "Input"
+	_input_field.placeholder_text = "Entrez une commande (help pour la liste)"
+	_input_field.add_theme_color_override("font_color", text_color)
+	_input_field.add_theme_color_override("caret_color", text_color)
+
 	var input_style := StyleBoxFlat.new()
 	input_style.bg_color = Color(0.1, 0.1, 0.15, 1.0)
-	input_style.border_width_all = 1
+	input_style.set_border_width_all(1)
 	input_style.border_color = text_color.darkened(0.5)
-	_input.add_theme_stylebox_override("normal", input_style)
-	
-	_input.text_submitted.connect(_on_command_submitted)
-	vbox.add_child(_input)
+	_input_field.add_theme_stylebox_override("normal", input_style)
+
+	_input_field.text_submitted.connect(_on_command_submitted)
+	vbox.add_child(_input_field)
 	
 	# Message de bienvenue
 	_print_line("[b]NEON PROTOCOL DEBUG CONSOLE[/b]")
@@ -203,7 +202,7 @@ func _show_console() -> void:
 	"""Affiche la console."""
 	_panel.visible = true
 	_is_open = true
-	_input.grab_focus()
+	_input_field.grab_focus()
 	get_tree().paused = true
 	console_opened.emit()
 
@@ -222,8 +221,8 @@ func _navigate_history(direction: int) -> void:
 		return
 	
 	_history_index = clampi(_history_index + direction, 0, _command_history.size() - 1)
-	_input.text = _command_history[_history_index]
-	_input.caret_column = _input.text.length()
+	_input_field.text = _command_history[_history_index]
+	_input_field.caret_column = _input_field.text.length()
 
 
 # ==============================================================================
@@ -251,14 +250,14 @@ func _on_command_submitted(text: String) -> void:
 	# Exécuter
 	if _commands.has(command_name):
 		var command: Dictionary = _commands[command_name]
-		var result := command.callable.call(args)
-		if result and result is String and not result.is_empty():
-			_print_line(result)
+		var result: Variant = command.callable.call(args)
+		if result and result is String and not (result as String).is_empty():
+			_print_line(result as String)
 	else:
 		_print_error("Commande inconnue: " + command_name)
 	
 	# Vider l'input
-	_input.clear()
+	_input_field.clear()
 	
 	command_executed.emit(text, "")
 
@@ -352,7 +351,8 @@ func _cmd_heal(_args: Array) -> String:
 	if player.has_method("heal"):
 		player.heal(9999)
 	elif player.has_method("set_health"):
-		player.set_health(player.get("max_health", 100))
+		var max_health: Variant = player.get("max_health")
+		player.set_health(max_health if max_health != null else 100)
 	
 	return "Joueur soigné"
 
@@ -373,8 +373,8 @@ func _cmd_kill(_args: Array) -> String:
 func _cmd_set_health(args: Array) -> String:
 	if args.is_empty():
 		return "Usage: set_health <amount>"
-	
-	var amount := args[0].to_int()
+
+	var amount: int = args[0].to_int()
 	var player := _get_player()
 	
 	if player and player.has_method("set_health"):
@@ -387,8 +387,8 @@ func _cmd_set_health(args: Array) -> String:
 func _cmd_add_credits(args: Array) -> String:
 	if args.is_empty():
 		return "Usage: add_credits <amount>"
-	
-	var amount := args[0].to_int()
+
+	var amount: int = args[0].to_int()
 	var player := _get_player()
 	
 	if player and player.has_method("add_credits"):
@@ -410,7 +410,7 @@ func _cmd_spawn_item(args: Array) -> String:
 		return "Usage: spawn_item <item_id> [quantity]"
 	
 	var item_id: String = args[0]
-	var quantity := args[1].to_int() if args.size() > 1 else 1
+	var quantity: int = args[1].to_int() if args.size() > 1 else 1
 	
 	if InventoryManager and InventoryManager.has_method("add_item"):
 		InventoryManager.add_item(item_id, quantity)
@@ -511,7 +511,7 @@ func _cmd_set_reputation(args: Array) -> String:
 		return "Usage: set_rep <faction> <value>"
 	
 	var faction: String = args[0]
-	var value := args[1].to_int()
+	var value: int = args[1].to_int()
 	
 	if FactionManager and FactionManager.has_method("set_reputation"):
 		FactionManager.set_reputation(faction, value)
@@ -579,7 +579,7 @@ func _cmd_set_time(args: Array) -> String:
 	if args.is_empty():
 		return "Usage: time <0-24>"
 	
-	var hour := args[0].to_float()
+	var hour: float = args[0].to_float()
 	
 	var day_night := get_tree().get_first_node_in_group("day_night_cycle")
 	if day_night and day_night.has_method("set_time"):
