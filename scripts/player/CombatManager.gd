@@ -193,7 +193,12 @@ func _perform_attack() -> void:
 	# Rotation instantanée vers la cible
 	if current_target and player_mesh:
 		_instant_rotate_toward(current_target)
-	
+
+	# Son d'attaque
+	var sfx := get_node_or_null("/root/SFXManager")
+	if sfx and player:
+		sfx.play_combat("player_attack", player.global_position)
+
 	# Attendre un court délai pour la "fenêtre de dégâts"
 	await get_tree().create_timer(attack_duration * 0.5).timeout
 	
@@ -326,7 +331,7 @@ func _deal_damage_with_combo(target: Node3D, multiplier: float) -> void:
 		final_damage += inv.get_total_damage_bonus()
 	
 	var health_component = target.get_node_or_null("HealthComponent")
-	
+
 	if health_component and health_component is HealthComponent:
 		health_component.take_damage(final_damage, player)
 		attack_hit.emit(target, final_damage)
@@ -338,6 +343,12 @@ func _deal_damage_with_combo(target: Node3D, multiplier: float) -> void:
 			attack_hit.emit(target, final_damage)
 			_combo_total_damage += final_damage
 			combo_hit.emit(_combo_count + 1, multiplier)
+
+	# Son d'impact
+	var sfx := get_node_or_null("/root/SFXManager")
+	if sfx:
+		var sound_category := "player_combo_finisher" if _combo_count + 1 >= max_combo else "player_hit"
+		sfx.play_combat(sound_category, target.global_position)
 
 
 func _end_combo() -> void:

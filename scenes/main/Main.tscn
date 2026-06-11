@@ -1,7 +1,13 @@
-[gd_scene load_steps=16 format=3 uid="uid://main_scene_001"]
+[gd_scene load_steps=22 format=3 uid="uid://main_scene_001"]
 
 [ext_resource type="PackedScene" path="res://scenes/player/Player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/audio/AmbientAudioManager.gd" id="4_ambient"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/building-skyscraper-a.glb" id="5_building_a"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/building-skyscraper-b.glb" id="6_building_b"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/building-skyscraper-c.glb" id="7_building_c"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/building-skyscraper-d.glb" id="8_building_d"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/building-skyscraper-e.glb" id="9_building_e"]
+[ext_resource type="PackedScene" path="res://assets/models/buildings/low-detail-building-wide-a.glb" id="10_building_wide_a"]
 
 [sub_resource type="Environment" id="Environment_cyberpunk"]
 background_mode = 1
@@ -159,6 +165,26 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 15)
 [node name="MarkerMesh" type="MeshInstance3D" parent="TestLevel/ObjectiveMarker"]
 mesh = SubResource("CylinderMesh_marker")
 surface_material_override/0 = SubResource("NeonMaterial_cyan")
+
+[node name="Skyline" type="Node3D" parent="TestLevel"]
+
+[node name="Building1" parent="TestLevel/Skyline" instance=ExtResource("5_building_a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -45, 0, -45)
+
+[node name="Building2" parent="TestLevel/Skyline" instance=ExtResource("6_building_b")]
+transform = Transform3D(0.866, 0, 0.5, 0, 1, 0, -0.5, 0, 0.866, 45, 0, -50)
+
+[node name="Building3" parent="TestLevel/Skyline" instance=ExtResource("7_building_c")]
+transform = Transform3D(0.707, 0, -0.707, 0, 1, 0, 0.707, 0, 0.707, -50, 0, 45)
+
+[node name="Building4" parent="TestLevel/Skyline" instance=ExtResource("8_building_d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 50)
+
+[node name="Building5" parent="TestLevel/Skyline" instance=ExtResource("9_building_e")]
+transform = Transform3D(0.5, 0, 0.866, 0, 1, 0, -0.866, 0, 0.5, 0, 0, -60)
+
+[node name="Building6" parent="TestLevel/Skyline" instance=ExtResource("10_building_wide_a")]
+transform = Transform3D(0.866, 0, -0.5, 0, 1, 0, 0.5, 0, 0.866, -60, 0, 0)
 
 [node name="PlayerSpawn" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

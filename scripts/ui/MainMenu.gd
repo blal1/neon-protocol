@@ -12,6 +12,21 @@ func _ready() -> void:
 	if tts and tts.has_method("speak"):
 		tts.speak("Menu principal. Neon Protocol.")
 
+	# Sons de survol/clic sur les boutons
+	_connect_button_sounds($VBox.get_children())
+
+
+func _connect_button_sounds(nodes: Array) -> void:
+	"""Connecte les sons de survol et de clic à tous les boutons donnés."""
+	var sfx = get_node_or_null("/root/SFXManager")
+	if not sfx:
+		return
+
+	for node in nodes:
+		if node is Button:
+			node.mouse_entered.connect(func(): sfx.play_ui("hover"))
+			node.pressed.connect(func(): sfx.play_ui("click"))
+
 
 func _on_play_pressed() -> void:
 	"""Lance le jeu."""
@@ -21,11 +36,11 @@ func _on_play_pressed() -> void:
 func _on_options_pressed() -> void:
 	"""Ouvre les options."""
 	# Charger et afficher le menu options
-	var options_scene := load("res://scenes/ui/OptionsMenu.tscn")
+	var options_scene: PackedScene = load("res://scenes/ui/OptionsMenu.tscn")
 	if options_scene:
-		var options_menu := options_scene.instantiate()
+		var options_menu: Node = options_scene.instantiate()
 		add_child(options_menu)
-		
+
 		# TTS feedback
 		var tts = get_node_or_null("/root/TTSManager")
 		if tts:
