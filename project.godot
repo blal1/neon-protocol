@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="Neon Protocol"
 config/description="Action-RPG Cyberpunk Low-Poly accessible à tous"
-config/version="0.0.0"
+config/version="0.1.0"
 run/main_scene="res://scenes/main/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 boot_splash/bg_color=Color(0.05, 0.05, 0.08, 1)
@@ -57,6 +57,8 @@ CyberwareManager="*res://scripts/systems/CyberwareManager.gd"
 HackingSystem="*res://scripts/systems/HackingSystem.gd"
 CyberneticInstabilitySystem="*res://scripts/systems/CyberneticInstabilitySystem.gd"
 CyberpunkReputationSystem="*res://scripts/systems/CyberpunkReputationSystem.gd"
+DistrictEcosystem="*res://scripts/world/DistrictEcosystem.gd"
+DayNightCycle="*res://scripts/world/DayNightCycle.gd"
 OppressiveAdvertisingSystem="*res://scripts/systems/OppressiveAdvertisingSystem.gd"
 TimeDilationManager="*res://scripts/systems/TimeDilationManager.gd"
 VFXPoolManager="*res://scripts/effects/VFXPoolManager.gd"
@@ -208,6 +210,12 @@ help_audio={
 repeat_last_message={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":86,"key_label":0,"unicode":118,"location":0,"echo":false,"script":null)
+]
+}
+tactical_mode={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":66,"key_label":0,"unicode":98,"location":0,"echo":false,"script":null)
+, Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":10,"pressure":0.0,"pressed":true,"script":null)
 ]
 }
 
