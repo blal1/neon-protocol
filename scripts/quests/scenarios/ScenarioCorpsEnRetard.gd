@@ -89,6 +89,7 @@ var _player_involved: bool = false
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_setup_victim_implants()
 	_spawn_victim()
 	scenario_started.emit()

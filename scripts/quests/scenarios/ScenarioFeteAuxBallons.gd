@@ -87,6 +87,7 @@ var _chaos_contract: Dictionary = {}
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_setup_chaos_contract()
 	_spawn_party()
 	scenario_started.emit()

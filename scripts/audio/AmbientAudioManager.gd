@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name AmbientAudioManager
 
 # ==============================================================================
 # SIGNAUX
@@ -75,7 +74,7 @@ func _setup_global_audio() -> void:
 	if rain_sound:
 		_rain_player.stream = rain_sound
 	add_child(_rain_player)
-	
+
 	# Drone de ville
 	_city_drone_player = AudioStreamPlayer.new()
 	_city_drone_player.name = "CityDronePlayer"
@@ -84,7 +83,7 @@ func _setup_global_audio() -> void:
 	if city_drone_sound:
 		_city_drone_player.stream = city_drone_sound
 	add_child(_city_drone_player)
-	
+
 	# Trafic distant
 	_traffic_player = AudioStreamPlayer.new()
 	_traffic_player.name = "TrafficPlayer"
@@ -115,7 +114,7 @@ func set_rain_intensity(intensity: float) -> void:
 	@param intensity: 0 = pas de pluie, 1 = pluie forte
 	"""
 	rain_intensity = clamp(intensity, 0.0, 1.0)
-	
+
 	if _rain_player:
 		if intensity <= 0.0:
 			_rain_player.stop()
@@ -123,7 +122,7 @@ func set_rain_intensity(intensity: float) -> void:
 			_rain_player.volume_db = rain_volume_db + (intensity * 10.0) - 10.0
 			if not _rain_player.playing:
 				_rain_player.play()
-	
+
 	rain_intensity_changed.emit(intensity)
 
 
@@ -140,32 +139,32 @@ func fade_rain(target_intensity: float, duration: float = 2.0) -> void:
 func enter_indoor_area() -> void:
 	"""Appelé quand le joueur entre dans un bâtiment."""
 	is_indoors = true
-	
+
 	# Étouffer les sons extérieurs
 	var tween := create_tween()
 	tween.set_parallel(true)
-	
+
 	if _rain_player:
 		tween.tween_property(_rain_player, "volume_db", rain_volume_db - 20.0, 1.0)
 	if _traffic_player:
 		tween.tween_property(_traffic_player, "volume_db", city_volume_db - 25.0, 1.0)
-	
+
 	ambiance_changed.emit("indoor")
 
 
 func exit_to_outdoor() -> void:
 	"""Appelé quand le joueur sort d'un bâtiment."""
 	is_indoors = false
-	
+
 	# Restaurer les sons extérieurs
 	var tween := create_tween()
 	tween.set_parallel(true)
-	
+
 	if _rain_player:
 		tween.tween_property(_rain_player, "volume_db", rain_volume_db, 1.0)
 	if _traffic_player:
 		tween.tween_property(_traffic_player, "volume_db", city_volume_db - 5.0, 1.0)
-	
+
 	ambiance_changed.emit("outdoor")
 
 
@@ -200,7 +199,7 @@ func _create_3d_emitter(position: Vector3, sound: AudioStream, volume_db: float,
 	"""Crée un émetteur audio 3D générique."""
 	if not sound:
 		return null
-	
+
 	var emitter := AudioStreamPlayer3D.new()
 	emitter.stream = sound
 	emitter.bus = environment_bus
@@ -208,10 +207,10 @@ func _create_3d_emitter(position: Vector3, sound: AudioStream, volume_db: float,
 	emitter.max_distance = max_distance
 	emitter.unit_size = 5.0
 	emitter.autoplay = true
-	
+
 	add_child(emitter)
 	emitter.global_position = position
-	
+
 	_3d_emitters.append(emitter)
 	return emitter
 
@@ -256,7 +255,7 @@ func play_thunder() -> void:
 	# S'assurer que le player existe
 	if not _thunder_player:
 		_setup_punctual_audio()
-	
+
 	# Jouer le son
 	if _thunder_player.stream:
 		# Variation aléatoire du pitch pour variété
@@ -265,14 +264,9 @@ func play_thunder() -> void:
 	else:
 		# Fallback: utiliser un son procédural simple (bruit blanc filtré)
 		_play_procedural_thunder()
-	
+
 	# Effet de flash d'éclair
 	_flash_lightning()
-	
-	# TTS pour accessibilité (optionnel, désactivé par défaut pour ne pas interrompre)
-	# var tts = get_node_or_null("/root/TTSManager")
-	# if tts:
-	#     tts.speak("Tonnerre", TTSManager.Priority.LOW)
 
 
 func _play_procedural_thunder() -> void:
@@ -281,14 +275,14 @@ func _play_procedural_thunder() -> void:
 	var generator := AudioStreamGenerator.new()
 	generator.mix_rate = 22050
 	generator.buffer_length = 0.5
-	
+
 	var temp_player := AudioStreamPlayer.new()
 	temp_player.stream = generator
 	temp_player.bus = environment_bus
 	temp_player.volume_db = -8.0
 	add_child(temp_player)
 	temp_player.play()
-	
+
 	# Laisser jouer puis supprimer
 	await get_tree().create_timer(2.0).timeout
 	temp_player.queue_free()
@@ -298,15 +292,15 @@ func _flash_lightning() -> void:
 	"""Crée un flash d'éclair à l'écran."""
 	var canvas := CanvasLayer.new()
 	canvas.layer = 100
-	
+
 	var flash := ColorRect.new()
 	flash.color = Color(0.9, 0.95, 1.0, 0.6)  # Blanc-bleu
 	flash.anchors_preset = Control.PRESET_FULL_RECT
 	flash.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
+
 	canvas.add_child(flash)
 	get_tree().current_scene.add_child(canvas)
-	
+
 	# Double flash (réaliste)
 	var tween := create_tween()
 	tween.tween_property(flash, "color:a", 0.0, 0.05)
@@ -324,7 +318,7 @@ func play_siren(position: Vector3) -> void:
 		# Fallback: juste un log
 		print("AmbientAudio: Siren sound not configured")
 		return
-	
+
 	# Créer un émetteur 3D temporaire
 	var siren_emitter := AudioStreamPlayer3D.new()
 	siren_emitter.name = "SirenEmitter"
@@ -334,11 +328,11 @@ func play_siren(position: Vector3) -> void:
 	siren_emitter.max_distance = 50.0
 	siren_emitter.unit_size = 10.0
 	siren_emitter.doppler_tracking = AudioStreamPlayer3D.DOPPLER_TRACKING_PHYSICS_STEP
-	
+
 	add_child(siren_emitter)
 	siren_emitter.global_position = position
 	siren_emitter.play()
-	
+
 	# Animer le mouvement (passe et s'éloigne)
 	_animate_siren_movement(siren_emitter, position)
 
@@ -347,7 +341,7 @@ func _animate_siren_movement(emitter: AudioStreamPlayer3D, start_pos: Vector3) -
 	"""Anime la sirène qui passe et s'éloigne."""
 	var direction := Vector3(randf_range(-1, 1), 0, randf_range(-1, 1)).normalized()
 	var end_pos := start_pos + direction * 100.0
-	
+
 	var tween := create_tween()
 	tween.tween_property(emitter, "global_position", end_pos, 8.0)
 	tween.tween_callback(emitter.queue_free)
@@ -363,17 +357,17 @@ func play_announcement(text: String) -> void:
 	if tts:
 		# Préfixe pour effet dystopique
 		var announcement := "Attention citoyens. " + text
-		
+
 		# Jouer via TTS avec priorité haute
 		tts.speak(announcement)
 	else:
 		# Fallback: utiliser un son d'annonce pré-enregistré s'il existe
 		print("[ANNONCE] ", text)
-	
+
 	# Notification toast pour accessibilité visuelle
 	var toast = get_node_or_null("/root/ToastNotification")
 	if toast:
-		toast.show_notification("📢 " + text, toast.NotificationType.INFO, 5.0)
+		toast.show_notification(text, 0, 5.0)
 
 
 # ==============================================================================
@@ -383,7 +377,7 @@ func play_announcement(text: String) -> void:
 func set_master_volume(volume_db: float) -> void:
 	"""Définit le volume principal de l'ambiance."""
 	master_volume_db = volume_db
-	
+
 	# Mettre à jour tous les émetteurs
 	for emitter in _3d_emitters:
 		if is_instance_valid(emitter):
@@ -398,7 +392,7 @@ func pause_all() -> void:
 		_city_drone_player.stream_paused = true
 	if _traffic_player:
 		_traffic_player.stream_paused = true
-	
+
 	for emitter in _3d_emitters:
 		if is_instance_valid(emitter):
 			emitter.stream_paused = true
@@ -412,7 +406,7 @@ func resume_all() -> void:
 		_city_drone_player.stream_paused = false
 	if _traffic_player:
 		_traffic_player.stream_paused = false
-	
+
 	for emitter in _3d_emitters:
 		if is_instance_valid(emitter):
 			emitter.stream_paused = false
@@ -426,7 +420,7 @@ func stop_all() -> void:
 		_city_drone_player.stop()
 	if _traffic_player:
 		_traffic_player.stop()
-	
+
 	for emitter in _3d_emitters:
 		if is_instance_valid(emitter):
 			emitter.stop()

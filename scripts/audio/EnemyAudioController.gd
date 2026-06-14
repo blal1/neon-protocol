@@ -49,6 +49,27 @@ var enemy_sounds: Dictionary = {
 		"alert": "res://audio/navigation/493162__breviceps__submarine-sonar.wav",
 		"attack": "res://audio/sfx/combat/laserLarge_001.ogg",
 		"death": "res://audio/sfx/combat/explosionCrunch_001.ogg"
+	},
+	"boss_corpo": {
+		"footstep": "res://audio/sfx/combat/forceField_002.ogg",
+		"idle": "res://audio/sfx/combat/computerNoise_002.ogg",
+		"alert": "res://audio/sfx/ui/error_003.ogg",
+		"attack": "res://audio/sfx/combat/laserRetro_004.ogg",
+		"death": "res://audio/sfx/combat/explosionCrunch_002.ogg"
+	},
+	"boss_industrial": {
+		"footstep": "res://audio/sfx/combat/impactMetal_003.ogg",
+		"idle": "res://audio/sfx/combat/engineCircular_004.ogg",
+		"alert": "res://audio/sfx/combat/forceField_004.ogg",
+		"attack": "res://audio/sfx/combat/laserLarge_003.ogg",
+		"death": "res://audio/sfx/combat/lowFrequency_explosion_001.ogg"
+	},
+	"boss_cult": {
+		"footstep": "res://audio/sfx/combat/slime_000.ogg",
+		"idle": "res://audio/sfx/combat/spaceEngineLow_002.ogg",
+		"alert": "res://audio/sfx/combat/slime_001.ogg",
+		"attack": "res://audio/sfx/combat/laserSmall_004.ogg",
+		"death": "res://audio/sfx/combat/explosionCrunch_004.ogg"
 	}
 }
 
@@ -206,6 +227,8 @@ func _get_enemy_type(enemy: Node3D) -> String:
 	elif enemy.is_in_group("turret"):
 		return "turret"
 	elif enemy.is_in_group("boss"):
+		if "boss_type" in enemy and enemy_sounds.has(enemy.boss_type):
+			return enemy.boss_type
 		return "boss"
 	else:
 		return "robot"

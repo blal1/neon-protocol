@@ -142,12 +142,14 @@ func _on_dyslexia_toggled(enabled: bool) -> void:
 	var am = get_node_or_null("/root/AccessibilityManager")
 	if am:
 		am.set_dyslexia_mode(enabled)
-	
+
+	_play_toggle_sound()
 	_speak("Police dyslexie " + ("activée" if enabled else "désactivée"))
 
 
 func _on_blind_mode_toggled(enabled: bool) -> void:
 	"""Toggle mode aveugle."""
+	_play_toggle_sound()
 	var am = get_node_or_null("/root/AccessibilityManager")
 	if am:
 		am.set_blind_mode(enabled)
@@ -207,8 +209,18 @@ func _on_sfx_volume_changed(value: float) -> void:
 
 func _on_back_pressed() -> void:
 	"""Ferme le menu options."""
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("back")
 	closed.emit()
 	hide()
+
+
+func _play_toggle_sound() -> void:
+	"""Joue le son de bascule pour les toggles d'accessibilité."""
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("toggle")
 
 
 func _speak(text: String) -> void:

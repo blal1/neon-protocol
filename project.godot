@@ -34,6 +34,7 @@ driver/mix_rate=22050
 AccessibilityManager="*res://scripts/accessibility/AccessibilityManager.gd"
 BlindAccessibilityManager="*res://scripts/accessibility/BlindAccessibilityManager.gd"
 MissionManager="*res://scripts/missions/MissionManager.gd"
+DialogueSystem="*res://scenes/ui/DialogueSystem.tscn"
 TTSManager="*res://scripts/audio/TTSManager.gd"
 SaveManager="*res://scripts/systems/SaveManager.gd"
 InventoryManager="*res://scripts/systems/InventoryManager.gd"
@@ -70,6 +71,9 @@ PlatformUIController="*res://scripts/ui/PlatformUIController.gd"
 KeyboardAccessibilityManager="*res://scripts/accessibility/KeyboardAccessibilityManager.gd"
 SFXManager="*res://scripts/audio/SFXManager.gd"
 EnemyAudioController="*res://scripts/audio/EnemyAudioController.gd"
+MCPScreenshot="*res://addons/godot_mcp/mcp_screenshot_service.gd"
+MCPInputService="*res://addons/godot_mcp/mcp_input_service.gd"
+MCPGameInspector="*res://addons/godot_mcp/mcp_game_inspector_service.gd"
 
 [display]
 
@@ -82,6 +86,10 @@ window/handheld/orientation=4
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
+
+[filesystem]
+
+import/blender/enabled=false
 
 [input]
 

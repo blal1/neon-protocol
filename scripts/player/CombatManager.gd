@@ -73,6 +73,26 @@ func _ready() -> void:
 	if player:
 		player_mesh = player.get_node_or_null("MeshPivot")
 
+	# Transition musicale selon l'état de combat
+	target_acquired.connect(_on_target_acquired)
+	target_lost.connect(_on_target_lost)
+
+
+func _on_target_acquired(_target: Node3D) -> void:
+	"""Bascule la musique en mode combat."""
+	var music = get_node_or_null("/root/MusicManager")
+	if music and music.has_method("enter_combat"):
+		music.enter_combat()
+
+
+func _on_target_lost() -> void:
+	"""Revient à la musique d'exploration si plus aucun ennemi à proximité."""
+	if not get_all_enemies_in_range().is_empty():
+		return
+	var music = get_node_or_null("/root/MusicManager")
+	if music and music.has_method("enter_exploration"):
+		music.enter_exploration()
+
 
 func _process(delta: float) -> void:
 	"""Mise à jour du ciblage et des combos."""

@@ -41,16 +41,51 @@ var ui_sounds: Dictionary = {
 		"res://audio/sfx/ui/error_001.ogg",
 		"res://audio/sfx/ui/error_002.ogg",
 		"res://audio/sfx/ui/error_003.ogg",
+		"res://audio/sfx/ui/error_004.ogg",
+		"res://audio/sfx/ui/error_005.ogg",
+		"res://audio/sfx/ui/error_006.ogg",
+		"res://audio/sfx/ui/error_007.ogg",
+		"res://audio/sfx/ui/error_008.ogg",
 	],
 	"open": [
 		"res://audio/sfx/ui/open_001.ogg",
 		"res://audio/sfx/ui/open_002.ogg",
 		"res://audio/sfx/ui/open_003.ogg",
+		"res://audio/sfx/ui/open_004.ogg",
 	],
 	"close": [
 		"res://audio/sfx/ui/close_001.ogg",
 		"res://audio/sfx/ui/close_002.ogg",
 		"res://audio/sfx/ui/close_003.ogg",
+		"res://audio/sfx/ui/close_004.ogg",
+	],
+	"pickup": [
+		"res://audio/sfx/ui/pluck_001.ogg",
+		"res://audio/sfx/ui/pluck_002.ogg",
+	],
+	"toggle": [
+		"res://audio/sfx/ui/toggle_001.ogg",
+		"res://audio/sfx/ui/toggle_002.ogg",
+		"res://audio/sfx/ui/toggle_003.ogg",
+		"res://audio/sfx/ui/toggle_004.ogg",
+	],
+	"notification": [
+		"res://audio/sfx/ui/bong_001.ogg",
+		"res://audio/sfx/ui/scroll_001.ogg",
+		"res://audio/sfx/ui/scroll_002.ogg",
+		"res://audio/sfx/ui/scroll_003.ogg",
+		"res://audio/sfx/ui/scroll_004.ogg",
+		"res://audio/sfx/ui/scroll_005.ogg",
+	],
+	"door_open": [
+		"res://audio/sfx/env/doorOpen_000.ogg",
+		"res://audio/sfx/env/doorOpen_001.ogg",
+		"res://audio/sfx/env/doorOpen_002.ogg",
+	],
+	"door_close": [
+		"res://audio/sfx/env/doorClose_000.ogg",
+		"res://audio/sfx/env/doorClose_001.ogg",
+		"res://audio/sfx/env/doorClose_002.ogg",
 	],
 }
 
@@ -62,17 +97,59 @@ var combat_sounds: Dictionary = {
 		"res://audio/sfx/combat/laserSmall_000.ogg",
 		"res://audio/sfx/combat/laserSmall_001.ogg",
 		"res://audio/sfx/combat/laserSmall_002.ogg",
+		"res://audio/sfx/combat/laserSmall_003.ogg",
+		"res://audio/sfx/combat/laserSmall_004.ogg",
 	],
 	"player_hit": [
 		"res://audio/sfx/combat/impactMetal_000.ogg",
 		"res://audio/sfx/combat/impactMetal_001.ogg",
 		"res://audio/sfx/combat/impactMetal_002.ogg",
 		"res://audio/sfx/combat/impactMetal_003.ogg",
+		"res://audio/sfx/combat/impactMetal_004.ogg",
 	],
 	"player_combo_finisher": [
 		"res://audio/sfx/combat/laserLarge_000.ogg",
 		"res://audio/sfx/combat/laserLarge_001.ogg",
+		"res://audio/sfx/combat/laserLarge_002.ogg",
+		"res://audio/sfx/combat/laserLarge_003.ogg",
+		"res://audio/sfx/combat/laserLarge_004.ogg",
 	],
+	"explosion": [
+		"res://audio/sfx/combat/explosionCrunch_000.ogg",
+		"res://audio/sfx/combat/explosionCrunch_001.ogg",
+		"res://audio/sfx/combat/explosionCrunch_002.ogg",
+		"res://audio/sfx/combat/explosionCrunch_003.ogg",
+		"res://audio/sfx/combat/explosionCrunch_004.ogg",
+	],
+	"heavy_impact": [
+		"res://audio/sfx/combat/Impact_1.wav",
+		"res://audio/sfx/combat/Impact_2.wav",
+	],
+}
+
+# ==============================================================================
+# SONS D'ENVIRONNEMENT ET TECH
+# ==============================================================================
+var env_sounds: Dictionary = {
+	"footstep_concrete": [
+		"res://audio/sfx/env/footstep_concrete_000.ogg",
+		"res://audio/sfx/env/footstep_concrete_001.ogg",
+		"res://audio/sfx/env/footstep_concrete_002.ogg",
+		"res://audio/sfx/env/footstep_concrete_003.ogg",
+		"res://audio/sfx/env/footstep_concrete_004.ogg",
+	],
+	"glitch": [
+		"res://audio/sfx/tech/glitch_001.ogg",
+		"res://audio/sfx/tech/glitch_002.ogg",
+		"res://audio/sfx/tech/glitch_003.ogg",
+		"res://audio/sfx/tech/glitch_004.ogg",
+	],
+	"computer_noise": [
+		"res://audio/sfx/tech/computerNoise_000.ogg",
+		"res://audio/sfx/tech/computerNoise_001.ogg",
+		"res://audio/sfx/tech/computerNoise_002.ogg",
+		"res://audio/sfx/tech/computerNoise_003.ogg",
+	]
 }
 
 # ==============================================================================
@@ -152,4 +229,26 @@ func play_combat(category: String, position: Vector3) -> void:
 	player.stream = load(path)
 	player.global_position = position
 	player.pitch_scale = 1.0 + randf_range(-0.05, 0.05)
+	player.play()
+
+
+func play_env(category: String, position: Vector3) -> void:
+	"""Joue un son d'environnement positionnel (pas, glitch, etc)."""
+	if not env_sounds.has(category):
+		return
+
+	var paths: Array = env_sounds[category]
+	if paths.is_empty():
+		return
+
+	var path: String = paths.pick_random()
+	if not ResourceLoader.exists(path):
+		return
+
+	var player := _sfx3d_players[_sfx3d_next]
+	_sfx3d_next = (_sfx3d_next + 1) % _sfx3d_players.size()
+
+	player.stream = load(path)
+	player.global_position = position
+	player.pitch_scale = 1.0 + randf_range(-0.1, 0.1)
 	player.play()

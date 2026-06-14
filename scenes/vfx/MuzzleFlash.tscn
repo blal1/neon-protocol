@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/textures/vfx/muzzle_01.png" id="1_tex"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_muzzle"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("1_tex")
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_muzzle"]
+direction = Vector3(0, 0, -1)
+spread = 10.0
+initial_velocity_min = 2.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.5
+scale_max = 1.2
+color = Color(1, 0.9, 0.4, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_muzzle"]
+material = SubResource("StandardMaterial3D_muzzle")
+size = Vector2(0.5, 0.5)
+
+[node name="MuzzleFlashVFX" type="Node3D"]
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 8
+lifetime = 0.1
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_muzzle")
+draw_pass_1 = SubResource("QuadMesh_muzzle")

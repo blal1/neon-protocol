@@ -14,10 +14,16 @@ class_name LivingCityGenerator
 
 signal generation_complete(structure_count: int)
 signal poi_spawned(poi_type: String, position: Vector3)
+signal hostility_changed(level: float)
+signal patrol_density_changed(multiplier: float)
+signal price_modifier_changed(modifier: float)
 
 # ==============================================================================
 # CONFIGURATION
 # ==============================================================================
+
+@export_group("Monde Vivant")
+@export var district_id: String = ""  ## ID du district (DistrictEcosystem) lié à cette zone
 
 @export_group("Dimensions")
 @export var zone_width: float = 300.0
@@ -27,7 +33,9 @@ signal poi_spawned(poi_type: String, position: Vector3)
 
 @export_group("Bâtiments Résidentiels")
 @export var residential_prefabs: Array[PackedScene] = []
-@export var residential_density: float = 0.4
+@export var residential_density: float = 0.55
+@export var residential_scale_range: Vector2 = Vector2(0.8, 1.4)
+@export var window_light_chance: float = 0.5
 
 @export_group("Commerces")
 @export var food_stall_prefabs: Array[PackedScene] = []
@@ -60,12 +68,97 @@ var _rng := RandomNumberGenerator.new()
 var _structures: Array[Node3D] = []
 var _pois: Dictionary = {}  # {type: Array[Node3D]}
 
+## Lumières de fenêtres générées, pour effet d'hostilité (patrouilles/alerte) et jour/nuit
+var _window_lights: Array[OmniLight3D] = []
+var _window_light_base_colors: Array[Color] = []
+var _current_hostility: float = 0.0
+var _current_night_factor: float = 1.0  ## 0 = éteint (jour), 1 = pleine intensité (nuit)
+
 # ==============================================================================
 # GÉNÉRATION
 # ==============================================================================
 
 func _ready() -> void:
 	_rng.randomize()
+	_connect_world_state_signals()
+
+
+func _connect_world_state_signals() -> void:
+	"""Relie le cycle jour/nuit, la réputation et la tension du district aux effets visuels."""
+	if DayNightCycle and not DayNightCycle.period_changed.is_connected(_on_period_changed):
+		DayNightCycle.period_changed.connect(_on_period_changed)
+		_on_period_changed(DayNightCycle.get_current_period())
+
+	if district_id == "":
+		return
+
+	if CyberpunkReputationSystem and not CyberpunkReputationSystem.reputation_changed.is_connected(_on_reputation_changed):
+		CyberpunkReputationSystem.reputation_changed.connect(_on_reputation_changed)
+
+	if DistrictEcosystem and not DistrictEcosystem.district_tension_changed.is_connected(_on_district_tension_changed):
+		DistrictEcosystem.district_tension_changed.connect(_on_district_tension_changed)
+
+	_refresh_world_state()
+
+
+func _on_period_changed(period: int) -> void:
+	"""Ajuste l'intensité des néons/fenêtres selon la période du jour."""
+	match period:
+		DayNightCycle.TimePeriod.DAY:
+			_current_night_factor = 0.15
+		DayNightCycle.TimePeriod.DAWN:
+			_current_night_factor = 0.4
+		DayNightCycle.TimePeriod.DUSK:
+			_current_night_factor = 0.7
+		DayNightCycle.TimePeriod.NIGHT:
+			_current_night_factor = 1.0
+
+	_apply_window_lights()
+
+
+func _on_reputation_changed(group_id: String, _old_value: int, _new_value: int) -> void:
+	"""Réagit à un changement de réputation affectant la faction de ce district."""
+	if not DistrictEcosystem:
+		return
+
+	var faction := DistrictEcosystem.get_controlling_faction(district_id)
+	if CyberpunkReputationSystem.get_group_for_faction(faction) == group_id:
+		_refresh_world_state()
+
+
+func _on_district_tension_changed(changed_district_id: String, _tension: float) -> void:
+	"""Réagit à un changement de tension de ce district."""
+	if changed_district_id == district_id:
+		_refresh_world_state()
+
+
+func _refresh_world_state() -> void:
+	"""Recalcule l'hostilité ambiante (patrouilles, prix, PNJ) à partir du district."""
+	if district_id == "" or not DistrictEcosystem:
+		return
+
+	var tension: float = DistrictEcosystem.get_tension(district_id)
+	var local_rep: int = DistrictEcosystem.get_local_reputation(district_id)
+	var rep_hostility: float = clampf(-float(local_rep) / 100.0, 0.0, 1.0)
+	var hostility: float = clampf(maxf(tension, rep_hostility), 0.0, 1.0)
+
+	if not is_equal_approx(hostility, _current_hostility):
+		_current_hostility = hostility
+		_apply_window_lights()
+		hostility_changed.emit(hostility)
+		patrol_density_changed.emit(1.0 + hostility)  # Consommé par SpawnManager (patrouilles renforcées)
+		price_modifier_changed.emit(DistrictEcosystem.get_price_modifier(district_id))
+
+
+func _apply_window_lights() -> void:
+	"""Teinte les fenêtres selon l'hostilité (rouge alerte) et règle leur intensité jour/nuit."""
+	for i in _window_lights.size():
+		var light := _window_lights[i]
+		if not is_instance_valid(light):
+			continue
+		var base_color := _window_light_base_colors[i]
+		light.light_color = base_color.lerp(Color(1, 0, 0), _current_hostility)
+		light.light_energy = lerpf(1.5, 3.0, _current_hostility) * _current_night_factor
 
 
 func generate(seed_value: int = 0) -> void:
@@ -146,8 +239,12 @@ func _generate_residential(floor_y: float) -> void:
 			if building:
 				building.position = pos
 				building.rotation.y = _rng.randf() * TAU
+				var scale_factor := _rng.randf_range(residential_scale_range.x, residential_scale_range.y)
+				building.scale = Vector3.ONE * scale_factor
 				add_child(building)
 				_structures.append(building)
+				if _rng.randf() < window_light_chance:
+					_add_window_light(building, scale_factor)
 
 
 func _generate_food_stalls(floor_y: float) -> void:
@@ -374,6 +471,20 @@ func _instance_random(prefabs: Array[PackedScene]) -> Node3D:
 	if scene:
 		return scene.instantiate() as Node3D
 	return null
+
+
+func _add_window_light(building: Node3D, scale_factor: float) -> void:
+	"""Ajoute une lumière de fenêtre néon sur un bâtiment résidentiel."""
+	var colors := [Color(0, 1, 1), Color(1, 0, 0.5), Color(0, 1, 0.4), Color(1, 1, 0)]
+	var base_color: Color = colors[_rng.randi() % colors.size()]
+	var light := OmniLight3D.new()
+	light.light_color = base_color.lerp(Color(1, 0, 0), _current_hostility)
+	light.light_energy = lerpf(1.5, 3.0, _current_hostility) * _current_night_factor
+	light.omni_range = 12.0 * scale_factor
+	light.position = Vector3(0, _rng.randf_range(2.0, 6.0) * scale_factor, 0)
+	building.add_child(light)
+	_window_lights.append(light)
+	_window_light_base_colors.append(base_color)
 
 
 func _register_poi(poi_type: String, node: Node3D) -> void:

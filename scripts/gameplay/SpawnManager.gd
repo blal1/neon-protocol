@@ -176,9 +176,11 @@ func _start_next_wave() -> void:
 
 func _spawn_wave(wave_data: WaveData) -> void:
 	"""Spawn une vague prédéfinie."""
+	var spawn_multiplier := _get_spawn_multiplier()
+
 	for enemy_data in wave_data.enemies:
 		var scene_key: String = enemy_data["scene"]
-		var count: int = enemy_data["count"]
+		var count: int = max(1, int(round(enemy_data["count"] * spawn_multiplier)))
 		var delay: float = enemy_data["delay"]
 		
 		var scene_path: String = ENEMY_SCENES.get(scene_key, "")
@@ -202,7 +204,8 @@ func _spawn_wave(wave_data: WaveData) -> void:
 
 func _spawn_procedural_wave() -> void:
 	"""Spawn une vague générée procéduralement."""
-	var enemy_count := enemies_per_wave_base + (current_wave - 1) * enemies_per_wave_increase
+	var base_count := enemies_per_wave_base + (current_wave - 1) * enemies_per_wave_increase
+	var enemy_count := max(1, int(round(base_count * _get_spawn_multiplier())))
 	
 	for i in range(enemy_count):
 		while active_enemies.size() >= max_active_enemies:
@@ -271,6 +274,13 @@ func _complete_all_waves() -> void:
 # ==============================================================================
 # SPAWN D'ENNEMIS
 # ==============================================================================
+
+func _get_spawn_multiplier() -> float:
+	"""Retourne le multiplicateur de spawn selon l'heure (DayNightCycle, plus d'ennemis la nuit)."""
+	if DayNightCycle and DayNightCycle.has_method("get_enemy_spawn_multiplier"):
+		return DayNightCycle.get_enemy_spawn_multiplier()
+	return 1.0
+
 
 func _spawn_enemy(scene_path: String) -> Node3D:
 	"""Spawn un ennemi."""
@@ -341,17 +351,19 @@ func start_continuous_spawn(interval: float = 5.0) -> void:
 	"""Démarre un spawn continu."""
 	spawn_mode = SpawnMode.CONTINUOUS
 	is_spawning = true
-	
+
 	while is_spawning:
 		if active_enemies.size() < max_active_enemies:
 			var types := ENEMY_SCENES.keys()
 			var random_type: String = types[randi() % (types.size() - 1)]  # Exclure boss
 			var scene_path: String = ENEMY_SCENES.get(random_type, "")
-			
+
 			if scene_path:
 				_spawn_enemy(scene_path)
-		
-		await get_tree().create_timer(interval).timeout
+
+		# La nuit, les vagues s'enchaînent plus vite (DayNightCycle.get_enemy_spawn_multiplier)
+		var effective_interval := interval / _get_spawn_multiplier()
+		await get_tree().create_timer(effective_interval).timeout
 
 
 func stop_spawning() -> void:

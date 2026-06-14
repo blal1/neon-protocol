@@ -7,30 +7,81 @@ extends Control
 
 func _ready() -> void:
 	"""Initialisation du menu."""
+	# Libérer la souris immédiatement
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	var p_ctrl = get_node_or_null("/root/PlatformUIController")
+	if p_ctrl:
+		p_ctrl.capture_mouse_on_desktop = false
+
 	# Annoncer via TTS pour accessibilité
 	var tts = get_node_or_null("/root/TTSManager")
-	if tts and tts.has_method("speak"):
-		tts.speak("Menu principal. Neon Protocol.")
+	if tts:
+		tts.stop()
+		if tts.has_method("speak"):
+			tts.speak("Menu principal. Neon Protocol. Utilisez les flèches pour naviguer.")
+
+	# Focus initial sur le bouton jouer pour navigation clavier/manette
+	await get_tree().create_timer(0.2).timeout
+	var play_button := $VBox/PlayButton
+	if play_button:
+		play_button.grab_focus()
+		if p_ctrl: p_ctrl.input_mode_changed.emit("keyboard")
 
 	# Sons de survol/clic sur les boutons
 	_connect_button_sounds($VBox.get_children())
+	
+	# Désactiver les managers de gameplay pendant le menu
+	_set_gameplay_accessibility(false)
+
+func _set_gameplay_accessibility(active: bool) -> void:
+	var tts = get_node_or_null("/root/TTSManager")
+	if tts and not active:
+		tts.stop()
+
+	var kam = get_node_or_null("/root/KeyboardAccessibilityManager")
+	if kam:
+		kam.enabled = active
+		
+	var bam = get_node_or_null("/root/BlindAccessibilityManager")
+	if bam:
+		if active:
+			bam.activate()
+		else:
+			bam.deactivate()
 
 
 func _connect_button_sounds(nodes: Array) -> void:
 	"""Connecte les sons de survol et de clic à tous les boutons donnés."""
 	var sfx = get_node_or_null("/root/SFXManager")
-	if not sfx:
-		return
+	var tts = get_node_or_null("/root/TTSManager")
 
 	for node in nodes:
 		if node is Button:
-			node.mouse_entered.connect(func(): sfx.play_ui("hover"))
-			node.pressed.connect(func(): sfx.play_ui("click"))
+			if sfx:
+				node.mouse_entered.connect(func(): sfx.play_ui("hover"))
+				node.pressed.connect(func(): sfx.play_ui("click"))
+			
+			node.focus_entered.connect(func():
+				if tts and tts.has_method("speak"):
+					tts.speak(node.text, 2) # HIGH priority
+				if sfx:
+					sfx.play_ui("hover")
+			)
 
 
 func _on_play_pressed() -> void:
 	"""Lance le jeu."""
-	get_tree().change_scene_to_file("res://scenes/main/Main.tscn")
+	print("[MainMenu] Bouton Jouer pressé. Chargement de Game.tscn...")
+	var error = get_tree().change_scene_to_file("res://scenes/main/Game.tscn")
+	if error != OK:
+		push_error("[MainMenu] Erreur lors du chargement de la scène: " + str(error))
+		if TTSManager:
+			TTSManager.speak("Erreur fatale de chargement.")
+
+
+func _on_district_pressed() -> void:
+	"""Lance le niveau alternatif CityBlock."""
+	get_tree().change_scene_to_file("res://scenes/world/CityBlock.tscn")
 
 
 func _on_options_pressed() -> void:

@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name VFXPoolManager
 
 # ==============================================================================
 # SIGNAUX
@@ -57,6 +56,9 @@ enum VFXType {
 @export var cull_unused_after: float = 60.0
 
 @export_group("Scenes")
+# Rempli au runtime dans _register_default_vfx() via load() pour éviter une
+# dépendance preload au moment de la compilation de l'autoload (les textures
+# référencées ne sont pas encore importées au premier démarrage).
 @export var vfx_scenes: Dictionary = {}  # VFXType -> PackedScene
 
 # ==============================================================================
@@ -97,6 +99,16 @@ func _create_container() -> void:
 
 func _register_default_vfx() -> void:
 	"""Enregistre les VFX par défaut si pas de scènes définies."""
+	# Charger les scènes par défaut au runtime (après import des ressources)
+	if vfx_scenes.is_empty():
+		var muzzle_path := "res://scenes/vfx/MuzzleFlash.tscn"
+		if ResourceLoader.exists(muzzle_path):
+			var muzzle_scene: PackedScene = load(muzzle_path)
+			if muzzle_scene:
+				vfx_scenes[VFXType.MUZZLE_FLASH] = muzzle_scene
+				vfx_scenes[VFXType.SPARK] = muzzle_scene  # base réutilisée pour les étincelles
+				vfx_scenes[VFXType.SMOKE] = muzzle_scene  # placeholder
+
 	for vfx_type in VFXType.values():
 		if not _pools.has(vfx_type):
 			_pools[vfx_type] = []
@@ -522,12 +534,12 @@ func get_system_summary() -> Dictionary:
 # Ces méthodes permettent une migration progressive depuis ImpactEffects.gd
 
 ## Singleton access pour compatibilité avec l'ancien code
-static var _instance: VFXPoolManager = null
+static var _instance: Node = null
 
-static func get_instance() -> VFXPoolManager:
+static func get_instance() -> Node:
 	"""Retourne l'instance singleton (pour compatibilité avec ImpactEffects)."""
 	if not _instance:
-		_instance = Engine.get_singleton("VFXPoolManager") as VFXPoolManager
+		_instance = Engine.get_singleton("VFXPoolManager") as Node
 		if not _instance:
 			push_warning("VFXPoolManager: Utilisez l'Autoload, pas get_instance()")
 	return _instance

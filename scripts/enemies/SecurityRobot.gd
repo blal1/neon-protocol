@@ -507,7 +507,12 @@ func _on_died() -> void:
 	"""Appelé quand le robot meurt."""
 	# Désactiver la physique
 	set_physics_process(false)
-	
+
+	# Son de destruction (feedback audio accessibilité)
+	var audio_feedback = get_node_or_null("EnemyAudioFeedback")
+	if audio_feedback and audio_feedback.has_method("play_death_sound"):
+		audio_feedback.play_death_sound()
+
 	# Jouer animation de mort si disponible
 	if animation_player and animation_player.has_animation("death"):
 		animation_player.play("death")

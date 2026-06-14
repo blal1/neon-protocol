@@ -85,6 +85,7 @@ var _betrayal_consequences: Array[Dictionary] = []
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_spawn_robot()
 	_setup_detection_area()
 	scenario_started.emit()

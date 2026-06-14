@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name HackingSystem
 
 # ==============================================================================
 # SIGNAUX
@@ -194,8 +193,8 @@ func update_hack(delta: float, player_skill: int) -> Dictionary:
 			return _handle_ice(current_ice, player_skill, delta)
 	
 	# Progression normale
-	var progress_rate := 1.0 / _active_hack.total_time
-	progress_rate *= (1.0 + (player_skill - _active_hack.difficulty) * 0.1)
+	var progress_rate: float = 1.0 / float(_active_hack.total_time)
+	progress_rate *= (1.0 + (player_skill - float(_active_hack.difficulty)) * 0.1)
 	
 	_hack_progress += progress_rate * delta
 	hack_progress_updated.emit(_hack_progress)

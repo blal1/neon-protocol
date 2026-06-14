@@ -1,0 +1,51 @@
+[gd_scene load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/GameManager.gd" id="1_manager"]
+[ext_resource type="Script" path="res://scripts/world/CityManager.gd" id="2_city"]
+[ext_resource type="PackedScene" path="res://scenes/ui/GameHUD.tscn" id="3_hud"]
+[ext_resource type="PackedScene" path="res://scenes/world/BuildingA.tscn" id="4_building_a"]
+[ext_resource type="PackedScene" path="res://scenes/world/BuildingB.tscn" id="5_building_b"]
+[ext_resource type="PackedScene" path="res://scenes/world/BuildingC.tscn" id="6_building_c"]
+[ext_resource type="PackedScene" path="res://scenes/world/Road.tscn" id="7_road"]
+[ext_resource type="Script" path="res://scripts/world/EnemySpawner.gd" id="8_spawner"]
+
+[sub_resource type="Environment" id="Environment_game"]
+background_mode = 1
+background_color = Color(0.02, 0.02, 0.05, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.1, 0.1, 0.2, 1)
+glow_enabled = true
+glow_intensity = 0.8
+fog_enabled = true
+fog_light_color = Color(0.05, 0.05, 0.1, 1)
+fog_density = 0.01
+
+[node name="Game" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_game")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.433, 0.25, 0, 0.5, 0.866, -0.5, -0.75, 0.433, 0, 20, 0)
+light_color = Color(0.5, 0.6, 0.9, 1)
+light_energy = 0.6
+shadow_enabled = true
+
+[node name="CityManager" type="Node3D" parent="."]
+script = ExtResource("2_city")
+building_prefabs = [ExtResource("4_building_a"), ExtResource("5_building_b"), ExtResource("6_building_c")]
+road_prefab = ExtResource("7_road")
+grid_width = 8
+grid_height = 8
+cell_size = 20.0
+
+[node name="GameHUD" parent="." instance=ExtResource("3_hud")]
+
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("city_manager", "hud")]
+script = ExtResource("1_manager")
+city_manager = NodePath("../CityManager")
+hud = NodePath("../GameHUD")
+
+[node name="EnemySpawner" type="Node" parent="." node_paths=PackedStringArray("city_manager")]
+script = ExtResource("8_spawner")
+city_manager = NodePath("../CityManager")

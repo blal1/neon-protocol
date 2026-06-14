@@ -122,6 +122,30 @@ func _create_default_shops() -> void:
 	
 	_shops["med_vendor"] = med_vendor
 
+	# Garage (améliorations véhicule)
+	var garage := Shop.new()
+	garage.id = "garage"
+	garage.name = "Garage Chrome & Cendres"
+	garage.description = "Améliorations pour votre moto"
+	garage.buy_price_multiplier = 1.0
+	garage.sell_price_multiplier = 0.3
+
+	var garage_prices := {
+		"moto_engine_mk1": 300,
+		"moto_engine_mk2": 700,
+		"moto_turbo_injector": 500,
+		"moto_reinforced_chassis": 350,
+		"moto_grip_tires": 250
+	}
+	for upgrade_id in garage_prices:
+		var garage_item := ShopItem.new()
+		garage_item.item_id = upgrade_id
+		garage_item.base_price = garage_prices[upgrade_id]
+		garage_item.stock = 1
+		garage.items.append(garage_item)
+
+	_shops["garage"] = garage
+
 
 # ==============================================================================
 # OUVERTURE/FERMETURE

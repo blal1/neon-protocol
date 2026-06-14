@@ -148,6 +148,7 @@ var _philosophical_score: int = 0
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_spawn_terminal()
 	scenario_started.emit()
 

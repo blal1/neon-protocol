@@ -1,5 +1,47 @@
 {
     "dialogues": {
+        "terminal_generic": {
+            "id": "terminal_generic",
+            "name": "Terminal Public",
+            "portrait": null,
+            "nodes": {
+                "start": {
+                    "text": "[SYSTÈME] Connexion au réseau local établie. Services de messagerie disponibles.",
+                    "choices": [
+                        {
+                            "text": "Consulter les offres d'emploi",
+                            "next": "missions"
+                        },
+                        {
+                            "text": "Quitter",
+                            "next": "exit"
+                        }
+                    ]
+                },
+                "missions": {
+                    "text": "[RECHERCHE...] Plusieurs contrats disponibles dans votre secteur. Voulez-vous en accepter un ?",
+                    "choices": [
+                        {
+                            "text": "Accepter le contrat prioritaire",
+                            "next": "accept"
+                        },
+                        {
+                            "text": "Retour",
+                            "next": "start"
+                        }
+                    ]
+                },
+                "accept": {
+                    "text": "[LOG] Contrat synchronisé avec votre interface neurale. Coordonnées transmises.",
+                    "start_mission": "1",
+                    "end": true
+                },
+                "exit": {
+                    "text": "[LOGOUT] Fin de session.",
+                    "end": true
+                }
+            }
+        },
         "npc_vendor_01": {
             "id": "npc_vendor_01",
             "name": "Viktor - Arms Dealer",

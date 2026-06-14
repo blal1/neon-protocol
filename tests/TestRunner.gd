@@ -37,6 +37,7 @@ var _unit_tests: Array[String] = [
 	"res://tests/unit/test_inventory.gd",
 	"res://tests/unit/test_skill_tree.gd",
 	"res://tests/unit/test_combat.gd",
+	"res://tests/unit/test_combat_advanced.gd",
 	"res://tests/unit/test_accessibility.gd"
 ]
 

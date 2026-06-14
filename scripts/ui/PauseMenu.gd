@@ -34,6 +34,14 @@ func _ready() -> void:
 	hide_menu()
 	process_mode = Node.PROCESS_MODE_ALWAYS  # Fonctionne même en pause
 
+	# Sons de survol/clic sur les boutons
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		for button in [resume_button, options_button, quit_button]:
+			if button:
+				button.mouse_entered.connect(func(): sfx.play_ui("hover"))
+				button.pressed.connect(func(): sfx.play_ui("click"))
+
 
 func _input(event: InputEvent) -> void:
 	"""Gestion de la touche Escape."""
@@ -58,7 +66,11 @@ func pause_game() -> void:
 	is_paused = true
 	get_tree().paused = true
 	show_menu()
-	
+
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("toggle")
+
 	# TTS pour accessibilité
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts and tts.has_method("speak"):
@@ -71,7 +83,11 @@ func resume_game() -> void:
 	get_tree().paused = false
 	hide_menu()
 	resumed.emit()
-	
+
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("toggle")
+
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts and tts.has_method("speak"):
 		tts.speak("Reprise du jeu")

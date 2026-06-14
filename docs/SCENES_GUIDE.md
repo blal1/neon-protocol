@@ -11,20 +11,32 @@ Ce guide explique comment configurer et utiliser les différentes scènes du pro
 ```
 scenes/
 ├── main/
-│   └── Main.tscn           # Point d'entrée, menu principal
+│   ├── Main.tscn           # Niveau de jeu (TestLevel + skyline de bâtiments)
+│   └── MainMenu.tscn       # Menu principal (point d'entrée, run/main_scene)
 ├── player/
 │   └── Player.tscn         # Scène du joueur
 ├── enemies/
-│   ├── SecurityRobot.tscn  # Robot de sécurité
-│   └── [autres ennemis]
+│   └── SecurityRobot.tscn  # Robot de sécurité
+├── gameplay/
+│   ├── CyberMotorcycle.tscn
+│   └── DroneCompanion.tscn
 ├── ui/
-│   ├── HUD.tscn            # Interface en jeu
+│   ├── GameHUD.tscn        # Interface en jeu (anciennement nommé "HUD.tscn" dans cette doc)
 │   ├── PauseMenu.tscn      # Menu pause
+│   ├── OptionsMenu.tscn
+│   ├── GameOverMenu.tscn
+│   ├── CraftingUI.tscn
+│   ├── HackingMinigame.tscn
+│   ├── MultiplayerLobby.tscn
+│   ├── TutorialPanel.tscn
 │   └── VirtualJoystick.tscn # Joystick mobile
 └── world/
-    ├── CityBlock.tscn      # Niveau principal
+    ├── CityBlock.tscn      # Niveau alternatif jouable
     └── TutorialLevel.tscn  # Niveau tutoriel
 ```
+
+> **run/main_scene** est `scenes/main/MainMenu.tscn`. Le bouton "Jouer" charge `scenes/main/Main.tscn`.
+> Le bouton "🏙 NIVEAU ALTERNATIF" charge `scenes/world/CityBlock.tscn`.
 
 ---
 
@@ -113,50 +125,81 @@ SecurityRobot (CharacterBody3D)
 
 ---
 
-## 🌆 Scène CityBlock.tscn
+## 🏙️ Scène Main.tscn (niveau de jeu actuel)
 
-### Hiérarchie Recommandée
+### Hiérarchie
 
 ```
-CityBlock (Node3D)
-├── WorldEnvironment
+Main (Node3D)
+├── WorldEnvironment           # Environnement cyberpunk (fog, glow, ambient)
 ├── DirectionalLight3D
-├── NavigationRegion3D
-│   └── [Géométrie du niveau]
-├── Ground (StaticBody3D)
+├── TestLevel (Node3D)
+│   ├── Floor / Walls          # Sol + 4 murs (StaticBody3D + meshes procéduraux)
+│   ├── NeonPillar1-4           # Piliers néon colorés (cyan/magenta/vert/jaune)
+│   ├── ObjectiveMarker         # Marqueur d'objectif (groupe "objective")
+│   └── Skyline (Node3D)        # 6 bâtiments .glb en périphérie
+│       ├── Building1-6         # instances de assets/models/buildings/*.glb
+├── PlayerSpawn (Marker3D)
+├── Enemies (Node3D)
+├── CanvasLayer
+├── AmbientAudio (AmbientAudioManager.gd)
+└── Player (instance Player.tscn)
+```
+
+### Skyline (ajouté récemment)
+
+6 bâtiments `.glb` (skyscraper-a à e + low-detail-building-wide-a) sont placés en périmètre du
+`TestLevel` pour donner une impression de skyline :
+
+| Nœud | Modèle | Position approx. |
+|------|--------|-------------------|
+| Building1 | building-skyscraper-a.glb | (-45, 0, -45) |
+| Building2 | building-skyscraper-b.glb | (45, 0, -50) |
+| Building3 | building-skyscraper-c.glb | (-50, 0, 45) |
+| Building4 | building-skyscraper-d.glb | (50, 0, 50) |
+| Building5 | building-skyscraper-e.glb | (0, 0, -60) |
+| Building6 | low-detail-building-wide-a.glb | (-60, 0, 0) |
+
+Pour ajouter d'autres bâtiments, instancier d'autres `.glb` de `assets/models/buildings/` sous
+`TestLevel/Skyline` avec un `Transform3D` positionné en dehors de la zone de jeu (rayon > 25).
+
+---
+
+## 🌆 Scène CityBlock.tscn (niveau alternatif)
+
+Petit niveau "block urbain" jouable, accessible via le bouton "🏙 NIVEAU ALTERNATIF" du
+`MainMenu` (`MainMenu.gd._on_district_pressed()` → `change_scene_to_file("res://scenes/world/CityBlock.tscn")`).
+
+### Hiérarchie
+
+```
+CityBlock (Node3D, groupe "world_chunk")
+├── WorldEnvironment           # Environnement cyberpunk (fog, glow, ambient)
+├── DirectionalLight3D
+├── Ground (StaticBody3D, groupes "ground","concrete")
+│   ├── FloorMesh
+│   └── FloorCollision
 ├── Buildings (Node3D)
-│   └── [StaticBody3D pour chaque bâtiment]
-├── SpawnPoints (Node3D)
-│   ├── PlayerSpawn (Marker3D)
-│   └── EnemySpawns (Node3D)
-├── Interactables (Node3D)
-│   └── [Portes, Terminaux...]
-└── Lighting (Node3D)
-    └── [OmniLight3D, SpotLight3D...]
+│   └── Building1-4 (StaticBody3D + Mesh + CollisionShape3D)
+├── Neons (Node3D)            # Barres/enseignes néon (ShaderMaterial neon_glow)
+├── StreetLamps (Node3D)      # Lamp1-2 (Pole + Light + OmniLight3D)
+├── Props (Node3D)            # Crate1-2 (StaticBody3D)
+├── PlayerSpawn (Marker3D)
+├── Enemies (Node3D)
+│   └── SecurityRobot1-2 (instances de SecurityRobot.tscn)
+├── CanvasLayer (layer=10)
+├── AmbientAudio (AmbientAudioManager.gd)
+└── Player (instance Player.tscn)
 ```
 
-### Configuration Navigation
+### Notes
 
-1. **Sélectionner** `NavigationRegion3D`
-2. **Créer** un `NavigationMesh` dans l'inspecteur
-3. **Configurer**:
-   - Agent Radius: 0.5
-   - Agent Height: 2.0
-   - Cell Size: 0.25
-4. **Bake**: Clic droit → Rebake Navigation Mesh
-
-### Spawn du Joueur
-
-1. Créer un `Marker3D` nommé `PlayerSpawn`
-2. Le positionner à l'entrée du niveau
-3. Dans le script du niveau:
-```gdscript
-func _ready():
-    var player_scene = preload("res://scenes/player/Player.tscn")
-    var player = player_scene.instantiate()
-    player.global_position = $SpawnPoints/PlayerSpawn.global_position
-    add_child(player)
-```
+- Toutes les `StaticBody3D` (sol, bâtiments, caisses) ont désormais un `CollisionShape3D`
+  (Building3/Building4 en manquaient auparavant).
+- Pas de `NavigationRegion3D` : comme `Main.tscn`, les `SecurityRobot` se déplacent sans navmesh
+  baked (suffisant pour ce niveau de petite taille).
+- `BoxMesh_sidewalk` reste défini en sub-resource mais non utilisé — réservoir pour ajouter des
+  trottoirs plus tard.
 
 ---
 
@@ -174,9 +217,9 @@ VirtualJoystick (Control)
 
 Attacher `scripts/ui/SimpleJoystick.gd`
 
-### Intégration dans HUD
+### Intégration dans le HUD
 
-1. Ouvrir `scenes/ui/HUD.tscn`
+1. Ouvrir `scenes/ui/GameHUD.tscn`
 2. Ajouter `VirtualJoystick.tscn` en enfant
 3. Positionner en bas à gauche
 
@@ -192,12 +235,14 @@ if joystick:
 
 ---
 
-## 🖥️ Scène HUD.tscn
+## 🖥️ Scène GameHUD.tscn
+
+> Nom de fichier réel : `scenes/ui/GameHUD.tscn`, script `scripts/ui/GameHUD.gd` (`class_name GameHUD`).
 
 ### Hiérarchie Recommandée
 
 ```
-HUD (CanvasLayer)
+GameHUD (CanvasLayer)
 ├── TopBar (HBoxContainer)
 │   ├── HealthBar (ProgressBar)
 │   └── CreditsLabel (Label)
@@ -338,4 +383,4 @@ OmniLight3D:
 
 ---
 
-*Guide des Scènes - Neon Protocol v0.1.0*
+*Guide des Scènes - Neon Protocol v0.2.0 - 11 Juin 2026*

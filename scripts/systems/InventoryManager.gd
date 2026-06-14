@@ -76,7 +76,7 @@ const ITEM_DATABASE_PATH := "res://data/items.json"
 # ==============================================================================
 var items: Array[InventoryItem] = []
 var equipped: Dictionary = {}  # {"weapon": InventoryItem, "armor": InventoryItem}
-var credits: int = 0
+var credits: int = 5000
 var _item_database: Dictionary = {}
 
 # ==============================================================================
@@ -114,14 +114,17 @@ func _load_item_database() -> void:
 		_create_default_database()
 		return
 	
-	if json.data == null or not json.data is Array:
-		push_error("InventoryManager: Format JSON invalide - array attendu")
+	if json.data == null or not json.data is Dictionary or not json.data.has("items"):
+		push_error("InventoryManager: Format JSON invalide - objet avec clé 'items' attendu")
 		_create_default_database()
 		return
-	
-	for item_data in json.data:
-		if item_data is Dictionary and item_data.has("id"):
-			_item_database[item_data["id"]] = item_data
+
+	var items_data: Dictionary = json.data["items"]
+	for item_id in items_data:
+		var item_data = items_data[item_id]
+		if item_data is Dictionary:
+			item_data["id"] = item_data.get("id", item_id)
+			_item_database[item_id] = item_data
 
 
 func _create_default_database() -> void:

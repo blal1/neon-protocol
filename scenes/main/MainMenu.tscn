@@ -98,7 +98,16 @@ size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBox_button")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
 theme_override_styles/pressed = SubResource("StyleBox_button_pressed")
-text = "▶ JOUER"
+text = "JOUER"
+
+[node name="DistrictButton" type="Button" parent="VBox"]
+custom_minimum_size = Vector2(300, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button_hover")
+theme_override_styles/pressed = SubResource("StyleBox_button_pressed")
+text = "NIVEAU ALTERNATIF"
 
 [node name="OptionsButton" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(300, 60)
@@ -107,7 +116,7 @@ size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBox_button")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
 theme_override_styles/pressed = SubResource("StyleBox_button_pressed")
-text = "⚙ OPTIONS"
+text = "OPTIONS"
 
 [node name="AccessibilityButton" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(300, 60)
@@ -116,7 +125,7 @@ size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBox_button")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
 theme_override_styles/pressed = SubResource("StyleBox_button_pressed")
-text = "♿ ACCESSIBILITÉ"
+text = "ACCESSIBILITÉ"
 
 [node name="QuitButton" type="Button" parent="VBox"]
 custom_minimum_size = Vector2(300, 60)
@@ -125,7 +134,7 @@ size_flags_horizontal = 4
 theme_override_styles/normal = SubResource("StyleBox_button")
 theme_override_styles/hover = SubResource("StyleBox_button_hover")
 theme_override_styles/pressed = SubResource("StyleBox_button_pressed")
-text = "✕ QUITTER"
+text = "QUITTER"
 
 [node name="Version" type="Label" parent="."]
 layout_mode = 1
@@ -142,6 +151,7 @@ horizontal_alignment = 2
 vertical_alignment = 2
 
 [connection signal="pressed" from="VBox/PlayButton" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBox/DistrictButton" to="." method="_on_district_pressed"]
 [connection signal="pressed" from="VBox/OptionsButton" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="VBox/AccessibilityButton" to="." method="_on_accessibility_pressed"]
 [connection signal="pressed" from="VBox/QuitButton" to="." method="_on_quit_pressed"]

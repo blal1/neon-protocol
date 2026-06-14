@@ -1,8 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://enemy_robot_001"]
+[gd_scene load_steps=19 format=3 uid="uid://enemy_robot_001"]
 
 [ext_resource type="Script" path="res://scripts/enemies/SecurityRobot.gd" id="1_robot"]
 [ext_resource type="Script" path="res://scripts/components/HealthComponent.gd" id="2_health"]
 [ext_resource type="Script" path="res://scripts/audio/EnemyAudioFeedback.gd" id="3_audio"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/impactMetal_000.ogg" id="4_step1"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/impactMetal_001.ogg" id="5_step2"]
+[ext_resource type="AudioStream" path="res://audio/sfx/environment/forceField_000.ogg" id="6_servo1"]
+[ext_resource type="AudioStream" path="res://audio/sfx/environment/forceField_001.ogg" id="7_servo2"]
+[ext_resource type="AudioStream" path="res://audio/sfx/environment/computerNoise_000.ogg" id="8_hum"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/laserRetro_000.ogg" id="9_alert"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/spaceEngineSmall_000.ogg" id="10_chase"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/laserSmall_000.ogg" id="11_attack"]
+[ext_resource type="AudioStream" path="res://audio/sfx/combat/explosionCrunch_000.ogg" id="12_death"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_robot"]
 radius = 0.5
@@ -94,6 +103,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
 
 [node name="EnemyAudioFeedback" type="Node" parent="."]
 script = ExtResource("3_audio")
+footstep_sounds = Array[AudioStream]([ExtResource("4_step1"), ExtResource("5_step2")])
+servo_sounds = Array[AudioStream]([ExtResource("6_servo1"), ExtResource("7_servo2")])
+patrol_hum_sound = ExtResource("8_hum")
+alert_sound = ExtResource("9_alert")
+chase_sound = ExtResource("10_chase")
+attack_sound = ExtResource("11_attack")
+death_sound = ExtResource("12_death")
 
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]

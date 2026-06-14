@@ -89,6 +89,43 @@ func _ready() -> void:
 	if combat_manager:
 		combat_manager.attack_started.connect(_on_attack_started)
 		combat_manager.attack_hit.connect(_on_attack_hit)
+		
+	# Appliquer le cyberware initial
+	_apply_all_cyberware_benefits()
+	
+	# Connecter aux nouveaux implants
+	if CyberwareManager:
+		CyberwareManager.implant_installed.connect(func(_data): _apply_all_cyberware_benefits())
+		CyberwareManager.implant_removed.connect(func(_id): _apply_all_cyberware_benefits())
+
+
+func _apply_all_cyberware_benefits() -> void:
+	"""Applique tous les bonus des implants installés."""
+	if not CyberwareManager: return
+	
+	# Reset bases
+	move_speed = 5.0
+	var health_bonus := 0.0
+	var damage_bonus := 0.0
+	
+	var implants = CyberwareManager.get_installed_implants()
+	for slot in implants:
+		var benefits = implants[slot].get("benefits", {})
+		
+		# Vitesse / Réflexes
+		if benefits.has("reflex_bonus"):
+			move_speed += benefits.reflex_bonus * 0.1
+			
+		# Santé
+		if benefits.has("health_regen"):
+			# On pourrait ajouter un composant de régénération
+			pass
+			
+		# Dommages
+		if benefits.has("strength_bonus"):
+			damage_bonus += benefits.strength_bonus
+	
+	print("[Player] Cyberware appliqué. Vitesse: %.1f, Bonus Dégâts: %.1f" % [move_speed, damage_bonus])
 
 
 func _physics_process(delta: float) -> void:
@@ -143,6 +180,40 @@ func request_attack() -> void:
 	"""Appelée par le bouton Attaque UI. Utilise l'auto-targeting."""
 	if combat_manager:
 		combat_manager.request_attack()
+
+
+func request_tactical_mode() -> void:
+	"""Appelée par le bouton/geste Bullet-Time UI."""
+	_toggle_bullet_time()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	"""Gestion des inputs non capturés (raccourcis clavier/manette)."""
+	if event.is_action_pressed("tactical_mode"):
+		_toggle_bullet_time()
+
+
+func _toggle_bullet_time() -> void:
+	"""Bascule le mode Bullet-Time (TimeDilationManager) avec annonce TTS."""
+	var time_dilation = get_node_or_null("/root/TimeDilationManager")
+	if not time_dilation:
+		return
+
+	var sfx = get_node_or_null("/root/SFXManager")
+	var tts = get_node_or_null("/root/TTSManager")
+
+	if time_dilation.is_time_dilated():
+		time_dilation.exit_tactical_mode()
+		if sfx:
+			sfx.play_ui("toggle")
+		if tts:
+			tts.speak("Mode bullet-time désactivé")
+	else:
+		time_dilation.enter_tactical_mode(self)
+		if sfx:
+			sfx.play_ui("toggle")
+		if tts:
+			tts.speak("Mode bullet-time activé")
 
 
 # ==============================================================================

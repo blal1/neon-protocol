@@ -6,7 +6,7 @@
 # ==============================================================================
 
 extends Node
-class_name DayNightCycle
+# NOTE: pas de class_name - enregistré comme autoload singleton (voir project.godot)
 
 # ==============================================================================
 # SIGNAUX
@@ -69,6 +69,7 @@ var _last_period: TimePeriod = TimePeriod.DAY
 
 func _ready() -> void:
 	"""Initialisation."""
+	add_to_group("day_night_cycle")
 	current_hour = starting_hour
 	current_minute = starting_minute
 	_update_period()

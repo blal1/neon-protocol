@@ -33,7 +33,7 @@
 
 ### Windows
 
-1. Téléchargez Godot 4.2+ depuis [godotengine.org](https://godotengine.org/download)
+1. Téléchargez Godot 4.6+ depuis [godotengine.org](https://godotengine.org/download)
 2. Choisissez la version **Standard** (pas .NET)
 3. Extrayez l'archive dans un dossier (ex: `C:\Godot\`)
 4. Lancez `Godot_v4.x-stable_win64.exe`
@@ -52,14 +52,14 @@
 ### Méthode 1: Import Direct
 
 1. Dans Godot, cliquez sur **Importer**
-2. Naviguez vers le dossier `tester/`
+2. Naviguez vers le dossier `neon-protocol/`
 3. Sélectionnez `project.godot`
 4. Cliquez **Importer et Éditer**
 
 ### Méthode 2: Scan de Dossier
 
 1. Cliquez sur **Scanner** dans le gestionnaire de projets
-2. Sélectionnez le dossier parent de `tester/`
+2. Sélectionnez le dossier parent de `neon-protocol/`
 3. Le projet apparaîtra dans la liste
 
 ### Première Ouverture
@@ -71,7 +71,7 @@
 ## 📁 Structure du Projet
 
 ```
-tester/
+neon-protocol/
 ├── assets/                    # Ressources graphiques
 │   ├── fonts/                 # Polices TTF
 │   │   ├── Orbitron-VariableFont_wght.ttf
@@ -396,7 +396,7 @@ No main scene defined
 
 ## ✅ Checklist de Configuration
 
-- [ ] Godot 4.2+ installé
+- [ ] Godot 4.6+ installé
 - [ ] Projet importé
 - [ ] Tous les autoloads actifs
 - [ ] Inputs configurés
@@ -406,4 +406,4 @@ No main scene defined
 
 ---
 
-*Documentation générée pour Neon Protocol v0.1.0 - Godot 4.2*
+*Documentation générée pour Neon Protocol v0.2.0 - Godot 4.6.3*

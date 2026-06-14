@@ -160,8 +160,11 @@ func _process_speech_queue() -> void:
 	_is_speaking = true
 	var text: String = _speech_queue.pop_front()
 	
-	# Utiliser le TTS de Godot
-	DisplayServer.tts_speak(text, DisplayServer.tts_get_voices()[0] if DisplayServer.tts_get_voices().size() > 0 else "")
+	# Utiliser le TTS de Godot (l'argument voix doit être un ID de voix String,
+	# pas le dictionnaire complet retourné par tts_get_voices()).
+	var voices: Array = DisplayServer.tts_get_voices()
+	var voice_id: String = String(voices[0].get("id", "")) if voices.size() > 0 else ""
+	DisplayServer.tts_speak(text, voice_id)
 	
 	# Timer pour estimer la fin de la parole
 	var estimated_duration: float = text.length() * 0.05  # ~50ms par caractère

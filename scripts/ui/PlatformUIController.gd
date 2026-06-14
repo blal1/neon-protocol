@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name PlatformUIController
 
 # ==============================================================================
 # SIGNAUX
@@ -39,7 +38,14 @@ enum InputMode {
 @export var escape_menu_hint: Control  ## Hint "Appuyez sur ESC"
 
 @export_group("Settings")
-@export var capture_mouse_on_desktop: bool = true
+@export var capture_mouse_on_desktop: bool = true:
+	set(value):
+		capture_mouse_on_desktop = value
+		if not is_mobile:
+			if capture_mouse_on_desktop:
+				_capture_mouse()
+			else:
+				_release_mouse()
 @export var show_keyboard_hints: bool = true
 @export var auto_detect_input_change: bool = true
 

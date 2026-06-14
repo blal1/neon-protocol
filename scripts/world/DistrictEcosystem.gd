@@ -7,7 +7,7 @@
 # ==============================================================================
 
 extends Node
-class_name DistrictEcosystem
+# NOTE: pas de class_name - enregistré comme autoload singleton (voir project.godot)
 
 # ==============================================================================
 # SIGNAUX
@@ -251,7 +251,7 @@ func enter_district(district_id: String, player: Node3D) -> Dictionary:
 	
 	district_entered.emit(district_id)
 	
-	var district := DISTRICTS[district_id]
+	var district: Dictionary = DISTRICTS[district_id]
 	var state: Dictionary = _district_states[district_id]
 	
 	# TTS
@@ -293,7 +293,7 @@ func _get_atmosphere_description(district_id: String) -> String:
 	if atmo.drone_density > 0.5:
 		desc.append("Drones omniprésents")
 	
-	if atmo.surveillance_level > 0.7:
+	if district.get("surveillance_level", 0.0) > 0.7:
 		desc.append("Surveillance maximale")
 	
 	return ". ".join(desc) if desc.size() > 0 else "Zone neutre"
@@ -321,7 +321,7 @@ func _check_restricted_items(player: Node3D, district: Dictionary) -> Array[Stri
 func _player_has_item(player: Node3D, item_type: String) -> bool:
 	"""Vérifie si le joueur a un type d'item."""
 	# Logique simplifiée - à connecter avec l'inventaire réel
-	if player.has_method("has_item_type"):
+	if player and player.has_method("has_item_type"):
 		return player.has_item_type(item_type)
 	return false
 
@@ -352,10 +352,10 @@ func get_price_modifier(district_id: String = "") -> float:
 	var state: Dictionary = _district_states[d_id]
 	
 	# Ajuster selon l'économie
-	var economy_modifier := 1.0 + (0.7 - state.economy_health) * 0.3
+	var economy_modifier: float = 1.0 + (0.7 - state.economy_health) * 0.3
 	
 	# Ajuster selon la réputation locale
-	var rep_modifier := 1.0 - (state.player_reputation_local / 100.0 * 0.2)
+	var rep_modifier: float = 1.0 - (state.player_reputation_local / 100.0 * 0.2)
 	
 	return base_price * economy_modifier * rep_modifier
 
@@ -420,7 +420,7 @@ func _trigger_high_tension_event(district_id: String) -> void:
 		{"type": "blackout", "description": "Coupure de courant"}
 	]
 	
-	var event := events[randi() % events.size()]
+	var event: Dictionary = events[randi() % events.size()]
 	event["district"] = district_id
 	
 	_district_states[district_id].recent_events.append(event)

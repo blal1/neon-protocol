@@ -219,6 +219,48 @@ func _create_achievements() -> void:
 		"reward_credits": 250
 	})
 
+	# === CHOIX MORAUX ===
+	_add_achievement({
+		"id": "ai_liberator",
+		"name": "Briseur de Chaînes IA",
+		"description": "Libérez une IA captive plutôt que de la vendre ou de l'effacer",
+		"category": "story",
+		"progress_target": 1,
+		"stat_to_track": "ai_freed",
+		"reward_credits": 200
+	})
+
+	_add_achievement({
+		"id": "pacifist",
+		"name": "Pacifiste",
+		"description": "Choisissez la voie pacifique dans 4 dilemmes moraux",
+		"category": "story",
+		"progress_target": 4,
+		"stat_to_track": "pacifist_choices",
+		"reward_credits": 400
+	})
+
+	_add_achievement({
+		"id": "ruthless",
+		"name": "Sans Pitié",
+		"description": "Choisissez la voie brutale dans 4 dilemmes moraux",
+		"category": "story",
+		"progress_target": 4,
+		"stat_to_track": "ruthless_choices",
+		"reward_credits": 400,
+		"is_hidden": true
+	})
+
+	_add_achievement({
+		"id": "blood_on_hands",
+		"name": "Sang sur les Mains",
+		"description": "Tuez Jasmin",
+		"category": "story",
+		"progress_target": 1,
+		"stat_to_track": "jasmin_killed",
+		"is_hidden": true
+	})
+
 
 func _add_achievement(data: Dictionary) -> void:
 	"""Ajoute un achievement."""
@@ -351,7 +393,7 @@ func _connect_signals() -> void:
 	if mm:
 		if mm.has_signal("mission_completed"):
 			mm.mission_completed.connect(_on_mission_completed)
-	
+
 	# Connexion à l'InventoryManager
 	var inv = get_node_or_null("/root/InventoryManager")
 	if inv:
@@ -359,6 +401,62 @@ func _connect_signals() -> void:
 			inv.item_added.connect(_on_item_collected)
 		if inv.has_signal("credits_changed"):
 			inv.credits_changed.connect(_on_credits_changed)
+
+	# Connexion aux scénarios à choix moraux (ScenarioXxx.gd, groupe "moral_scenario")
+	get_tree().node_added.connect(_on_node_added)
+	for scenario in get_tree().get_nodes_in_group("moral_scenario"):
+		_connect_moral_scenario(scenario)
+
+
+# ==============================================================================
+# CHOIX MORAUX (scénarios)
+# ==============================================================================
+
+const PACIFIST_OUTCOMES := ["freed", "helped", "protected", "peaceful", "saved", "published"]
+const RUTHLESS_OUTCOMES := ["sold", "erased", "betrayed", "ignored", "chaos_exploited", "harvested", "collectors_win", "censored"]
+
+func _on_node_added(node: Node) -> void:
+	"""Connecte automatiquement les scénarios moraux ajoutés en cours de jeu."""
+	if node.is_in_group("moral_scenario"):
+		_connect_moral_scenario(node)
+
+
+func _connect_moral_scenario(scenario: Node) -> void:
+	"""Connecte les signaux de fin de scénario d'un ScenarioXxx.gd."""
+	if scenario.has_signal("scenario_ended") and not scenario.scenario_ended.is_connected(_on_scenario_ended):
+		scenario.scenario_ended.connect(_on_scenario_ended.bind(scenario))
+
+	# Cas particulier: ScenarioJasmin n'émet pas scenario_ended
+	if scenario.has_signal("jasmin_killed") and not scenario.jasmin_killed.is_connected(_on_jasmin_killed):
+		scenario.jasmin_killed.connect(_on_jasmin_killed)
+	if scenario.has_signal("jasmin_allied") and not scenario.jasmin_allied.is_connected(_on_jasmin_allied):
+		scenario.jasmin_allied.connect(_on_jasmin_allied)
+	if scenario.has_signal("jasmin_betrayed") and not scenario.jasmin_betrayed.is_connected(_on_jasmin_betrayed):
+		scenario.jasmin_betrayed.connect(_on_jasmin_betrayed)
+
+
+func _on_scenario_ended(outcome: String, _scenario: Node) -> void:
+	"""Callback de fin de scénario à choix moral."""
+	if outcome == "freed":
+		increment_stat("ai_freed")
+
+	if outcome in PACIFIST_OUTCOMES:
+		increment_stat("pacifist_choices")
+	elif outcome in RUTHLESS_OUTCOMES:
+		increment_stat("ruthless_choices")
+
+
+func _on_jasmin_killed() -> void:
+	increment_stat("jasmin_killed")
+	increment_stat("ruthless_choices")
+
+
+func _on_jasmin_allied() -> void:
+	increment_stat("pacifist_choices")
+
+
+func _on_jasmin_betrayed() -> void:
+	increment_stat("ruthless_choices")
 
 
 func _on_mission_completed(mission) -> void:

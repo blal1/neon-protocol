@@ -71,17 +71,17 @@ func _ready() -> void:
 	"""Initialisation."""
 	add_to_group("door")
 	add_to_group("interactable")
-	
+
 	if lock_type == LockType.HACK:
 		add_to_group("hackable")
-	
+
 	_original_position = global_position
 	_original_rotation = rotation.y
-	
+
 	# Définir l'état initial
 	is_locked = lock_type != LockType.NONE
 	_update_indicator()
-	
+
 	# Créer les éléments manquants
 	if not interaction_area:
 		_create_interaction_area()
@@ -103,11 +103,11 @@ func _try_interact() -> void:
 	var players := get_tree().get_nodes_in_group("player")
 	if players.is_empty():
 		return
-	
+
 	var player: Node3D = players[0]
 	if global_position.distance_to(player.global_position) > 3.0:
 		return
-	
+
 	interact(player)
 
 
@@ -115,7 +115,7 @@ func interact(interactor: Node3D) -> void:
 	"""Interaction principale."""
 	if current_state == DoorState.OPENING or current_state == DoorState.CLOSING:
 		return
-	
+
 	if is_locked:
 		_try_unlock(interactor)
 	else:
@@ -140,22 +140,22 @@ func _try_key_unlock(interactor: Node3D) -> void:
 	var save = get_node_or_null("/root/SaveManager")
 	if not save:
 		return
-	
+
 	var keys: Array = save.get_value("keys_obtained", [])
-	
+
 	if required_key_id in keys:
 		unlock()
-		
+
 		var tts = get_node_or_null("/root/TTSManager")
 		if tts:
 			tts.speak("Porte déverrouillée avec la clé")
 	else:
 		door_locked.emit()
-		
+
 		var toast = get_node_or_null("/root/ToastNotification")
 		if toast:
-			toast.show_error("🔒 Clé requise: " + required_key_id)
-		
+			toast.show_error("Clé requise: " + required_key_id)
+
 		var tts = get_node_or_null("/root/TTSManager")
 		if tts:
 			tts.speak("Porte verrouillée. Clé nécessaire.")
@@ -165,19 +165,19 @@ func _start_hack(interactor: Node3D) -> void:
 	"""Démarre le mini-jeu de hacking."""
 	if is_being_hacked:
 		return
-	
+
 	is_being_hacked = true
 	hack_started.emit()
-	
+
 	# Changer la couleur de l'indicateur
 	if indicator_light:
 		indicator_light.light_color = hacking_color
-	
+
 	# TTS
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts:
 		tts.speak("Hacking en cours. Difficulté %d" % hack_difficulty)
-	
+
 	# Lancer le mini-jeu de hacking
 	var hacking = get_node_or_null("/root/HackingMinigame")
 	if hacking and hacking.has_method("start_hack"):
@@ -193,24 +193,24 @@ func _start_hack(interactor: Node3D) -> void:
 func _on_hack_result(success: bool) -> void:
 	"""Résultat du hacking."""
 	is_being_hacked = false
-	
+
 	if success:
 		unlock()
 		hack_completed.emit()
-		
+
 		var toast = get_node_or_null("/root/ToastNotification")
 		if toast:
-			toast.show_success("🔓 Hack réussi!")
+			toast.show_success("Hack réussi!")
 	else:
 		hack_failed.emit()
-		
+
 		var toast = get_node_or_null("/root/ToastNotification")
 		if toast:
-			toast.show_error("❌ Hack échoué!")
-		
+			toast.show_error("Hack échoué!")
+
 		# Déclencher une alarme ?
 		_trigger_alarm()
-	
+
 	_update_indicator()
 
 
@@ -218,8 +218,8 @@ func _show_switch_required() -> void:
 	"""Affiche que la porte nécessite un interrupteur."""
 	var toast = get_node_or_null("/root/ToastNotification")
 	if toast:
-		toast.show("🔌 Activez l'interrupteur lié", 0)
-	
+		toast.show("Activez l'interrupteur lié", 0)
+
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts:
 		tts.speak("Cette porte nécessite un interrupteur")
@@ -229,8 +229,8 @@ func _show_mission_required() -> void:
 	"""Affiche que la porte nécessite une mission."""
 	var toast = get_node_or_null("/root/ToastNotification")
 	if toast:
-		toast.show("📋 Mission requise pour accès", 0)
-	
+		toast.show("Mission requise pour accès", 0)
+
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts:
 		tts.speak("Accomplissez la mission pour ouvrir cette porte")
@@ -244,30 +244,34 @@ func open() -> void:
 	"""Ouvre la porte."""
 	if current_state != DoorState.CLOSED or is_locked:
 		return
-	
+
 	current_state = DoorState.OPENING
 	door_opened.emit()
-	
+
 	# Son d'ouverture
 	if audio_player:
 		audio_player.play()
-	
+	else:
+		var sfx = get_node_or_null("/root/SFXManager")
+		if sfx:
+			sfx.play_ui("door_open")
+
 	# Animation
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_OUT)
-	
+
 	if open_offset != Vector3.ZERO:
 		# Porte coulissante
-		tween.tween_property(self, "global_position", 
+		tween.tween_property(self, "global_position",
 			_original_position + open_offset, open_duration)
 	else:
 		# Porte pivotante
-		tween.tween_property(self, "rotation:y", 
+		tween.tween_property(self, "rotation:y",
 			_original_rotation + open_rotation, open_duration)
-	
+
 	await tween.finished
 	current_state = DoorState.OPEN
-	
+
 	# Auto-fermeture
 	if auto_close:
 		await get_tree().create_timer(auto_close_delay).timeout
@@ -278,25 +282,29 @@ func close() -> void:
 	"""Ferme la porte."""
 	if current_state != DoorState.OPEN:
 		return
-	
+
 	current_state = DoorState.CLOSING
 	door_closed.emit()
-	
+
 	# Son de fermeture
 	if audio_player:
 		audio_player.play()
-	
+	else:
+		var sfx = get_node_or_null("/root/SFXManager")
+		if sfx:
+			sfx.play_ui("door_close")
+
 	# Animation
 	var tween := create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
-	
+
 	if open_offset != Vector3.ZERO:
-		tween.tween_property(self, "global_position", 
+		tween.tween_property(self, "global_position",
 			_original_position, open_duration)
 	else:
-		tween.tween_property(self, "rotation:y", 
+		tween.tween_property(self, "rotation:y",
 			_original_rotation, open_duration)
-	
+
 	await tween.finished
 	current_state = DoorState.CLOSED
 
@@ -331,7 +339,7 @@ func _update_indicator() -> void:
 	"""Met à jour l'indicateur lumineux."""
 	if not indicator_light:
 		return
-	
+
 	if is_locked:
 		indicator_light.light_color = locked_color
 	else:
@@ -352,12 +360,12 @@ func _create_interaction_area() -> void:
 	"""Crée l'area d'interaction."""
 	interaction_area = Area3D.new()
 	interaction_area.name = "InteractionArea"
-	
+
 	var collision := CollisionShape3D.new()
 	var box := BoxShape3D.new()
 	box.size = Vector3(3, 3, 3)
 	collision.shape = box
-	
+
 	interaction_area.add_child(collision)
 	add_child(interaction_area)
 

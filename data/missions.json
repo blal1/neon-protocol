@@ -160,6 +160,69 @@
       "story_context": "C'est la mission finale. NovaTech tombera, ou tu tomberas avec.",
       "layer": "CORPORATE_TOWERS",
       "layer_name": "Tours Corporatistes"
+    },
+    {
+      "id": 11,
+      "title": "Sabotage Énergétique",
+      "description": "Désactive les 3 générateurs de secours de la tour de communication.",
+      "objective_type": "Interact",
+      "target_coordinates": {
+        "x": 350.0,
+        "y": 100.0,
+        "z": 350.0
+      },
+      "target_count": 3,
+      "reward_credits": 1500,
+      "story_context": "Couper le courant permettra aux Cryptopirates de hacker le flux TV.",
+      "layer": "CORPORATE_TOWERS",
+      "layer_name": "Tours Corporatistes"
+    },
+    {
+      "id": 12,
+      "title": "Extraction d'Urgence",
+      "description": "Retrouve l'agent infiltré blessé et amène-le au point d'extraction.",
+      "objective_type": "GoTo",
+      "target_coordinates": {
+        "x": 45.0,
+        "y": 0.0,
+        "z": 45.0
+      },
+      "reward_credits": 2500,
+      "story_context": "Il possède des codes de décryptage vitaux. Il ne doit pas mourir.",
+      "layer": "DEAD_GROUND",
+      "layer_name": "Sol Mort"
+    },
+    {
+      "id": 13,
+      "title": "Marché Noir",
+      "description": "Achète les composants interdits au vendeur de la zone d'ombre.",
+      "objective_type": "Interact",
+      "target_coordinates": {
+        "x": 120.0,
+        "y": -100.0,
+        "z": 50.0
+      },
+      "target_count": 1,
+      "reward_credits": 1000,
+      "story_context": "Nous avons besoin de processeurs neuronaux non bridés.",
+      "layer": "SUBNETWORK",
+      "layer_name": "Sous-Réseau"
+    },
+    {
+      "id": 14,
+      "title": "Assaut Final",
+      "description": "Élimine les 12 gardes d'élite devant le bunker de commandement.",
+      "objective_type": "Kill",
+      "target_coordinates": {
+        "x": 500.0,
+        "y": 300.0,
+        "z": 500.0
+      },
+      "target_count": 12,
+      "reward_credits": 10000,
+      "story_context": "C'est maintenant ou jamais. La garde personnelle du PDG est là.",
+      "layer": "CORPORATE_TOWERS",
+      "layer_name": "Tours Corporatistes"
     }
   ]
 }

@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name SafeAreaManager
 
 # ==============================================================================
 # SIGNAUX
@@ -88,11 +87,11 @@ func _process(delta: float) -> void:
 func _update_safe_area() -> void:
 	"""Met à jour la zone sûre."""
 	var screen_size := DisplayServer.screen_get_size()
-	var new_safe_area := DisplayServer.get_display_safe_area()
-	
+	var new_safe_area: Rect2 = Rect2(DisplayServer.get_display_safe_area())
+
 	# Fallback si pas de safe area (desktop)
 	if new_safe_area == Rect2():
-		new_safe_area = Rect2(Vector2.ZERO, screen_size)
+		new_safe_area = Rect2(Vector2.ZERO, Vector2(screen_size))
 	
 	# Calculer l'orientation
 	var new_landscape := screen_size.x > screen_size.y

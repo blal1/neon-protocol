@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name UnifiedInputManager
 
 # ==============================================================================
 # SIGNAUX
@@ -357,6 +356,7 @@ func _game_action_to_input(action: GameAction) -> String:
 		GameAction.DODGE: return "dash"
 		GameAction.INTERACT: return "interact"
 		GameAction.PAUSE: return "pause"
+		GameAction.TACTICAL_MODE: return "tactical_mode"
 		GameAction.SONAR_PING: return "ping_navigation"
 		_: return ""
 

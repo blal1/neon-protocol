@@ -29,6 +29,7 @@ enum AttackType { MELEE, RANGED, AOE, CHARGE }
 # ==============================================================================
 @export_group("Statistiques")
 @export var boss_name: String = "OVERLORD-X7"
+@export var boss_type: String = "boss"  ## Clé sonore dans EnemyAudioController.enemy_sounds
 @export var max_health: float = 500.0
 @export var phase_2_threshold: float = 0.6  ## 60% HP
 @export var phase_3_threshold: float = 0.3  ## 30% HP

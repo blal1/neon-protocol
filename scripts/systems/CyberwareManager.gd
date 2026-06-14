@@ -8,7 +8,6 @@
 # ==============================================================================
 
 extends Node
-class_name CyberwareManager
 
 # ==============================================================================
 # SIGNAUX
@@ -359,7 +358,7 @@ func remove_implant(slot: int, surgery_type: SurgeryType) -> Dictionary:
 	if not installed_implants.has(slot):
 		return {"success": false, "reason": "Aucun implant dans ce slot"}
 	
-	var implant := installed_implants[slot]
+	var implant: Dictionary = installed_implants[slot]
 	var implant_data: Dictionary = IMPLANT_DATABASE.get(implant.id, {})
 	
 	# Risque de retrait

@@ -16,6 +16,7 @@ signal vehicle_exited(driver: Node3D)
 signal speed_changed(current_speed: float, max_speed: float)
 signal crashed(impact_force: float)
 signal boosting
+signal upgrade_installed(item_id: String)
 
 # ==============================================================================
 # VARIABLES EXPORTÉES
@@ -42,6 +43,37 @@ signal boosting
 @export_group("Interaction")
 @export var enter_range: float = 2.0
 @export var exit_offset: Vector3 = Vector3(1.5, 0, 0)
+
+# ==============================================================================
+# AMÉLIORATIONS (GARAGE)
+# ==============================================================================
+const UPGRADES_SAVE_PATH := "user://vehicle_upgrades.json"
+
+## item_id (CraftingSystem.items_db) -> modificateurs additifs appliqués aux stats exportées
+const UPGRADE_CATALOG: Dictionary = {
+	"moto_engine_mk1": {
+		"name": "Moteur Surclassé Mk1",
+		"modifiers": {"max_speed": 5.0, "acceleration": 2.0}
+	},
+	"moto_engine_mk2": {
+		"name": "Moteur Surclassé Mk2",
+		"modifiers": {"max_speed": 10.0, "acceleration": 5.0}
+	},
+	"moto_turbo_injector": {
+		"name": "Injecteur Turbo",
+		"modifiers": {"boost_multiplier": 0.2, "boost_cooldown": -3.0}
+	},
+	"moto_reinforced_chassis": {
+		"name": "Châssis Renforcé",
+		"modifiers": {"brake_force": 10.0}
+	},
+	"moto_grip_tires": {
+		"name": "Pneus Grip+",
+		"modifiers": {"turn_speed": 0.8, "tilt_amount": 5.0}
+	}
+}
+
+var installed_upgrades: Array[String] = []
 
 # ==============================================================================
 # VARIABLES D'ÉTAT
@@ -80,6 +112,8 @@ func _ready() -> void:
 	# Créer l'area d'interaction si elle n'existe pas
 	if not interaction_area:
 		_create_interaction_area()
+
+	_load_upgrades()
 
 
 func _physics_process(delta: float) -> void:
@@ -453,3 +487,80 @@ func can_enter(player: Node3D) -> bool:
 	if is_occupied:
 		return false
 	return global_position.distance_to(player.global_position) <= enter_range
+
+
+# ==============================================================================
+# GARAGE / AMÉLIORATIONS
+# ==============================================================================
+
+func install_upgrade(item_id: String) -> bool:
+	"""Installe une amélioration depuis l'inventaire (achetée au garage ou craftée)."""
+	if not UPGRADE_CATALOG.has(item_id):
+		return false
+
+	if item_id in installed_upgrades:
+		return false
+
+	var inv = get_node_or_null("/root/InventoryManager")
+	if not inv or not inv.has_item(item_id):
+		return false
+
+	inv.remove_item(item_id, 1)
+	_apply_upgrade_modifiers(item_id)
+	installed_upgrades.append(item_id)
+	_save_upgrades()
+
+	upgrade_installed.emit(item_id)
+
+	var tts = get_node_or_null("/root/TTSManager")
+	if tts:
+		tts.speak("Amélioration installée : " + UPGRADE_CATALOG[item_id].get("name", item_id))
+
+	return true
+
+
+func _apply_upgrade_modifiers(item_id: String) -> void:
+	"""Applique les modificateurs de stats d'une amélioration."""
+	var data: Dictionary = UPGRADE_CATALOG.get(item_id, {})
+	var modifiers: Dictionary = data.get("modifiers", {})
+
+	for stat_name in modifiers:
+		set(stat_name, get(stat_name) + modifiers[stat_name])
+
+
+func get_available_upgrades() -> Array:
+	"""Retourne les ids d'améliorations non encore installées."""
+	var available := []
+	for item_id in UPGRADE_CATALOG:
+		if item_id not in installed_upgrades:
+			available.append(item_id)
+	return available
+
+
+func _save_upgrades() -> void:
+	"""Sauvegarde les améliorations installées."""
+	var file := FileAccess.open(UPGRADES_SAVE_PATH, FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify({"installed_upgrades": installed_upgrades}))
+		file.close()
+
+
+func _load_upgrades() -> void:
+	"""Charge et réapplique les améliorations installées."""
+	if not FileAccess.file_exists(UPGRADES_SAVE_PATH):
+		return
+
+	var file := FileAccess.open(UPGRADES_SAVE_PATH, FileAccess.READ)
+	if not file:
+		return
+
+	var json := JSON.new()
+	if json.parse(file.get_as_text()) == OK:
+		var data: Dictionary = json.data
+		var saved: Array = data.get("installed_upgrades", [])
+		for item_id in saved:
+			if UPGRADE_CATALOG.has(item_id):
+				_apply_upgrade_modifiers(item_id)
+				installed_upgrades.append(item_id)
+
+	file.close()

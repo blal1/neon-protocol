@@ -53,15 +53,14 @@ var _colors: Dictionary = {
 
 # Icônes par type
 var _icons: Dictionary = {
-	NotificationType.INFO: "ℹ️",
-	NotificationType.SUCCESS: "✓",
-	NotificationType.WARNING: "⚠️",
-	NotificationType.ERROR: "✕",
-	NotificationType.ACHIEVEMENT: "🏆",
-	NotificationType.LEVEL_UP: "⬆️",
-	NotificationType.ITEM: "📦"
+	NotificationType.INFO: "i",
+	NotificationType.SUCCESS: "OK",
+	NotificationType.WARNING: "!",
+	NotificationType.ERROR: "X",
+	NotificationType.ACHIEVEMENT: "*",
+	NotificationType.LEVEL_UP: "+",
+	NotificationType.ITEM: ">>"
 }
-
 # ==============================================================================
 # FONCTIONS GODOT
 # ==============================================================================
@@ -111,7 +110,12 @@ func show_notification(message: String, type: NotificationType = NotificationTyp
 	tween.tween_property(notification, "position:x", 0.0, SLIDE_DURATION).set_ease(Tween.EASE_OUT)
 	
 	notification_shown.emit(message)
-	
+
+	# Son de notification
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("notification")
+
 	# TTS (si activé)
 	var tts = get_node_or_null("/root/TTSManager")
 	if tts:
@@ -124,7 +128,7 @@ func show_notification(message: String, type: NotificationType = NotificationTyp
 
 func show_achievement(title: String, description: String = "") -> void:
 	"""Affiche une notification d'achievement."""
-	var full_message := "🏆 " + title
+	var full_message := title
 	if description:
 		full_message += "\n" + description
 	show_notification(full_message, NotificationType.ACHIEVEMENT, 5.0)
@@ -132,7 +136,7 @@ func show_achievement(title: String, description: String = "") -> void:
 
 func show_level_up(new_level: int) -> void:
 	"""Affiche une notification de level up."""
-	show_notification("⬆️ Niveau %d atteint!" % new_level, NotificationType.LEVEL_UP, 4.0)
+	show_notification("Niveau %d atteint!" % new_level, NotificationType.LEVEL_UP, 4.0)
 
 
 func show_item_acquired(item_name: String, quantity: int = 1) -> void:
@@ -140,8 +144,7 @@ func show_item_acquired(item_name: String, quantity: int = 1) -> void:
 	var message := item_name
 	if quantity > 1:
 		message += " x%d" % quantity
-	show_notification("📦 " + message, NotificationType.ITEM, 3.0)
-
+	show_notification(message, NotificationType.ITEM, 3.0)
 
 func show_error(message: String) -> void:
 	"""Affiche une notification d'erreur."""

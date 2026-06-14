@@ -137,6 +137,7 @@ var _dialogue_modifiers: Dictionary = {}
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_spawn_jasmin()
 
 

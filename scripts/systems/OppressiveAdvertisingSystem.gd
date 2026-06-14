@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node3D
-class_name OppressiveAdvertisingSystem
 
 # ==============================================================================
 # SIGNAUX
@@ -86,13 +85,14 @@ func _ready() -> void:
 
 
 func _generate_ads() -> void:
-	"""Génère les publicités du jour."""
+	"""Génère les publicités du jour avec supports visuels."""
 	_current_ads = [
 		{
 			"id": "synthfood_deluxe",
 			"type": AdType.PRODUCT,
 			"brand": "SynthFood™",
 			"slogan": "Le goût de demain, aujourd'hui!",
+			"texture": "res://assets/textures/ads/Advertising5.png",
 			"duration": 10.0,
 			"credits": 3,
 			"propaganda_value": 5
@@ -102,6 +102,7 @@ func _generate_ads() -> void:
 			"type": AdType.CORPORATE,
 			"brand": "NovaTech",
 			"slogan": "Construisons ensemble un avenir meilleur.",
+			"texture": "res://assets/textures/ads/Advertising6.png",
 			"duration": 15.0,
 			"credits": 8,
 			"propaganda_value": 15
@@ -111,6 +112,7 @@ func _generate_ads() -> void:
 			"type": AdType.POLITICAL,
 			"brand": "Sécurité Urbaine",
 			"slogan": "Votre sécurité est notre priorité. Signalez les suspects.",
+			"texture": "res://assets/textures/ads/Advertising7.png",
 			"duration": 12.0,
 			"credits": 5,
 			"propaganda_value": 20
@@ -123,16 +125,6 @@ func _generate_ads() -> void:
 			"duration": 8.0,
 			"credits": 4,
 			"propaganda_value": 10
-		},
-		{
-			"id": "obey_consume",
-			"type": AdType.SUBLIMINAL,
-			"brand": "???",
-			"slogan": "OBÉIS. CONSOMME. DORS.",
-			"duration": 5.0,
-			"credits": 10,
-			"propaganda_value": 30,
-			"hidden": true
 		}
 	]
 

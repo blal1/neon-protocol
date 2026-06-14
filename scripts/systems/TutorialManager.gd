@@ -100,7 +100,7 @@ func _load_tutorial_steps() -> void:
 		var file := FileAccess.open(TUTORIAL_STEPS_PATH, FileAccess.READ)
 		if file:
 			var json := JSON.new()
-			if json.parse(file.get_as_text()) == OK:
+			if json.parse(file.get_as_text()) == OK and json.data is Array:
 				_parse_steps(json.data)
 			file.close()
 

@@ -4,69 +4,57 @@
 
 | Élément | Statut | Notes |
 |---------|--------|-------|
-| **project.godot** | ✅ Fait | Configuration complète |
-| **Scènes .tscn** | ✅ Fait | 6 scènes créées |
+| **project.godot** | ✅ Fait | Configuration complète, Godot 4.6.3 |
+| **Scènes .tscn** | ✅ Fait | 17 scènes créées |
 | **Input Map** | ✅ Fait | WASD, Espace, E, Escape |
-| **Autoloads** | ✅ Fait | 4 managers enregistrés |
-| **Assets graphiques** | 🟡 Partiel | Meshes procéduraux (OK pour MVP) |
-| **Assets audio** | ⚠️ Manquant | Voir guide ci-dessous |
+| **Autoloads** | ✅ Fait | 37 managers enregistrés |
+| **Assets graphiques** | 🟡 Partiel | Meshes procéduraux + 6 bâtiments `.glb` (skyline `Main.tscn`) |
+| **Assets audio** | ✅ Fait | 448 fichiers, câblés via SFXManager/EnemyAudioController/MusicManager |
 
 ---
 
-## 🎵 Assets Audio Requis
+## 🎵 Assets Audio (Implémenté)
 
-### Sons Essentiels (Priorité Haute)
+448 fichiers audio sont présents dans `audio/` et utilisés par les Autoloads
+`SFXManager.gd`, `EnemyAudioController.gd`, `MusicManager.gd`, `AmbientAudioManager.gd`,
+`AudioCompass.gd`, `FootstepSystem.gd`, `TTSManager.gd`.
 
-| Fichier | Usage | Téléchargement |
-|---------|-------|----------------|
-| `ping_sonar.ogg` | AudioCompass navigation | [Freesound: Sonar](https://freesound.org/search/?q=sonar+beep) |
-| `footstep_concrete.ogg` | Pas sur béton | [Freesound: Footsteps](https://freesound.org/search/?q=footstep+concrete) |
-| `footstep_metal.ogg` | Pas sur métal | [Freesound: Metal Steps](https://freesound.org/search/?q=footstep+metal) |
-| `attack_hit.ogg` | Impact attaque | [Freesound: Punch](https://freesound.org/search/?q=punch+hit) |
-| `enemy_alert.ogg` | Détection joueur | [Freesound: Alert](https://freesound.org/search/?q=robot+alert) |
-| `ui_click.ogg` | Clic menu | [Freesound: UI Click](https://freesound.org/search/?q=ui+click) |
-
-### Sons d'Ambiance (Priorité Moyenne)
-
-| Fichier | Usage |
-|---------|-------|
-| `rain_loop.ogg` | Pluie ambiante |
-| `city_drone.ogg` | Bourdonnement ville |
-| `neon_buzz.ogg` | Grésillement néon |
-| `music_synthwave.ogg` | Musique de fond |
-
-### Structure de dossiers
+### Structure réelle des dossiers
 
 ```
 audio/
-├── default_bus_layout.tres  ✅ Créé
-├── music/
-│   └── synthwave_loop.ogg
-├── sfx/
-│   ├── footsteps/
-│   │   ├── concrete_01.ogg
-│   │   ├── concrete_02.ogg
-│   │   ├── metal_01.ogg
-│   │   └── metal_02.ogg
-│   ├── combat/
-│   │   ├── attack_swing.ogg
-│   │   └── attack_hit.ogg
-│   ├── enemy/
-│   │   ├── robot_alert.ogg
-│   │   ├── robot_footstep.ogg
-│   │   └── robot_death.ogg
-│   └── ui/
-│       ├── click.ogg
-│       └── hover.ogg
-├── navigation/
-│   ├── ping_far.ogg
-│   ├── ping_close.ogg
-│   └── objective_reached.ogg
-└── environment/
-    ├── rain_loop.ogg
-    ├── city_drone.ogg
-    └── neon_buzz.ogg
+├── default_bus_layout.tres   # Bus: Music/SFX/Voice/Ambient/UI/TTS
+├── AUDIO_BUS_SETUP.md
+├── music/                     # 54 fichiers
+├── navigation/                # 8 fichiers (sonar, ping objectif...)
+└── sfx/
+    ├── ui/                     # 200 fichiers (Kenney UI Audio: click_001.ogg, hover...)
+    ├── combat/                 # 146 fichiers (Kenney: laserSmall_000.ogg, impactMetal_003.ogg...)
+    ├── environment/            # 30 fichiers
+    └── ambient/                # 8 fichiers
 ```
+
+### Câblage actuel
+
+| Système | Sons utilisés |
+|---------|---------------|
+| `SFXManager.play_ui()` | `click_001`, `hover`, `back`, `confirm`, `error`, `open`, `close`, `pickup`, `toggle`, `notification`, `door_open`, `door_close` (depuis `audio/sfx/ui/` et `audio/sfx/environment/`) |
+| `SFXManager.play_combat()` | `laserSmall_000` (attaque), `impactMetal_003` (hit), combo finisher (depuis `audio/sfx/combat/`) |
+| `EnemyAudioController` | footstep/idle/alert/attack/death par type d'ennemi (robot/drone/turret/boss), mix `audio/sfx/ui/`, `audio/sfx/combat/`, `audio/navigation/` |
+| `EnemyAudioFeedback` (sur `SecurityRobot.tscn`) | footstep/servo/hum/alert/chase/attack/death, mix `audio/sfx/combat/` et `audio/sfx/environment/` |
+| `MainMenu.gd` | hover/click sur tous les boutons via `SFXManager.play_ui()` |
+| `CombatManager.gd` | `player_attack` à l'attaque, `player_hit`/`player_combo_finisher` à l'impact |
+| `Pickup.gd` | `pickup` au ramassage d'objet |
+| `Door.gd` | `door_open`/`door_close` (fallback si pas d'`AudioPlayer` dédié) |
+| `ToastNotification.gd` | `notification` à chaque toast affiché |
+| `PauseMenu.gd` | `hover`/`click` sur les boutons, `toggle` à la pause/reprise |
+| `OptionsMenu.gd` | `toggle` sur les switches accessibilité, `back` à la fermeture |
+| `CraftingSystem.gd` | `confirm` au craft réussi |
+
+### Pistes d'amélioration
+
+- `audio/sfx/ambient/` (8) et `audio/sfx/environment/` sont disponibles pour enrichir
+  `AmbientAudioManager.gd` par district (`DistrictEcosystem.gd`).
 
 ---
 
@@ -146,12 +134,14 @@ Write-Host "Structure créée ! Ajoutez vos assets dans les dossiers."
 
 ## ✅ Checklist de Lancement
 
-- [x] project.godot configuré
-- [x] Scènes principales créées
+- [x] project.godot configuré (Godot 4.6.3)
+- [x] Scènes principales créées (17)
 - [x] Input map défini
-- [x] Autoloads enregistrés
+- [x] Autoloads enregistrés (37)
 - [x] Bus audio configurés
-- [ ] 6 sons minimum ajoutés
+- [x] SFX UI + combat câblés (SFXManager)
+- [x] Audio ennemis câblé (EnemyAudioController, autoload)
+- [x] Décor 3D : skyline de bâtiments dans Main.tscn/TestLevel
 - [ ] Police OpenDyslexic ajoutée
 - [ ] Test sur Android
 - [ ] Build APK signé

@@ -226,9 +226,9 @@ func collect(collector: Node3D) -> void:
 	picked_up.emit(pickup_type, value)
 	
 	# Son UI
-	var audio = get_node_or_null("/root/AudioManager")
-	if audio and audio.has_method("play_ui_sound"):
-		audio.play_ui_sound("pickup")
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("pickup")
 	
 	# Notification toast
 	_show_pickup_notification()
@@ -282,6 +282,10 @@ func _apply_effect(collector: Node3D) -> void:
 				save.set_value("keys", keys + 1)
 		
 		PickupType.DATA_CHIP:
+			var mm = get_node_or_null("/root/MissionManager")
+			if mm and mm.active_mission and mm.active_mission.objective_type == "Collect":
+				mm.update_progress(1)
+				
 			var save = get_node_or_null("/root/SaveManager")
 			if save:
 				var chips: Array = save.get_value("data_chips", [])

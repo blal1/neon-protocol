@@ -252,21 +252,21 @@ func _select_voice() -> void:
 	# Si voix spécifique demandée
 	if not voice_id.is_empty():
 		for voice in _available_voices:
-			if voice == voice_id:
+			if String(voice.get("id", "")) == voice_id:
 				_current_voice = voice_id
 				voice_changed.emit(_current_voice)
 				return
 	
 	# Chercher une voix dans la langue préférée
 	for voice in _available_voices:
-		var voice_str := str(voice)
-		if preferred_language.to_lower() in voice_str.to_lower():
-			_current_voice = voice_str
+		var lang := String(voice.get("language", ""))
+		if preferred_language.to_lower() in lang.to_lower():
+			_current_voice = String(voice.get("id", ""))
 			voice_changed.emit(_current_voice)
 			return
 	
 	# Fallback : première voix disponible
-	_current_voice = str(_available_voices[0])
+	_current_voice = String(_available_voices[0].get("id", ""))
 	voice_changed.emit(_current_voice)
 
 

@@ -44,17 +44,14 @@ CombatManager.request_attack()  # Appelé par le bouton attaque
 
 ---
 
-### DashAbility.gd
-**Type**: Node (enfant de Player)  
-**Rôle**: Capacité de dash avec invincibilité
+> ⚠️ `DashAbility.gd` documenté ici précédemment n'existe plus dans `scripts/player/` — la capacité
+> de dash/roll est maintenant gérée via `CharacterStateMachine.gd` (état `Roll`).
 
-**Configuration**:
-```gdscript
-@export var dash_speed: float = 20.0
-@export var dash_duration: float = 0.2
-@export var dash_cooldown: float = 1.0
-@export var invincibility_enabled: bool = true
-```
+---
+
+### CharacterStateMachine.gd
+**Type**: Node (enfant de Player)  
+**Rôle**: FSM des transitions d'animation (Idle/Attack/HitStun/Roll...)
 
 ---
 
@@ -199,6 +196,62 @@ TTSManager.speak("Ennemi détecté", TTSManager.Priority.HIGH)
 TTSManager.announce_health(current, max)
 TTSManager.announce_enemy_count(3)
 ```
+
+---
+
+### SFXManager.gd (Autoload)
+**Rôle**: Lecture des effets sonores UI (2D) et combat (3D positionnel)
+
+**Pools**:
+```gdscript
+const UI_POOL_SIZE = 4      # AudioStreamPlayer 2D, bus "UI"
+const SFX3D_POOL_SIZE = 8   # AudioStreamPlayer3D, bus "SFX"
+```
+
+**Catégories UI** (`play_ui`): `click`, `hover`, `back`, `confirm`, `error`, `open`, `close`,
+`pickup`, `toggle`, `notification`, `door_open`, `door_close`
+**Catégories Combat** (`play_combat`): `player_attack`, `player_hit`, `player_combo_finisher`
+
+**Utilisation**:
+```gdscript
+var sfx = get_node_or_null("/root/SFXManager")
+sfx.play_ui("click")
+sfx.play_combat("player_attack", player.global_position)
+```
+
+Câblé dans `MainMenu.gd` (hover/click sur tous les boutons) et `CombatManager.gd`
+(`player_attack` à l'attaque, `player_hit`/`player_combo_finisher` à l'impact selon le combo).
+
+Nouvelles catégories câblées dans : `Pickup.gd` (`pickup` au ramassage), `Door.gd`
+(`door_open`/`door_close` si pas d'`AudioPlayer` dédié), `ToastNotification.gd` (`notification`
+à chaque toast), `PauseMenu.gd` (`hover`/`click` sur les boutons, `toggle` à la pause/reprise),
+`OptionsMenu.gd` (`toggle` sur les switches accessibilité, `back` à la fermeture),
+`CraftingSystem.gd` (`confirm` au craft réussi).
+
+---
+
+### EnemyAudioController.gd (Autoload)
+**Rôle**: Contrôleur audio spatial des ennemis pour l'accessibilité
+
+Auto-détecte les nœuds du groupe `enemy`, leur attache un `AudioStreamPlayer3D`, et joue
+footstep/idle/alert/attack/death selon le type (`robot`/`drone`/`turret`/`boss`, déterminé via
+les groupes `drone`/`turret`/`boss`). Se connecte automatiquement à `HealthComponent.died`
+pour le son de mort.
+
+> Anciennement script utilitaire avec `class_name EnemyAudioController`, désormais enregistré
+> comme Autoload — le `class_name` a été retiré pour éviter le conflit
+> "hides an autoload singleton".
+
+---
+
+### EnemyAudioFeedback.gd
+**Type**: Node (enfant d'ennemi, ex: `SecurityRobot.tscn`)
+**Rôle**: Retour audio riche par instance (pas, servomoteurs, alerte, poursuite, attaque, mort)
+pour la navigation des joueurs aveugles — complémentaire à `EnemyAudioController.gd`.
+
+Câblé sur `SecurityRobot.tscn` avec des sons de `audio/sfx/combat/` et `audio/sfx/environment/`
+(impactMetal, forceField, computerNoise, laserRetro, spaceEngineSmall, laserSmall,
+explosionCrunch). `SecurityRobot.gd._on_died()` appelle `play_death_sound()`.
 
 ---
 
@@ -423,6 +476,20 @@ HapticFeedback.vibrate_pattern([50, 30, 50])  # Custom
 
 ---
 
+## 🆕 Autres Autoloads (ajoutés depuis v0.1.0)
+
+| Script | Rôle |
+|--------|------|
+| `KeyboardAccessibilityManager.gd` | Accessibilité clavier complète pour joueurs aveugles PC (ciblage assisté + TTS) |
+| `LazyLoader.gd` | Charge les systèmes lourds uniquement quand nécessaire |
+| `PerformanceManager.gd` | Détecte le type d'appareil et applique les paramètres de qualité |
+| `PlatformUIController.gd` | Adapte l'UI selon la plateforme (Mobile vs Desktop) |
+| `SafeAreaManager.gd` | Gère encoches, coins arrondis et zones système sur mobile |
+
+Voir [ARCHITECTURE_REPORT.md](ARCHITECTURE_REPORT.md) pour la liste complète des 37 autoloads.
+
+---
+
 ## 📋 Conventions de Code
 
 ### Nommage
@@ -478,4 +545,4 @@ func _private_method() -> void:
 
 ---
 
-*Documentation Scripts - Neon Protocol v0.1.0*
+*Documentation Scripts - Neon Protocol v0.2.0 - 11 Juin 2026*

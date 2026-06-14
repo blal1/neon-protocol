@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=3 uid="uid://dialogue_system_001"]
+
+[ext_resource type="Script" path="res://scripts/ui/DialogueSystem.gd" id="1_dialogue"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel_bg"]
+bg_color = Color(0.02, 0.02, 0.05, 0.92)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.8, 0.8)
+
+[sub_resource type="LabelSettings" id="LabelSettings_speaker"]
+font_size = 22
+font_color = Color(0, 1, 1, 1)
+
+[node name="DialogueSystem" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource("1_dialogue")
+dialogue_panel = NodePath("DialoguePanel")
+speaker_label = NodePath("DialoguePanel/Margin/VBox/Header/SpeakerLabel")
+text_label = NodePath("DialoguePanel/Margin/VBox/TextLabel")
+continue_indicator = NodePath("DialoguePanel/ContinueIndicator")
+portrait_texture = NodePath("DialoguePanel/Margin/VBox/Header/PortraitTexture")
+
+[node name="DialoguePanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -220.0
+offset_right = -40.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBox_panel_bg")
+
+[node name="Margin" type="MarginContainer" parent="DialoguePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="DialoguePanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="DialoguePanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="PortraitTexture" type="TextureRect" parent="DialoguePanel/Margin/VBox/Header"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
+visible = false
+
+[node name="SpeakerLabel" type="Label" parent="DialoguePanel/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_vertical = 4
+text = "???"
+label_settings = SubResource("LabelSettings_speaker")
+
+[node name="TextLabel" type="RichTextLabel" parent="DialoguePanel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
+[node name="ContinueIndicator" type="Control" parent="DialoguePanel"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -36.0
+offset_top = -36.0
+offset_right = -12.0
+offset_bottom = -12.0
+grow_horizontal = 0
+grow_vertical = 0
+visible = false
+
+[node name="Arrow" type="Label" parent="DialoguePanel/ContinueIndicator"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "▼"
+horizontal_alignment = 1
+vertical_alignment = 1

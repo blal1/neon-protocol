@@ -54,12 +54,17 @@ enum CellType {
 @export_group("Spawn Joueur")
 @export var player_spawn_cell: Vector2i = Vector2i(5, 0)  ## Cellule de spawn
 
+@export_group("District")
+@export var forced_district: String = ""  ## ID du district (laisser vide pour random)
+
 # ==============================================================================
 # VARIABLES INTERNES
 # ==============================================================================
 var _grid: Array = []  # Array 2D [x][z] de CellType
 var _buildings: Array[Node3D] = []  # Références aux bâtiments instanciés
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _current_district_id: String = ""
+var _current_district_data: Dictionary = {}
 
 # ==============================================================================
 # INITIALISATION
@@ -73,8 +78,64 @@ func _ready() -> void:
 	else:
 		_rng.seed = random_seed
 	
-	# Générer la ville
-	_generate_city()
+	_setup_district()
+
+	# Générer la ville au prochain idle pour laisser les autres noeuds
+	# (GameManager) se connecter au signal city_generation_completed.
+	_generate_city.call_deferred()
+
+
+func _setup_district() -> void:
+	"""Configure les paramètres du district actuel."""
+	if not DistrictEcosystem:
+		return
+		
+	var de = get_node_or_null("/root/DistrictEcosystem")
+	if not de: return
+	
+	if forced_district != "" and forced_district in de.DISTRICTS:
+		_current_district_id = forced_district
+	else:
+		var districts = de.get_all_districts()
+		_current_district_id = districts[_rng.randi() % districts.size()]
+		
+	_current_district_data = de.get_district_data(_current_district_id)
+	
+	# Ajuster la densité selon le district
+	var type = _current_district_data.get("type", 0)
+	match type:
+		0: # CORPORATE
+			building_density = 0.5
+		3: # SLUMS
+			building_density = 0.9
+		4: # NOMAD
+			building_density = 0.2
+		_:
+			building_density = 0.7
+			
+	_apply_visual_style()
+
+
+func _apply_visual_style() -> void:
+	"""Applique le style visuel du district."""
+	var world_env = get_tree().root.find_child("WorldEnvironment", true, false)
+	if not world_env or not world_env.environment: return
+	
+	var env: Environment = world_env.environment
+	
+	match _current_district_id:
+		"corpo_heights":
+			env.fog_light_color = Color("00ffff") # Cyan
+			env.background_color = Color("000510")
+		"dead_end":
+			env.fog_light_color = Color("331100") # Marron/Rouille
+			env.background_color = Color("050200")
+		"neon_mile":
+			env.fog_light_color = Color("ff00ff") # Magenta
+			env.glow_intensity = 2.0
+		"rust_belt":
+			env.fog_light_color = Color("ffcc00") # Jaune/Ocre
+			env.fog_density = 0.03
 
 
 func _generate_city() -> void:
@@ -98,10 +159,40 @@ func _generate_city() -> void:
 	# Étape 5 : Placer les décorations (optionnel)
 	_place_decorations()
 	
+	# Étape 6 : Placer les terminaux de service
+	_place_service_terminals()
+	
 	var elapsed := Time.get_ticks_msec() - start_time
 	print("CityManager: Ville générée en %d ms (%d bâtiments)" % [elapsed, building_count])
 	
+	_notify_district_entry()
+	
 	city_generation_completed.emit(building_count)
+
+
+func _notify_district_entry() -> void:
+	if DistrictEcosystem:
+		var de = get_node_or_null("/root/DistrictEcosystem")
+		if de:
+			de.enter_district(_current_district_id, null) # null player for now as they might not be spawned yet
+
+
+func _place_service_terminals() -> void:
+	"""Place les terminaux essentiels (Ripperdoc, Mission)."""
+	var ripper_scene := preload("res://scenes/world/RipperdocTerminal.tscn")
+	
+	# Placer un Ripperdoc près du spawn (ex: à 1 cellule de distance)
+	var spawn_x := clampi(player_spawn_cell.x, 0, grid_width - 1)
+	var spawn_z := clampi(player_spawn_cell.y, 0, grid_height - 1)
+	
+	var ripper_x := clampi(spawn_x + 1, 0, grid_width - 1)
+	var ripper_z := clampi(spawn_z + 1, 0, grid_height - 1)
+	
+	var terminal = ripper_scene.instantiate() as Node3D
+	terminal.position = _grid_to_world(ripper_x, ripper_z)
+	add_child(terminal)
+	
+	print("[CityManager] Ripperdoc terminal placé à (%d, %d)" % [ripper_x, ripper_z])
 
 
 # ==============================================================================
@@ -307,6 +398,11 @@ func get_player_spawn_position() -> Vector3:
 func get_all_buildings() -> Array[Node3D]:
 	"""Retourne la liste de tous les bâtiments."""
 	return _buildings
+
+
+func get_current_district_data() -> Dictionary:
+	"""Retourne les données du district actuel."""
+	return _current_district_data
 
 
 # ==============================================================================

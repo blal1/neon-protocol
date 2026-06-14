@@ -96,7 +96,14 @@ var items_db: Dictionary = {
 	"damage_chip": {"name": "Puce de dégâts", "type": "upgrade", "stat": "damage", "value": 10},
 	"defense_chip": {"name": "Puce de défense", "type": "upgrade", "stat": "defense", "value": 10},
 	"speed_chip": {"name": "Puce de vitesse", "type": "upgrade", "stat": "speed", "value": 5},
-	
+
+	# Améliorations véhicule (garage)
+	"moto_engine_mk1": {"name": "Moteur Surclassé Mk1", "type": "vehicle_upgrade", "value": 300},
+	"moto_engine_mk2": {"name": "Moteur Surclassé Mk2", "type": "vehicle_upgrade", "value": 700},
+	"moto_turbo_injector": {"name": "Injecteur Turbo", "type": "vehicle_upgrade", "value": 500},
+	"moto_reinforced_chassis": {"name": "Châssis Renforcé", "type": "vehicle_upgrade", "value": 350},
+	"moto_grip_tires": {"name": "Pneus Grip+", "type": "vehicle_upgrade", "value": 250},
+
 	# Hacking
 	"hack_key_basic": {"name": "Clé hack basique", "type": "hacking", "level": 1},
 	"hack_key_advanced": {"name": "Clé hack avancée", "type": "hacking", "level": 2}
@@ -195,7 +202,40 @@ func _create_recipes() -> void:
 	recipe_speed.set_station("workbench")
 	recipe_speed.category = "upgrades"
 	recipes["speed_chip"] = recipe_speed
-	
+
+	# ========================
+	# AMÉLIORATIONS VÉHICULE (GARAGE)
+	# ========================
+	var recipe_engine_mk1 := Recipe.new("moto_engine_mk1", "moto_engine_mk1", 1)
+	recipe_engine_mk1.add_ingredient("scrap_metal", 4).add_ingredient("cyber_component", 2)
+	recipe_engine_mk1.set_station("garage")
+	recipe_engine_mk1.category = "vehicle"
+	recipes["moto_engine_mk1"] = recipe_engine_mk1
+
+	var recipe_engine_mk2 := Recipe.new("moto_engine_mk2", "moto_engine_mk2", 1)
+	recipe_engine_mk2.add_ingredient("moto_engine_mk1", 1).add_ingredient("cyber_component", 4).add_ingredient("circuit_board", 2)
+	recipe_engine_mk2.set_station("garage")
+	recipe_engine_mk2.category = "vehicle"
+	recipes["moto_engine_mk2"] = recipe_engine_mk2
+
+	var recipe_turbo := Recipe.new("moto_turbo_injector", "moto_turbo_injector", 1)
+	recipe_turbo.add_ingredient("circuit_board", 2).add_ingredient("chemical", 2).add_ingredient("battery", 2)
+	recipe_turbo.set_station("garage")
+	recipe_turbo.category = "vehicle"
+	recipes["moto_turbo_injector"] = recipe_turbo
+
+	var recipe_chassis := Recipe.new("moto_reinforced_chassis", "moto_reinforced_chassis", 1)
+	recipe_chassis.add_ingredient("scrap_metal", 6).add_ingredient("circuit_board", 1)
+	recipe_chassis.set_station("garage")
+	recipe_chassis.category = "vehicle"
+	recipes["moto_reinforced_chassis"] = recipe_chassis
+
+	var recipe_tires := Recipe.new("moto_grip_tires", "moto_grip_tires", 1)
+	recipe_tires.add_ingredient("scrap_metal", 3).add_ingredient("chemical", 1)
+	recipe_tires.set_station("garage")
+	recipe_tires.category = "vehicle"
+	recipes["moto_grip_tires"] = recipe_tires
+
 	# ========================
 	# HACKING
 	# ========================
@@ -274,7 +314,12 @@ func craft(recipe_id: String) -> bool:
 	
 	_is_crafting = false
 	item_crafted.emit(recipe.result_item, recipe.result_quantity)
-	
+
+	# Son de confirmation
+	var sfx = get_node_or_null("/root/SFXManager")
+	if sfx:
+		sfx.play_ui("confirm")
+
 	# Notification
 	var item_name: String = items_db.get(recipe.result_item, {}).get("name", recipe.result_item)
 	var toast = get_node_or_null("/root/ToastNotification")

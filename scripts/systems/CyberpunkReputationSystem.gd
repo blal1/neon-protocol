@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name CyberpunkReputationSystem
 
 # ==============================================================================
 # SIGNAUX
@@ -92,6 +91,17 @@ const LOCKED_OPTIONS: Dictionary = {
 	}
 }
 
+## Mappe les factions de DistrictEcosystem/FactionManager vers les 4 groupes de réputation
+const FACTION_TO_GROUP: Dictionary = {
+	"novatech": "corporations",
+	"police": "corporations",
+	"entertainment_corps": "corporations",
+	"anarkingdom": "gangs",
+	"nomads": "gangs",
+	"cryptopirates": "gangs",
+	"ban_captchas": "ai_collective"
+}
+
 # ==============================================================================
 # VARIABLES
 # ==============================================================================
@@ -155,6 +165,9 @@ func add_reputation(group_id: String, amount: int, propagate: bool = true) -> vo
 		reputation_changed.emit(group_id, old_value, new_value)
 		_update_tier(group_id)
 		
+		# Feedback audio
+		_play_reputation_sound(amount > 0)
+
 		# Historique
 		_history.append({
 			"group": group_id,
@@ -163,7 +176,10 @@ func add_reputation(group_id: String, amount: int, propagate: bool = true) -> vo
 			"new": new_value,
 			"time": Time.get_ticks_msec()
 		})
-		
+
+		# Répercuter sur les districts contrôlés par ce groupe
+		_propagate_to_districts(group_id, amount)
+
 		# Propager aux autres groupes
 		if propagate:
 			_propagate_reputation_change(group_id, amount)
@@ -184,12 +200,32 @@ func set_reputation(group_id: String, value: int) -> void:
 	if old_value != new_value:
 		reputation_changed.emit(group_id, old_value, new_value)
 		_update_tier(group_id)
+		
+		# Feedback audio
+		_play_reputation_sound(new_value > old_value)
 		_recalculate_locked_options()
 
 
 # ==============================================================================
 # PROPAGATION
 # ==============================================================================
+
+func get_group_for_faction(faction_id: String) -> String:
+	"""Retourne le groupe de réputation associé à une faction de district."""
+	return FACTION_TO_GROUP.get(faction_id, "citizens")
+
+
+func _propagate_to_districts(group_id: String, amount: int) -> void:
+	"""Répercute un changement de réputation sur les districts contrôlés par ce groupe."""
+	if not DistrictEcosystem:
+		return
+
+	for district_id in DistrictEcosystem.get_all_districts():
+		var faction := DistrictEcosystem.get_controlling_faction(district_id)
+		if get_group_for_faction(faction) == group_id:
+			DistrictEcosystem.modify_local_reputation(district_id, amount)
+			DistrictEcosystem.modify_tension(district_id, -float(amount) / 200.0)
+
 
 func _propagate_reputation_change(source_group: String, amount: int) -> void:
 	"""Propage les changements de réputation aux groupes antagonistes."""
@@ -248,6 +284,35 @@ func _update_all_tiers() -> void:
 	"""Met à jour tous les tiers."""
 	for group_id in _reputation.keys():
 		_update_tier(group_id)
+
+
+func _play_reputation_sound(positive: bool) -> void:
+	var sfx = get_node_or_null("/root/SFXManager")
+	if not sfx: return
+	
+	if positive:
+		# Jouer un ton montant/positif
+		var tones := [
+			"res://audio/sfx/reputation/Tone1_01.wav",
+			"res://audio/sfx/reputation/Tone2_01.wav"
+		]
+		var path = tones.pick_random()
+		if ResourceLoader.exists(path):
+			_play_direct(path)
+	else:
+		# Jouer un ton descendant/négatif
+		var path = "res://audio/sfx/reputation/Tone3_01.wav"
+		if ResourceLoader.exists(path):
+			_play_direct(path)
+
+
+func _play_direct(path: String) -> void:
+	var player := AudioStreamPlayer.new()
+	player.stream = load(path)
+	player.bus = "UI"
+	add_child(player)
+	player.play()
+	player.finished.connect(player.queue_free)
 
 
 # ==============================================================================

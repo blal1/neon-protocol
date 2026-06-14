@@ -1,0 +1,156 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/CyberwareUI.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.05, 0.05, 0.1, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 0.8, 0.8, 0.5)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="LabelSettings" id="LabelSettings_title"]
+font_size = 32
+font_color = Color(0, 1, 1, 1)
+outline_size = 4
+outline_color = Color(0, 0.5, 0.5, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_stats"]
+font_size = 18
+font_color = Color(1, 0.9, 0.2, 1)
+
+[node name="CyberwareUI" type="Control" node_paths=PackedStringArray("implant_list", "details_label", "install_button", "credits_label", "humanity_label")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+implant_list = NodePath("Panel/HBoxContainer/VBoxContainer/ImplantList")
+details_label = NodePath("Panel/HBoxContainer/DetailsPanel/VBoxContainer/DetailsLabel")
+install_button = NodePath("Panel/HBoxContainer/DetailsPanel/VBoxContainer/InstallButton")
+credits_label = NodePath("Panel/VBoxContainer/TopBar/CreditsLabel")
+humanity_label = NodePath("Panel/VBoxContainer/TopBar/HumanityLabel")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -500.0
+offset_top = -300.0
+offset_right = 500.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "CLINIQUE RIPPERDOC"
+label_settings = SubResource("LabelSettings_title")
+horizontal_alignment = 1
+
+[node name="TopBar" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 50
+alignment = 1
+
+[node name="CreditsLabel" type="Label" parent="Panel/VBoxContainer/TopBar"]
+layout_mode = 2
+text = "CRÉDITS: 0 ¥"
+label_settings = SubResource("LabelSettings_stats")
+
+[node name="HumanityLabel" type="Label" parent="Panel/VBoxContainer/TopBar"]
+layout_mode = 2
+text = "HUMANITÉ: 100%"
+label_settings = SubResource("LabelSettings_stats")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 130.0
+offset_right = -20.0
+offset_bottom = -70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "IMPLANTS DISPONIBLES"
+
+[node name="ImplantList" type="ItemList" parent="Panel/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DetailsPanel" type="PanelContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/HBoxContainer/DetailsPanel"]
+layout_mode = 2
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 475.0
+offset_bottom = 395.0
+theme_override_constants/separation = 15
+
+[node name="DetailsLabel" type="RichTextLabel" parent="Panel/HBoxContainer/DetailsPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "Détails de l'implant..."
+
+[node name="InstallButton" type="Button" parent="Panel/HBoxContainer/DetailsPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+text = "INSTALLER L'IMPLANT"
+
+[node name="BottomBar" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="BackButton" type="Button" parent="Panel/BottomBar"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "RETOUR"
+
+[connection signal="pressed" from="Panel/BottomBar/BackButton" to="." method="_on_back_pressed"]

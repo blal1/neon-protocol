@@ -7,7 +7,7 @@
 # ==============================================================================
 
 extends Control
-class_name DialogueSystem
+# NOTE: pas de class_name - enregistré comme autoload singleton (voir project.godot)
 
 # ==============================================================================
 # SIGNAUX

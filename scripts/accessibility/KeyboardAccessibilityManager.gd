@@ -7,7 +7,6 @@
 # ==============================================================================
 
 extends Node
-class_name KeyboardAccessibilityManager
 
 # ==============================================================================
 # SIGNAUX
@@ -78,7 +77,7 @@ func _process(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	"""Gestion des inputs clavier pour l'accessibilité."""
-	if not enabled:
+	if not enabled or not player:
 		return
 	
 	# Ciblage suivant (Tab ou T)
@@ -359,7 +358,7 @@ func _detect_nearby_walls() -> String:
 	
 	for dir in directions.keys():
 		# Transformer la direction en world space
-		var world_dir := player.global_transform.basis * dir
+		var world_dir: Vector3 = player.global_transform.basis * (dir as Vector3)
 		world_dir.y = 0
 		world_dir = world_dir.normalized()
 		
@@ -483,7 +482,7 @@ func announce_player_status() -> void:
 	
 	# Santé
 	if player.has_method("get_health_percent"):
-		var hp := player.get_health_percent() * 100
+		var hp: float = player.get_health_percent() * 100
 		status += "%.0f pourcent de vie. " % hp
 	
 	# Position

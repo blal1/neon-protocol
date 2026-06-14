@@ -26,7 +26,7 @@ class Mission:
 	var id: int
 	var title: String
 	var description: String
-	var objective_type: String  # "GoTo", "Kill", "Collect"
+	var objective_type: String  # "GoTo", "Kill", "Collect", "Interact"
 	var target_coordinates: Vector3
 	var target_count: int = 1
 	var reward_credits: int
@@ -63,6 +63,8 @@ class Mission:
 				return "%d / %d éliminés" % [current_progress, target_count]
 			"Collect":
 				return "%d / %d collectés" % [current_progress, target_count]
+			"Interact":
+				return "%d / %d activés" % [current_progress, target_count]
 		return ""
 
 # ==============================================================================

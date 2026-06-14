@@ -92,6 +92,7 @@ var _wave_timer: float = 0.0
 # ==============================================================================
 
 func _ready() -> void:
+	add_to_group("moral_scenario")
 	_setup_default_waypoints()
 	scenario_started.emit()
 

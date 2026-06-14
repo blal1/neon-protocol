@@ -335,6 +335,10 @@ func _handle_bottom_zone_gesture(gesture: Gesture) -> void:
 			# Utiliser objet
 			use_item_requested.emit()
 			_speak_action("Utilisation objet")
+		Gesture.DOUBLE_TAP:
+			# Bullet-Time
+			if player and player.has_method("request_tactical_mode"):
+				player.request_tactical_mode()
 		Gesture.SWIPE_UP:
 			# Objet suivant
 			_speak_action("Objet suivant")
