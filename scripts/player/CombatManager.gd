@@ -260,7 +260,12 @@ func _perform_attack_animation_only() -> void:
 	can_attack = false
 	is_attacking = true
 	attack_started.emit()
-	
+
+	# Son d'attaque (même sur un coup dans le vide)
+	var sfx := get_node_or_null("/root/SFXManager")
+	if sfx and player:
+		sfx.play_combat("player_attack", player.global_position)
+
 	await get_tree().create_timer(attack_duration).timeout
 	is_attacking = false
 	

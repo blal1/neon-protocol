@@ -59,6 +59,7 @@ const GRAVITY_MULTIPLIER: float = 2.0  # Gravité plus réactive sur mobile
 # VARIABLES D'ÉTAT
 # ==============================================================================
 var _input_direction: Vector2 = Vector2.ZERO  # Direction du joystick
+var _kb_was_active: bool = false  # Le clavier/manette pilotait-il le mouvement?
 var _is_dashing: bool = false
 var _can_dash: bool = true
 var _was_moving: bool = false
@@ -130,6 +131,16 @@ func _apply_all_cyberware_benefits() -> void:
 
 func _physics_process(delta: float) -> void:
 	"""Boucle physique principale - optimisée pour mobile."""
+	# 0. Input clavier/manette (desktop). N'écrase pas le joystick tactile :
+	#    sur mobile get_vector reste à zéro et _kb_was_active reste faux.
+	var kb := Input.get_vector("move_left", "move_right", "move_forward", "move_backward")
+	if kb.length() > 0.01:
+		_input_direction = kb
+		_kb_was_active = true
+	elif _kb_was_active:
+		_input_direction = Vector2.ZERO
+		_kb_was_active = false
+
 	# 1. Appliquer la gravité
 	_apply_gravity(delta)
 	
@@ -191,6 +202,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	"""Gestion des inputs non capturés (raccourcis clavier/manette)."""
 	if event.is_action_pressed("tactical_mode"):
 		_toggle_bullet_time()
+	# Actions clavier/manette (desktop). Le tactile passe par les request_* UI.
+	elif event.is_action_pressed("attack"):
+		request_attack()
+	elif event.is_action_pressed("dash"):
+		request_dash()
+	elif event.is_action_pressed("interact"):
+		request_interact()
 
 
 func _toggle_bullet_time() -> void:

@@ -107,10 +107,13 @@ func _detect_platform() -> void:
 	
 	# Détection automatique
 	var os_name := OS.get_name()
-	is_mobile = os_name in ["Android", "iOS", "Web"]
-	
-	# Fallback: vérifier les capacités tactiles
-	if not is_mobile:
+	is_mobile = os_name in ["Android", "iOS"]
+
+	# Fallback tactile UNIQUEMENT hors desktop (ex: Web).
+	# Sur desktop, is_touchscreen_available() renvoie true à cause de
+	# input_devices/pointing/emulate_touch_from_mouse, ce qui forçait le mode mobile.
+	var is_desktop := os_name in ["Windows", "Linux", "macOS", "FreeBSD", "NetBSD", "OpenBSD", "BSD"]
+	if not is_mobile and not is_desktop:
 		is_mobile = DisplayServer.is_touchscreen_available()
 
 
