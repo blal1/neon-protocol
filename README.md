@@ -1,12 +1,12 @@
-<<<<<<< HEAD
 # 🌆 NEON PROTOCOL
 
 <div align="center">
 
-![Godot](https://img.shields.io/badge/Godot-4.5+-478CBF?style=for-the-badge&logo=godot-engine&logoColor=white)
+![Godot](https://img.shields.io/badge/Godot-4.6-478CBF?style=for-the-badge&logo=godot-engine&logoColor=white)
 ![Platform](https://img.shields.io/badge/Platform-Mobile%20%2B%20Desktop-green?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-0.0.1-blue?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.1.0-blue?style=for-the-badge)
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=for-the-badge)
 
 **Action-RPG Cyberpunk Low-Poly avec Accessibilité Universelle**
 
@@ -239,7 +239,3 @@ Ce projet est sous licence **MIT**. Voir [LICENSE](LICENSE) pour plus de détail
 *"Dans la nuit néon, même les ombres ont un prix."*
 
 </div>
-=======
-# neon-protocol
-Jeu Cyberpunk
->>>>>>> 5f2c1a0360039894725324a5b05de4cb17badcfd
